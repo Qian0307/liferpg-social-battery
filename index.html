@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6450d7"><meta name="color-scheme" content="light">
+<meta name="description" content="LifeRPG：把現實中的專注化為 Boss 戰，記錄人生目標與成長。動態 Boss 戰、七大領域技能樹與人生目標管理。">
+<title>LifeRPG · 讓成長成為一場冒險</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="./icons/icon.svg">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>:root{--bg:#f5f4fa;--paper:#fff;--ink:#24233c;--muted:#73738a;--line:#e7e6f1;--purple:#6450d7;--purple-dark:#4d3eb0;--violet:#a39af1;--lavender:#eeeafd;--green:#167969;--gold:#a26b2c;--danger:#b23c5b;--radius:22px;--shadow:0 8px 30px #34324f06;font-family:Inter,'Noto Sans CJK TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;color:var(--ink);font-size:14px;font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:var(--bg)}button,input,select,textarea{font:inherit}button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{cursor:wait;opacity:.55}button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #bd80fb;outline-offset:4px}input:focus,select:focus,textarea:focus{outline:2px solid #a596e9;outline-offset:1px}a{color:var(--purple)}h1,h2,h3,h4,p{margin:0}h1{font-size:28px;letter-spacing:-1px;line-height:1.4}h2{font-size:21px;line-height:1.5}h3{font-size:16px;line-height:1.55}p{line-height:1.9}.icon{width:21px;height:21px;stroke:currentColor;stroke-width:1.65;fill:none;flex:none;stroke-linecap:round;stroke-linejoin:round}.icon.big{width:28px;height:28px}.muted{color:var(--muted)}.eyebrow{font-size:10px;letter-spacing:2.8px;font-weight:700;color:var(--muted)}.small{font-size:12px;line-height:1.8}.num{font-variant-numeric:tabular-nums}.row{display:flex;align-items:center;gap:12px}.between{display:flex;align-items:center;justify-content:space-between;gap:16px}.stack{display:grid;gap:18px}.btn{border:1px solid var(--line);border-radius:12px;min-height:44px;display:inline-flex;justify-content:center;align-items:center;gap:9px;background:white;color:var(--ink);padding:11px 17px;text-decoration:none;font-weight:600;line-height:1.4;transition:background .15s,transform .15s}.btn:hover{background:#f2effc;transform:translateY(-1px)}.btn.primary{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 4px 12px #6450d728}.btn.primary:hover{background:var(--purple-dark)}.btn.ghost{background:transparent;border-color:transparent;color:var(--muted);box-shadow:none}.btn.danger{color:var(--danger);border-color:#e9c1cb;background:#fff9fb}.btn.full{width:100%}.btn.icononly{width:44px;padding:10px;flex:none}.chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:7px;background:var(--lavender);color:var(--purple-dark);font-size:11px;font-weight:600;line-height:1.6}.chip.green{background:#e5f3ed;color:var(--green)}.chip.neutral{background:#f1f1f5;color:var(--muted)}.chip.gold{background:#fff1dd;color:#80521f}.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}.card-title{margin-bottom:22px}.empty{padding:28px 16px;text-align:center;color:var(--muted);line-height:1.9}.empty .icon{width:34px;height:34px;margin-bottom:12px;color:#a9a0cb}.divider{height:1px;background:var(--line);margin:20px 0}.progress{height:7px;background:#eeedf5;border-radius:30px;overflow:hidden}.progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#8676ea,#6150d5);transition:width .4s}.shell{display:grid;grid-template-columns:222px minmax(0,1fr);min-height:100vh}.sidebar{height:100vh;position:sticky;top:0;background:#fbfaff;border-right:1px solid var(--line);padding:34px 22px 22px;display:flex;flex-direction:column;gap:28px}.brand{display:flex;align-items:center;gap:10px;color:#302d52}.brand-mark{width:33px;height:35px;color:var(--purple)}.brand-name{font-family:Georgia,serif;font-size:27px;letter-spacing:-1px;font-weight:700}.brand-sub{font-size:9px;letter-spacing:2.2px;color:#8c84a8;margin-top:3px}.side-label{font-size:9px;letter-spacing:2px;color:#9290a6;padding:4px 14px;margin-bottom:10px}.nav-stack{display:grid;gap:8px}.nav-btn{display:flex;gap:12px;align-items:center;min-height:49px;padding:12px 14px;border:0;border-radius:12px;background:transparent;text-align:left;color:var(--muted);font-weight:600}.nav-btn.active{color:var(--purple);background:#eeeafb}.nav-btn:hover{background:#f0edf8}.nav-btn span{flex:1}.nav-btn small{font-size:9px;color:#aaa2c9}.side-footer{margin-top:auto}.local-card{border:1px solid #e8e4f3;padding:15px;border-radius:14px;background:#f6f3fc;font-size:11px;line-height:1.9;color:#7b7596}.user-card{display:flex;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}.avatar{width:39px;height:39px;display:grid;place-items:center;flex:none;border-radius:13px;color:#6b58cb;background:linear-gradient(135deg,#f2eefd,#d8d1f9);border:1px solid #ddd5f3}.user-name{font-weight:600;max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.workspace{padding:28px 36px 40px;max-width:1500px;width:100%;margin:0 auto;min-width:0}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;min-height:53px;gap:18px}.topbar h1{font-size:25px;margin-top:3px}.top-actions{display:flex;align-items:center;gap:14px}.date-label{font-size:11px;color:var(--muted)}.demo-banner{background:#f3e9cb;color:#684b1b;padding:10px 20px;margin:-28px -36px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px}.demo-banner .btn{font-size:11px;background:#fff9e9;min-height:35px;padding:6px 12px;border-color:#dfd0a8;color:#684b1b}.dashboard{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px}.main-column{min-width:0;display:grid;gap:22px;align-content:start}.aside-column{min-width:0;display:grid;gap:22px;align-content:start}.hero{position:relative;isolation:isolate;overflow:hidden;min-height:337px;border-radius:24px;background:radial-gradient(ellipse at 83% 33%,#57509a 0,transparent 48%),linear-gradient(125deg,#262644,#343055 65%,#635681);padding:35px 30px;color:white;border:1px solid #63598960}.hero:before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,#f8dfad70 1px,transparent 1.2px);background-size:67px 57px;opacity:.4;z-index:-1}.hero-content{max-width:59%;position:relative;z-index:2}.hero .eyebrow{color:#c2b7f0;letter-spacing:2px;font-size:9px}.hero h2{font-size:33px;line-height:1.5;letter-spacing:.8px;margin:15px 0 12px;font-family:'Noto Serif CJK TC','Songti TC',serif;font-weight:600}.hero p{color:#c8c3dd;font-size:12px;max-width:275px}.hero .btn{margin-top:24px;background:#eae3ff;color:#433370;border-color:#eae3ff;font-size:12px;min-height:44px}.hero .btn.ghost{color:#d4c9f0;background:transparent;border:0;padding-left:0}.hero-art{position:absolute;width:52%;height:100%;right:-3%;top:0;display:grid;place-items:center;opacity:.95;z-index:1}.hero-art .boss-art{width:100%;max-height:330px}.hero-caption{position:absolute;bottom:18px;right:22px;font-size:8px;letter-spacing:3px;color:#c0afdf;z-index:2}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px}.stat .icon{color:#8a7dc2;width:17px;height:17px}.stat-label{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:11px;margin-bottom:11px}.stat strong{font-family:Georgia,serif;font-size:29px;font-weight:500;line-height:1.2}.stat small{font-size:11px;color:var(--muted);margin-left:5px}.quest-line{display:flex;align-items:center;gap:13px;padding:15px 0;border-top:1px solid #f0eef6}.quest-line:first-of-type{border-top:0}.quest-icon{width:43px;height:43px;border-radius:13px;background:#efebfa;color:#7764c0;display:grid;place-items:center;flex:none}.quest-body{flex:1;min-width:0}.quest-body h3{font-size:13px;overflow-wrap:anywhere}.quest-body p{font-size:10px;color:var(--muted);margin-top:4px}.quest-line .btn{font-size:11px;padding:9px 13px}.level-card{text-align:left;background:linear-gradient(145deg,#fff,#fbf9ff)}.level-top{display:flex;gap:13px;align-items:center;margin-bottom:22px}.level-top .avatar{width:52px;height:52px;border-radius:18px}.level-number{font-size:24px;font-family:Georgia,serif;font-weight:500}.level-card .progress{margin:11px 0}.mini-metrics{display:grid;grid-template-columns:1fr 1fr;padding-top:16px;margin-top:16px;border-top:1px solid var(--line);gap:14px}.mini-metrics b{font-size:15px;display:block;margin-bottom:4px}.mini-metrics span{font-size:10px;color:var(--muted)}.checkpoint-list{display:grid;gap:17px}.checkpoint{display:flex;gap:11px;align-items:flex-start}.checkpoint-mark{width:23px;height:23px;border:1px solid #dcd8eb;border-radius:50%;flex:none;display:grid;place-items:center;color:#9990b1;font-size:10px;margin-top:1px}.checkpoint.done .checkpoint-mark{background:#e6f3ee;border-color:#cee8dc;color:var(--green)}.checkpoint h4{font-size:12px;font-weight:500;line-height:1.8}.checkpoint p{font-size:10px;color:var(--muted);margin-top:3px}.checkpoint button{margin-left:auto;flex:none;min-height:32px;padding:6px 8px;font-size:10px}.quote-card{padding:22px 24px;background:linear-gradient(145deg,#e9e2f6,#f5effb);border:1px solid #e3daf0;border-radius:19px;color:#605172;line-height:2;font-family:'Noto Serif CJK TC',serif;font-size:12px}.quote-card small{display:block;margin-top:11px;font-family:inherit;color:#8b7d9d;font-size:9px;letter-spacing:2px}.resume-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;border-radius:15px;background:#e8e2fa;border:1px solid #d1c5f1;margin-bottom:22px}.resume-banner p{font-size:12px}.resume-banner strong{color:#544095}.filters{display:flex;gap:7px;overflow:auto;padding:0 0 16px;margin:0 0 7px;scrollbar-width:thin}.filter{padding:9px 15px;border:1px solid var(--line);background:white;border-radius:30px;min-height:41px;white-space:nowrap;font-size:12px;color:var(--muted)}.filter.active{background:var(--purple);color:white;border-color:var(--purple)}.goals-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.goal-card{overflow:hidden;border:1px solid var(--line);border-radius:21px;background:white;transition:transform .2s,box-shadow .2s}.goal-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px #51497c0c}.goal-art{height:122px;background:linear-gradient(135deg,#e7e0f9,#f6f1fd);position:relative;display:flex;align-items:center;justify-content:center;color:#8574ba;overflow:hidden}.goal-art:after{content:'';width:130px;height:130px;border-radius:50%;border:1px solid #b9acda66;position:absolute;top:15px}.goal-art .icon{width:40px;height:40px;z-index:1}.goal-art .eyebrow{position:absolute;bottom:13px;left:18px;font-size:8px;letter-spacing:2px;color:#8e7aac}.goal-art .chip{position:absolute;top:14px;right:14px;background:#ffffffb3}.goal-body{padding:21px}.goal-body h3{min-height:48px;font-size:15px}.goal-body .progress{height:5px;margin:12px 0 7px}.goal-body .small{font-size:10px}.goal-body .btn{font-size:11px;margin-top:18px;width:100%}.add-goal{border:1px dashed #c9c1df;border-radius:21px;min-height:310px;background:#f8f6fc;color:#8a7da7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}.add-goal .icon{width:30px;height:30px}.detail-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px}.detail-top{padding:25px;background:linear-gradient(130deg,#efebfa,#faf8ff);border-radius:20px;margin-bottom:22px}.detail-top h2{margin:10px 0}.chart{width:100%;height:auto;display:block;overflow:visible}.chart text{font:10px system-ui;fill:#9690a7}.chart-point{fill:var(--purple);stroke:white;stroke-width:2;cursor:pointer}.chart-point:hover{r:6}.chart-wrap{padding:10px 3px 0}.chart-total{font-family:Georgia,serif;font-size:33px;font-weight:500}.chart-legend{display:flex;gap:17px;font-size:10px;color:var(--muted);margin-top:18px}.dot{width:7px;height:7px;border-radius:50%;display:inline-block;background:#7b65d1;margin-right:6px}.bar-row{display:grid;grid-template-columns:85px 1fr 45px;gap:12px;align-items:center;font-size:11px;margin:19px 0}.bar-track{height:9px;border-radius:20px;background:#f0edf8;overflow:hidden}.bar-track span{display:block;height:100%;background:#a398e1;border-radius:20px}.timeline-line{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-top:1px solid #f0eef6}.timeline-line .icon{width:17px;height:17px;color:#8c7eca;margin-top:3px}.timeline-line .timeline-text{flex:1}.timeline-line h4{font-size:12px;font-weight:500;line-height:1.7}.timeline-line p{font-size:10px;color:var(--muted)}.xp-label{color:var(--green);font-size:11px;white-space:nowrap;padding-top:4px}.chart-data{font-size:11px;line-height:1.8;color:var(--muted);margin-top:18px}.chart-data summary{cursor:pointer;min-height:36px;padding:6px 0}.data-table{width:100%;border-collapse:collapse;font-size:11px}.data-table td,.data-table th{padding:8px;border-bottom:1px solid var(--line);text-align:left}.profile-hero{background:radial-gradient(ellipse at 85% 30%,#e5def8,transparent 65%),white;padding:35px;border-radius:24px;border:1px solid var(--line)}.profile-hero .avatar{width:74px;height:74px;border-radius:25px}.profile-hero .avatar .icon{width:40px;height:40px}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:22px}.setting-row{display:flex;justify-content:space-between;gap:18px;padding:16px 0;border-top:1px solid var(--line);align-items:center}.setting-row p{font-size:11px;color:var(--muted)}.setting-row h3{font-size:13px}.setting-row .btn{font-size:11px;flex:none}.badge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.badge{text-align:center;border:1px solid var(--line);border-radius:15px;padding:18px 8px;color:#777087;background:#faf9fc}.badge.earned{background:#f1ecfc;color:var(--purple);border-color:#dad0f4}.badge .icon{width:30px;height:30px;display:block;margin:0 auto 12px}.badge b{font-size:11px;display:block}.badge p{font-size:9px;margin-top:4px}.bottom-nav{display:none}dialog{border:1px solid var(--line);border-radius:24px;padding:0;max-width:min(560px,calc(100vw - 30px));width:560px;max-height:90dvh;color:var(--ink);box-shadow:0 20px 90px #20133633}dialog::backdrop{background:#211b3b70;backdrop-filter:blur(5px)}.modal-head{padding:23px 25px 15px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:4;background:#fff}.modal-head h2{font-size:20px}.modal-body{padding:3px 25px 25px}.form-grid{display:grid;gap:16px}.two-fields{display:grid;grid-template-columns:1fr 1fr;gap:15px}label{display:block;font-size:12px;font-weight:600;line-height:1.8}label input,label select,label textarea{margin-top:7px}input,select,textarea{width:100%;border:1px solid #ddd9e8;padding:11px 12px;border-radius:10px;min-height:44px;color:var(--ink);background:white}textarea{resize:vertical;min-height:95px;line-height:1.8}.field-help{font-size:10px;color:var(--muted);line-height:1.8;margin-top:6px}.form-error{color:var(--danger);background:#fff0f3;border-radius:9px;padding:10px 12px;font-size:12px;margin-top:12px;display:none}.form-error:not(:empty){display:block}.preset-row{display:flex;gap:7px;flex-wrap:wrap}.preset{border:1px solid var(--line);border-radius:8px;background:#f9f7fd;color:#756797;font-size:10px;padding:7px 10px;min-height:34px}.form-actions{display:flex;gap:10px;margin-top:22px}.form-actions .primary{flex:1}.notice{padding:13px 15px;background:#f5f2fc;border:1px solid #e8e0f6;border-radius:12px;font-size:11px;color:#76668e;line-height:1.9}.notice.warning{background:#fff7e8;color:#816338;border-color:#eee0c0}.review-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}.review-stat{padding:20px;background:#f5f2fc;border-radius:15px;text-align:center}.review-stat strong{display:block;font-size:29px;font-family:Georgia,serif;color:var(--purple);font-weight:500}.review-stat span{font-size:11px;color:var(--muted)}.record-item{padding:16px 0;border-bottom:1px solid var(--line)}.record-item h3{font-size:13px}.record-item .btn{font-size:10px;min-height:35px;padding:6px 10px}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);padding:14px 22px;border:1px solid #e3dcef;background:#fff;color:#514369;border-radius:14px;box-shadow:0 6px 40px #3b285625;z-index:10000;font-size:12px;max-width:90vw;line-height:1.8;pointer-events:none}.toast.error{background:#fff5f7;color:var(--danger)}.fatal{max-width:600px;margin:80px auto;padding:30px}.fatal h1{font-size:22px;margin-bottom:16px}.fatal p{margin-bottom:16px}.loading{display:grid;place-items:center;min-height:100vh;color:var(--purple);font-size:14px;letter-spacing:3px}.loading-ring{width:34px;height:34px;border:2px solid #d8cef4;border-top-color:var(--purple);border-radius:50%;animation:spin 1.5s linear infinite;margin:20px auto}.battle-shell{min-height:100dvh;background:radial-gradient(ellipse at 50% 35%,#32224f 0,#171626 58%,#12141f);color:#f3edff;position:relative;isolation:isolate;overflow:hidden}.battle-shell:before{content:'';position:absolute;inset:0;z-index:-1;opacity:.5;background-image:radial-gradient(circle,#c7a8f6 1px,transparent 1.2px),radial-gradient(circle,#c7a8f633 1px,transparent 1.3px);background-size:113px 97px,63px 121px;background-position:10px 20px,43px 65px}.battle-top{display:flex;justify-content:space-between;align-items:center;padding:23px 30px;gap:12px;position:relative;z-index:3;border-bottom:1px solid #c3a5fb10}.battle-top .brand{color:#e4daff}.battle-top .brand-mark{color:#b4a0ed}.battle-top .brand-name{font-size:23px}.battle-top .btn{background:#b39adc12;border-color:#b9a5e224;color:#d4c8eb;font-size:11px}.battle-top .eyebrow{color:#9e8bbf}.battle-layout{max-width:1180px;margin:auto;padding:30px 30px 24px;display:grid;grid-template-columns:230px minmax(0,1fr) 230px;gap:30px;align-items:start}.battle-side{padding:18px 0}.battle-side h3{font-size:13px;margin:13px 0;color:#e8dff6}.battle-side p{font-size:11px;color:#b0a0c4}.battle-side .eyebrow{font-size:9px;color:#8f7aab}.battle-side .chip{background:#aa84e421;color:#c8b4eb;font-size:10px}.battle-side .checkpoint-list{margin-top:25px;gap:20px}.battle-side .checkpoint-mark{border-color:#63506e;color:#b7a1ce}.battle-side .checkpoint h4{font-size:11px;color:#b9adce}.battle-side .checkpoint.done h4{color:#d7cdeb}.battle-side .checkpoint.done .checkpoint-mark{background:#a384c72b;color:#d7b7ff;border-color:#88639e}.battle-help{border-top:1px solid #b597dc23;margin-top:27px;padding-top:20px}.battle-center{text-align:center;position:relative;min-width:0}.battle-center h1{font-size:26px;letter-spacing:2px;font-family:'Noto Serif CJK TC',serif;font-weight:600;margin:9px 0}.boss-title-line{font-size:9px;letter-spacing:3px;color:#b89adb;margin-bottom:11px}.battle-art-wrap{height:300px;position:relative;display:grid;place-items:center;margin-top:5px}.battle-art-wrap .boss-art{height:100%;max-width:420px;width:100%;overflow:visible}.boss-art{filter:drop-shadow(0 10px 22px #09081570)}.floating-boss{transform-origin:300px 280px;animation:breathe 6s ease-in-out infinite}.portal-ring{transform-origin:300px 276px;animation:spin 70s linear infinite}.attack-line{opacity:0;animation:slash 7s ease-in-out infinite}.attack-line.second{animation-delay:3.5s}.shield-track{background:#a48bc01c;height:6px;border-radius:50px;overflow:hidden;border:1px solid #b193d225}.shield-track span{display:block;height:100%;background:linear-gradient(90deg,#8372d3,#d3a4eb);transition:width 1s linear;box-shadow:0 0 14px #dd9ef280}.shield-label{font-size:10px;color:#ae9cc5;display:flex;justify-content:space-between;margin:7px 0 9px}.focus-timer{font-variant-numeric:tabular-nums;font-family:Georgia,'Times New Roman',serif;font-size:68px;line-height:1.2;letter-spacing:2px;margin-top:21px;color:#f3eaff;font-weight:400}.focus-state{font-size:11px;color:#b6a4ce;margin-top:8px;letter-spacing:1px}.battle-controls{display:flex;justify-content:center;gap:12px;margin:22px 0 17px}.battle-controls .btn{background:#a58bd11b;color:#e9defa;border-color:#ba9cdc3a;min-width:100px}.battle-controls .primary{background:#b49ae9;color:#241632;border-color:#b49ae9;min-width:150px}.battle-footnote{font-size:10px;color:#8d7e9f;line-height:1.8}.scene-toggle{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px;background:#0c0d172e;border:1px solid #a187c327;border-radius:10px;margin:15px 0}.scene-toggle button{border:0;border-radius:7px;background:transparent;color:#a796bb;min-height:38px;font-size:10px}.scene-toggle button.active{background:#9d7ece2a;color:#e2d2f7}.session-info{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}.session-info span{font-size:10px;display:block;color:#a18bb9}.session-info b{font-family:Georgia,serif;font-size:22px;display:block;margin-top:9px;font-weight:400;color:#decef1}.battle-note{padding:18px 17px;border:1px solid #9c7cc128;border-radius:13px;font-size:10px;line-height:2;color:#af9dbf;background:#b98be508;margin-top:28px}.battle-demo{font-size:10px;color:#e0bb82;background:#d7a33b18;padding:8px 18px;border-bottom:1px solid #d7a33b22;text-align:center}.battle-shell.static .floating-boss,.battle-shell.static .portal-ring,.battle-shell.paused .floating-boss,.battle-shell.paused .portal-ring{animation-play-state:paused}.battle-shell.static .attack-line,.battle-shell.paused .attack-line{display:none}.battle-shell.minimal .battle-art-wrap{display:none}.battle-shell.minimal .battle-center{padding-top:80px}.battle-shell.minimal .focus-timer{font-size:90px;margin-top:60px}.battle-footer{position:relative;text-align:center;padding:18px 20px 24px;font-size:9px;letter-spacing:2px;color:#746282}.battle-level{padding:15px 0;border-bottom:1px solid #a780d229;margin-bottom:24px}.battle-level .progress{background:#b9a1d71f;height:5px;margin:13px 0}.battle-level .progress span{background:#ac8ad1}.battle-level .level-number{font-size:27px;color:#e5d4ff}.battle-level .small{font-size:10px;color:#9784ac}.recover-note{max-width:800px;margin:15px auto 0;padding:12px 20px;border-radius:12px;background:#ad854324;border:1px solid #d6ac5b39;color:#d1bc99;font-size:11px;line-height:1.8}.reduced .floating-boss,.reduced .portal-ring,.reduced .attack-line{animation:none!important}.mobile-only{display:none}@keyframes spin{to{transform:rotate(360deg)}}@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes slash{0%,80%,100%{opacity:0;transform:translateY(10px)}84%{opacity:.8;transform:translateY(0)}89%{opacity:0;transform:translateY(-8px)}}
+@media(min-width:1500px){.hero{min-height:360px}.hero h2{font-size:37px}.workspace{padding-top:35px}}
+@media(max-width:1190px){.shell{grid-template-columns:190px 1fr}.sidebar{padding:29px 15px}.workspace{padding:26px}.dashboard{grid-template-columns:minmax(0,1fr) 265px;gap:18px}.hero{padding:28px 24px;min-height:330px}.hero h2{font-size:28px}.hero-content{max-width:64%}.hero-art{right:-12%;width:60%;opacity:.7}.goals-grid{grid-template-columns:repeat(2,1fr)}.demo-banner{margin:-26px -26px 22px}.battle-layout{grid-template-columns:190px minmax(0,1fr) 190px;gap:20px}}
+@media(max-width:1020px){.sidebar{width:84px;padding:28px 15px}.shell{grid-template-columns:84px 1fr}.brand-name,.brand-sub,.side-label,.nav-btn span,.nav-btn small,.local-card,.user-card>div:last-child{display:none}.nav-btn{padding:15px;justify-content:center}.side-footer .btn{width:48px;padding:10px;font-size:0}.side-footer .btn .icon{width:20px}.user-card{padding-top:20px;justify-content:center}.brand{justify-content:center}.sidebar .brand-mark{width:35px}.dashboard{grid-template-columns:1fr 260px}.battle-layout{grid-template-columns:minmax(0,1fr) 225px;max-width:880px}.battle-side.first{display:none}.battle-top .brand-name{display:inline}.detail-grid{grid-template-columns:1fr 280px}}
+@media(max-width:800px){.dashboard{grid-template-columns:1fr}.aside-column{grid-template-columns:1fr 1fr}.aside-column .quote-card{display:none}.hero{min-height:307px}.hero-art{width:46%;right:0;opacity:.9}.hero-content{max-width:60%}.hero h2{font-size:30px}.profile-grid,.detail-grid{grid-template-columns:1fr}.detail-grid .aside-column{grid-template-columns:1fr}.top-actions .date-label{display:none}.battle-layout{grid-template-columns:minmax(0,1fr);max-width:600px}.battle-side.last{display:none}.battle-art-wrap{height:300px}.battle-top{padding:18px 20px}.battle-center h1{font-size:24px}}
+@media(max-width:600px){:root{font-size:13px}.shell{display:block}.sidebar{display:none}.workspace{padding:22px 18px 100px}.topbar{margin-bottom:23px;gap:10px}.topbar h1{font-size:23px}.top-actions{gap:6px}.top-actions .btn{font-size:11px;padding:9px 12px}.eyebrow{font-size:9px}.dashboard,.main-column{gap:18px}.hero{padding:27px 22px;min-height:310px;border-radius:22px}.hero h2{font-size:27px;line-height:1.55;margin-top:16px}.hero-content{max-width:66%}.hero p{font-size:10px;max-width:200px}.hero .eyebrow{font-size:8px;letter-spacing:1px}.hero .btn{font-size:11px;margin-top:20px;padding:10px 12px}.hero-art{right:-19%;width:75%;opacity:.68}.hero-caption{display:none}.stat-grid{gap:9px}.stat{padding:14px 12px;border-radius:14px}.stat-label{font-size:9px;gap:5px}.stat-label .icon{width:14px;height:14px}.stat strong{font-size:26px}.stat small{font-size:9px;margin-left:3px}.card{padding:20px;border-radius:19px}.card-title{margin-bottom:16px}.card h2{font-size:18px}.aside-column{grid-template-columns:1fr}.aside-column .level-card{display:none}.quest-line .btn{padding:9px;min-width:40px}.quest-line .btn span{display:none}.quest-body h3{font-size:12px}.quest-body p{font-size:9px}.quest-icon{width:37px;height:37px}.quest-line{gap:10px}.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;width:100%;background:#fffefaee;backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:7px 8px calc(7px + env(safe-area-inset-bottom));z-index:20}.bottom-nav button{min-height:50px;display:flex;flex-direction:column;align-items:center;gap:5px;border:0;background:transparent;font-size:9px;color:#9390a4}.bottom-nav button.active{color:var(--purple)}.bottom-nav .icon{width:22px;height:22px}.demo-banner{margin:-22px -18px 20px;padding:9px 13px;font-size:10px;line-height:1.8}.demo-banner .btn{font-size:10px;padding:5px 8px;white-space:nowrap}.goals-grid{grid-template-columns:1fr;gap:17px}.goal-card{display:grid;grid-template-columns:95px minmax(0,1fr)}.goal-art{height:100%;min-height:206px}.goal-art:after{width:110px;height:110px;top:46px}.goal-art .eyebrow{display:none}.goal-art .icon{width:29px;height:29px}.goal-art .chip{font-size:8px;right:9px;top:10px;padding:3px 6px}.goal-body{padding:18px}.goal-body h3{font-size:14px;min-height:0}.goal-body .btn{margin-top:13px;min-height:38px;padding:8px}.add-goal{min-height:95px;flex-direction:row;font-size:12px}.add-goal .icon{width:24px;height:24px}.profile-hero{padding:25px}.profile-hero h2{font-size:21px}.profile-hero .avatar{width:57px;height:57px}.profile-grid{gap:18px;margin-top:18px}.two-fields{gap:12px}.modal-head{padding:19px 19px 12px}.modal-head h2{font-size:18px}.modal-body{padding:0 19px 22px}.toast{bottom:91px;width:max-content;max-width:92vw;font-size:11px}.battle-top .brand{display:none}.battle-top{padding:14px 17px}.battle-top .btn{padding:9px 11px;font-size:10px;min-height:40px}.battle-top .eyebrow{font-size:9px;letter-spacing:1.8px}.battle-layout{padding:24px 28px 12px;gap:10px}.battle-art-wrap{height:265px;margin-top:0}.battle-center h1{font-size:24px}.boss-title-line{font-size:8px}.focus-timer{font-size:60px;margin-top:20px}.battle-controls{margin-top:22px;gap:10px}.battle-controls .btn{min-width:100px;font-size:12px}.battle-controls .primary{min-width:155px}.battle-footer{padding:16px 15px 25px;font-size:8px;letter-spacing:1px}.mobile-only{display:block}.battle-mobile-modes{max-width:245px;margin:15px auto 0}.battle-mobile-modes .scene-toggle{margin:0}.battle-mobile-modes button{min-height:34px}.battle-shell.minimal .battle-center{padding-top:70px}.battle-shell.minimal .focus-timer{font-size:77px}.battle-footnote{font-size:9px}.recover-note{margin:12px 16px 0;font-size:10px}.chart text{font-size:11px}.resume-banner{padding:15px}.resume-banner .btn{font-size:10px;padding:9px 12px}.resume-banner p{font-size:10px}.detail-top{padding:20px}.field-help{font-size:10px}.setting-row{gap:10px}.setting-row .btn{padding:10px 12px}.setting-row p{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}.attack-line{display:none}}
+/* v0.4: layered battlefield and structured skill library. */
+:root{--purple:#6853db;--purple-dark:#513bbf;--bg:#f5f3fa}
+button:focus-visible,a:focus-visible{outline:3px solid #9c87e9;outline-offset:3px}input,select,textarea{min-height:44px}
+.skill-intro{display:flex;justify-content:space-between;gap:32px;padding:32px 36px;background:linear-gradient(115deg,#eee7fc,#f8f6ff);border:1px solid #e4dcf4;border-radius:24px;margin-bottom:24px}
+.skill-intro h2{font-size:29px;line-height:1.5;margin:12px 0;color:#342756}.skill-intro p{font-size:12px;color:#797187;line-height:1.8}
+.taxonomy-counts{display:flex;gap:27px;align-items:center}.taxonomy-counts b{font-family:Georgia,serif;font-size:38px;font-weight:400;color:#7261ac;text-align:center}.taxonomy-counts span{display:block;font-family:system-ui;font-size:11px;margin-top:8px;color:#837992}
+.skill-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.skill-toolbar input{max-width:285px;background:#fff}.skill-toolbar .filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin:0}
+#skill-results{display:grid;gap:20px}.skill-domain{border-top:3px solid var(--domain-color)}.skill-domain-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:21px;border-bottom:1px solid var(--line)}.skill-domain-head .row{gap:13px}.skill-domain-head>.row>.icon{width:30px;height:30px;color:#79649e}.skill-domain-head h3{font-size:18px}.skill-domain-head p{font-size:9px;letter-spacing:1.3px;color:var(--muted);margin-top:5px}
+.skill-subgroup{margin-top:21px}.skill-subgroup>h4{font-weight:500;color:#655a78;display:flex;gap:10px;align-items:center;margin-bottom:12px;font-size:12px}.skill-subgroup>h4>span{font-size:10px;color:#93879e}
+.skill-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.leaf-skill{border:1px solid #e9e3f0;background:#fbfaff;border-radius:16px;padding:17px}.leaf-skill .between{align-items:flex-start;gap:6px}.skill-detail-button{background:none;border:0;padding:0;display:flex;align-items:center;text-align:left;gap:9px;color:var(--ink);min-width:0;cursor:pointer}.skill-detail-button strong{font-size:13px;font-weight:600;line-height:1.6;display:block}.skill-detail-button small{font-size:9px;color:#81758f;display:block;margin-top:2px;overflow-wrap:anywhere}.skill-orb{width:32px;height:32px;display:grid;place-items:center;background:#eee8f7;color:#7b699b;border-radius:10px;flex-shrink:0}.skill-orb>.icon{width:18px;height:18px}.pin-button{background:transparent;border:0;font-size:21px;color:#b6a9c5;padding:0 3px;min-width:32px;min-height:36px;cursor:pointer}.pin-button.pinned{color:#b48b45}.skill-level-row{display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:12px}.skill-level-row small{font-size:9px;margin-left:6px;color:#9a90a5}.skill-level-row b{color:#80718e;font-size:10px;font-weight:500}.leaf-skill .progress{margin:9px 0;height:5px}.leaf-skill .progress>span{background:var(--domain-color)}.leaf-skill p{font-size:10px;margin:0}
+.skill-picker{display:grid;gap:11px;padding:15px;border-radius:14px;background:#f7f5fd;border:1px solid #e7e1f2}.skill-picker label{font-size:11px}.skill-picker select{background:#fff;font-size:12px}.skill-breadcrumb{font-size:10px;line-height:1.7;color:#77638f}.field-label{font-size:12px;margin-bottom:10px}.field-help{line-height:1.8}
+.immersive .battle-layout{max-width:1480px;grid-template-columns:215px minmax(460px,1fr) 190px;gap:32px;padding:28px 35px 18px}.immersive .battle-center{padding-top:3px}.immersive .battle-center h1{font-size:29px;letter-spacing:3px}.immersive .battle-side{padding-top:28px}.battle-task{font-size:12px;color:#b5a4c9;line-height:1.8;margin:9px auto 18px;max-width:530px}
+.boss-hp-head{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#e2cdec;font-size:11px;max-width:540px;margin:22px auto 10px}.boss-hp-head>span{display:flex;align-items:center;gap:7px;letter-spacing:1px}.boss-hp-head small{font-size:9px;letter-spacing:0;color:#95849f}.boss-hp-head .icon{width:15px;height:15px}.boss-hp-head b{font-size:11px;font-weight:500}.boss-hp-track{max-width:540px;height:10px;border:1px solid #b08ebc45;margin:auto;background:#130f226e;border-radius:10px;overflow:hidden}.boss-hp-track>span{display:block;height:100%;background:linear-gradient(90deg,#8e72d2,#d0a0dc,#edc6dc);box-shadow:0 0 18px #e2a0e66b;transition:width .8s linear}.hp-caption{font-size:10px;color:#a590b3;margin:9px auto 7px}
+.combat-stage{position:relative;aspect-ratio:2/1;width:100%;overflow:hidden;margin:0 auto;background:#201932;border-radius:24px;border:1px solid #aa8ccd24;box-shadow:0 20px 55px #0c071e2b;margin-top:20px}#combat-canvas{width:100%;height:100%;display:block}.stage-badge{position:absolute;top:14px;left:16px;font-size:9px;color:#c8b4e4;display:flex;align-items:center;gap:6px;background:#2118337a;border:1px solid #9374b132;padding:6px 10px;border-radius:20px}.stage-badge .icon{width:12px;height:12px}.frozen-caption{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);border:1px solid #b9a0ce50;border-radius:24px;padding:8px 16px;background:#252137c9;font-size:11px;white-space:nowrap;color:#e2d3f2}
+.combat-skill{margin-top:24px;border-top:1px solid #b597dc23;padding-top:20px}.combat-skill h3{font-size:17px;margin:13px 0 8px}.combat-skill p{line-height:1.8}.combat-skill>span{display:block;font-size:10px;color:#bca4d4;line-height:1.7;margin-top:12px}.timer-panel{max-width:470px;margin:auto}.immersive .focus-timer{font-size:69px;margin-top:16px;letter-spacing:4px}.session-progress{width:110px;margin:14px auto 0;height:3px;background:#b49acc2b;border-radius:3px;overflow:hidden}.session-progress>span{display:block;height:100%;background:#a994d8;transition:width .8s linear}.session-info>.session-skill-name{font-family:inherit;font-size:12px}.session-info>div:first-child{grid-column:1/-1}.session-info b.session-skill-name{font-family:inherit;font-size:13px}.session-info small{font-family:inherit;font-size:10px}.immersive .battle-controls{margin-top:18px}.immersive .battle-footnote{font-size:10px;color:#a18aad}.immersive .battle-footer{color:#9b85ae}.immersive .battle-side .eyebrow{color:#ae95c7}
+.battle-shell.minimal .combat-stage{display:none}.battle-shell.minimal .battle-center{padding-top:32px}.battle-shell.minimal .focus-timer{font-size:88px;margin-top:44px}.paused .boss-hp-track>span,.paused .session-progress>span{transition:none}
+.offline-indicator{font-size:10px;color:#77638f;padding:8px 12px;background:#ede8f8}.pwa-update{position:fixed;bottom:25px;right:24px;z-index:99;background:#fff;border:1px solid #b9a6dc;border-radius:16px;padding:15px 20px;box-shadow:0 10px 35px #352a5f25;max-width:320px;font-size:12px}.pwa-update button{margin-top:12px}
+@media(min-width:1500px){.immersive .battle-layout{padding-top:34px}.combat-stage{margin-top:23px}.immersive .focus-timer{font-size:74px}}
+@media(max-width:1200px){.immersive .battle-layout{grid-template-columns:minmax(0,1fr) 195px;max-width:1050px;padding:24px 28px;gap:25px}.immersive .battle-side.first{display:none}.skill-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.skill-intro{padding:27px}.skill-intro h2{font-size:24px}.taxonomy-counts{gap:15px}.taxonomy-counts b{font-size:32px}}
+@media(max-width:850px){.immersive .battle-layout{grid-template-columns:minmax(0,1fr);max-width:740px}.immersive .battle-side.last{display:none}.immersive .battle-mobile-modes{display:block;max-width:260px;margin:20px auto 0}.skill-intro{display:block}.taxonomy-counts{justify-content:flex-start;gap:35px;margin-top:22px}.taxonomy-counts b{font-size:30px}}
+@media(max-width:600px){.bottom-nav{grid-template-columns:repeat(5,1fr)}.bottom-nav button{min-height:52px}.bottom-nav .icon{width:21px;height:21px}.skill-intro{border-radius:19px;padding:22px}.skill-intro h2{font-size:23px}.skill-intro p{font-size:11px}.taxonomy-counts{gap:36px}.taxonomy-counts b{font-size:30px}.skill-toolbar{flex-direction:column;align-items:stretch;gap:13px}.skill-toolbar input{max-width:none;font-size:14px}.skill-cards{grid-template-columns:1fr}.leaf-skill{padding:16px}.skill-domain-head h3{font-size:16px}.skill-domain-head .chip{font-size:9px;padding:6px 9px}.skill-domain-head>.row>.icon{width:23px}.skill-level-row{margin-top:14px}.skill-detail-button strong{font-size:14px}.skill-detail-button small{font-size:10px}.skill-orb{width:37px;height:37px}.pin-button{min-width:42px;min-height:42px}.skill-intro .eyebrow{font-size:8px}.skill-picker{padding:12px}.skill-picker .two-fields{grid-template-columns:1fr 1fr;gap:8px}.skill-picker select{font-size:13px;padding:10px 8px}.form-grid input,.form-grid textarea{font-size:16px}.form-grid select{font-size:14px}.immersive .battle-layout{padding:23px 17px 6px}.immersive .battle-center h1{font-size:25px;letter-spacing:2px}.immersive .battle-task{font-size:11px;margin-bottom:15px}.boss-hp-head{font-size:10px;margin-top:18px}.boss-hp-head small{display:none}.boss-hp-head b{font-size:10px}.boss-hp-track{height:9px}.combat-stage{margin-top:16px;border-radius:17px;aspect-ratio:1.6/1}.stage-badge{top:10px;left:10px;font-size:8px;padding:5px 8px}.frozen-caption{font-size:10px;bottom:14px;padding:6px 12px}.immersive .focus-timer{font-size:63px;margin-top:20px}.immersive .focus-state{font-size:11px;letter-spacing:.5px}.immersive .battle-controls{gap:10px;margin-top:20px}.immersive .battle-controls .btn{font-size:13px;min-height:46px}.immersive .battle-footnote{font-size:9px}.immersive .battle-mobile-modes{margin-top:17px}.immersive .battle-footer{font-size:8px;line-height:1.8;padding:17px}.pwa-update{bottom:85px;left:15px;right:15px;max-width:none}.immersive .battle-top{padding:13px 17px}.immersive .battle-demo{font-size:9px}.skill-search{font-size:16px}}
+
+/* v0.5 — one decision at a time: mode, duration, start. */
+[hidden]{display:none!important}
+.more-settings{border:1px solid #e5e0ee;border-radius:14px;padding:0 15px;background:#fcfbfe}
+.more-settings>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;cursor:pointer;font-size:13px;color:#4a405d;list-style:none}
+.more-settings>summary::-webkit-details-marker{display:none}
+.more-settings>summary:after{content:'+';font-size:19px;color:#8775a1}
+.more-settings[open]>summary:after{content:'−'}
+.more-settings>summary span{margin-left:auto;font-size:11px;color:#857992}
+.more-settings>.form-grid{padding:6px 0 16px}
+.focus-context{display:flex;justify-content:space-between;gap:12px;align-items:center;border-bottom:1px solid #eee9f4;padding:3px 0 19px;margin-bottom:21px}
+.focus-context>span{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;min-width:0}
+.focus-context .icon{color:#8b74bb;flex-shrink:0}
+.focus-context small{font-size:11px;color:#726781;background:#f3effa;border-radius:20px;padding:6px 9px;white-space:nowrap}
+.timer-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:5px;background:#f4f1f8;border:1px solid #e9e3f1;border-radius:16px}
+.timer-mode{border:1px solid transparent;background:transparent;border-radius:11px;min-height:63px;padding:9px 5px;color:#746880;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.timer-mode b{font-size:14px;font-weight:600}
+.timer-mode small{font-size:10px;letter-spacing:.4px}
+.timer-mode.selected{background:#fff;color:#6345a6;border-color:#d4c5ed;box-shadow:0 2px 8px #4b307912}
+.duration-control{text-align:center;padding:9px 0 0}
+.duration-control>label{font-size:12px;color:#716580;font-weight:500}
+.duration-entry{display:flex;align-items:baseline;justify-content:center;gap:7px;margin:4px 0 12px}
+.focus-setup .duration-entry input{font-size:66px;line-height:1.1;font-weight:500;letter-spacing:-2px;width:155px;text-align:center;border:0;border-radius:12px;padding:2px 5px;color:#45345f;background:#fcfbff;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield}
+.duration-entry input::-webkit-inner-spin-button,.duration-entry input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.duration-entry span{font-size:13px;color:#8c7e9d;align-self:center}
+.duration-control .preset-row{justify-content:center;gap:9px}
+.duration-control .preset{min-height:40px;min-width:72px;font-size:12px;border-radius:10px}
+.duration-control .preset.chosen{background:#ece5fa;color:#65429d;border-color:#c7b5e4}
+.mode-help{font-size:12px;line-height:1.8;text-align:center;color:#756783;min-height:23px;margin:0 0 1px}
+.focus-setup .primary{min-height:49px;font-size:15px}
+.quick-demo-link{min-height:36px!important;font-size:12px!important;padding:3px!important;margin-top:-7px}
+.pomo-settings{padding-top:12px;border-top:1px solid #e8e2f0}
+.modal-body .field-help{font-size:12px}
+.modal-body .form-grid label{font-size:13px}
+.simple-battle .focus-arena{max-width:900px;margin:auto;padding:25px 40px 12px;text-align:center}
+.arena-context{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#b7a8cf;font-size:12px;padding-bottom:13px;border-bottom:1px solid #bdaaed19;text-align:left}
+.arena-context>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.arena-skill{display:flex;align-items:center;gap:6px;font-size:11px;white-space:nowrap;color:#d2c1e7}
+.arena-skill .icon{width:15px;height:15px}
+.focus-mode-label{color:#aa8ed0;font-size:10px;letter-spacing:2.5px;margin-top:18px;display:flex;align-items:center;gap:13px;justify-content:center}
+.focus-mode-label span{font-size:12px;letter-spacing:.5px;color:#ddd0ef;padding-left:13px;border-left:1px solid #9172b54d}
+.simple-battle .focus-arena h1{font-family:'Noto Serif CJK TC',serif;font-size:28px;font-weight:600;letter-spacing:1.5px;margin:7px 0 0;line-height:1.4}
+.simple-battle .battle-task{margin:7px auto 16px;font-size:12px}
+.arena-hp{max-width:590px;margin:0 auto}
+.simple-battle .hp-caption{font-size:11px;min-height:18px;line-height:1.5;margin:7px 0 0;color:#c1aed6}
+.simple-battle .boss-hp-head{font-size:12px}
+.simple-battle .boss-hp-head .icon{width:14px;height:14px}
+.simple-battle .boss-hp-track{height:9px}
+.simple-battle .combat-stage{max-width:780px;aspect-ratio:2.6/1;margin-top:15px;border-radius:22px;background:transparent}
+.simple-battle #combat-canvas{object-fit:contain}
+.simple-battle .timer-panel{max-width:640px}
+.simple-battle .timer-panel .focus-timer{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:66px;font-weight:500;letter-spacing:-1.5px;line-height:1.15;margin-top:15px}
+.simple-battle .focus-state{font-size:12px;letter-spacing:0;color:#c2afd7;line-height:1.7;min-height:21px;margin-top:6px}
+.simple-battle .battle-controls{gap:12px;margin:19px 0 14px;flex-wrap:wrap}
+.simple-battle .battle-controls .btn{min-height:48px;font-size:14px;min-width:130px;padding:10px 20px}
+.simple-battle .battle-controls .primary{background:#bda4ed;color:#261932;border-color:#bda4ed}
+.simple-battle .battle-footnote{font-size:11px;line-height:1.7;color:#ad9aba}
+.arena-settings{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:590px;margin:23px auto 0;border-top:1px solid #bb99df1f;padding-top:14px;color:#a493b6}
+.arena-settings>.small{font-size:11px}
+.arena-settings .scene-toggle{width:220px;margin:0}
+.arena-settings .scene-toggle button{font-size:11px;min-height:36px}
+.simple-battle .battle-footer{font-size:10px;letter-spacing:1.4px;padding:19px 15px 25px}
+.pomo-summary{font-size:11px;display:flex;align-items:center;gap:12px;justify-content:center;color:#bdaacf;flex-wrap:wrap}
+.pomo-summary b{font-variant-numeric:tabular-nums;font-weight:500;color:#e0d0f0}
+.pomo-dots{display:flex;gap:6px}
+.pomo-dots i{display:block;width:9px;height:9px;border-radius:50%;border:1px solid #b59bcc55;background:#67517433}
+.pomo-dots i.done{background:#b79ae7;border-color:#cbb5ec}
+.simple-battle.resting{background:radial-gradient(ellipse at 50% 35%,#253e49 0,#182733 58%,#131d2b)}
+.simple-battle.resting .focus-mode-label{color:#91c3c0}
+.simple-battle.resting .combat-stage,.arena-hp.is-rest{display:none}
+.rest-scene{height:223px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:25px}
+.rest-scene>span{font-size:9px;letter-spacing:3px;color:#8bacae}
+.rest-orbit{position:relative;width:139px;height:139px;border:1px solid #99c6c12b;border-radius:50%;display:grid;place-items:center;box-shadow:0 0 80px #6cb8b013,inset 0 0 30px #72bfb510}
+.rest-moon{width:60px;height:60px;border-radius:50%;box-shadow:-13px 8px 0 1px #c0dfd7;transform:translate(8px,-5px) rotate(-20deg)}
+.rest-orbit i{position:absolute;width:5px;height:5px;transform:rotate(45deg);background:#a5cfc7;top:20px;right:13px}
+.rest-orbit i:nth-of-type(2){top:auto;right:auto;bottom:16px;left:5px;width:3px;height:3px}
+.rest-orbit i:nth-of-type(3){top:52px;right:-23px;width:3px;height:3px}
+.simple-battle.resting .battle-controls .primary{background:#abd7cd;border-color:#abd7cd;color:#153630}
+.simple-battle.minimal .focus-arena{max-width:680px}
+.simple-battle.minimal .timer-panel .focus-timer{font-size:94px;margin-top:65px}
+@media(max-width:600px){
+ .focus-context{align-items:flex-start}.focus-context>span{font-size:12px;line-height:1.7}.focus-context small{font-size:10px}
+ .modal-body .form-grid input,.modal-body .form-grid select,.modal-body .form-grid textarea{font-size:16px}
+ .focus-setup .duration-entry input{font-size:64px}
+ .more-settings>summary{font-size:12px}.more-settings>summary span{font-size:10px}
+ .simple-battle .focus-arena{padding:16px 18px 9px}
+ .simple-battle .battle-top{padding:11px 16px}
+ .arena-context{font-size:11px;padding-bottom:11px}.arena-skill{font-size:10px}
+ .focus-mode-label{margin-top:14px;font-size:9px}.focus-mode-label span{font-size:11px}
+ .simple-battle .focus-arena h1{font-size:24px}
+ .simple-battle .battle-task{font-size:11px;margin-bottom:13px}
+ .simple-battle .combat-stage{aspect-ratio:1.65/1;margin-top:13px;border-radius:17px}
+ .simple-battle .timer-panel .focus-timer{font-size:60px;margin-top:14px}
+ .simple-battle .focus-state{font-size:11px}
+ .simple-battle .battle-controls{margin:17px 0 13px;gap:8px}
+ .simple-battle .battle-controls .btn{font-size:13px;padding:10px 14px;min-width:108px}
+ .simple-battle .battle-footnote{font-size:10px}
+ .arena-settings{margin-top:19px;gap:10px}.arena-settings>.small{font-size:10px}
+ .arena-settings .scene-toggle{width:183px}.arena-settings .scene-toggle button{min-height:38px}
+ .rest-scene{height:206px}.simple-battle.minimal .timer-panel .focus-timer{font-size:76px}
+}
+@media(max-width:360px){.simple-battle .focus-arena{padding-left:13px;padding-right:13px}.arena-settings{flex-wrap:wrap;justify-content:center}.more-settings>summary span{display:none}.pomo-settings .two-fields{grid-template-columns:1fr}}
+
+.simple-battle.minimal .rest-scene{display:none}
+
+/* v0.6: free-text subjects and open-ended training; preserve simple setup. */
+[hidden]{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.subject-picker{padding:0;border:0;background:transparent;display:block}
+.subject-picker>input[type="text"]{width:100%;font-size:16px;background:#fff;border:1px solid #d9d1e9;border-radius:12px;padding:13px 14px;min-height:48px;color:#302540}
+.subject-picker input:focus{outline:3px solid #b8a3e55c;outline-offset:1px;border-color:#8e72bf}
+.subject-chips{display:flex;gap:6px;flex-wrap:wrap;margin:9px 0 8px}
+.subject-chip{border:1px solid #e5def0;border-radius:20px;background:#f5f1fa;color:#645479;font-size:11px;min-height:32px;padding:6px 11px;max-width:100%;overflow-wrap:anywhere;text-align:left}
+.subject-chip:hover,.subject-chip:focus-visible{background:#e9e0f5;border-color:#b6a1d2}
+.subject-classification{font-size:11px;margin-top:5px;color:#83728f}
+.subject-classification>summary{cursor:pointer;min-height:30px;padding:6px 0;line-height:1.6}
+.subject-classification>summary span{margin-left:8px;color:#80728d}
+.subject-classification select{width:100%;font-size:13px;margin-top:6px}
+.subject-hint{margin:5px 0 0;font-size:11px;line-height:1.7}
+.focus-subject>.field-label{margin-bottom:8px;font-size:13px;font-weight:600}
+.task-settings summary{font-size:12px}
+.focus-setup .pomo-settings{margin-top:0;padding-top:0;border-top:0}
+.training-tag{display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;max-width:100%;margin:18px auto 15px;border:1px solid #c3ac7752;border-radius:24px;padding:9px 16px;font-size:12px;color:#d9c8a6;background:#a9915612;letter-spacing:.4px}
+.training-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#c7b986;box-shadow:0 0 10px #c7b98655}
+.simple-battle.training .combat-stage{border-color:#b9935840}
+.simple-battle.training .focus-mode-label{color:#d2bc8a}
+.simple-battle.training .battle-footnote{color:#c5b9a8}
+.skill-toolbar{flex-wrap:wrap}
+@media(max-width:600px){.subject-picker{padding:0}.subject-picker>input[type="text"]{font-size:16px;min-height:48px}.subject-chip{min-height:36px}.training-tag{font-size:10px;padding:8px 12px;margin-top:14px}.subject-classification select{font-size:14px}.skill-toolbar>.btn{align-self:flex-start}}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading"><div><div class="loading-ring"></div>正在開啟你的冒險</div></div></div>
+<dialog id="modal" aria-labelledby="modal-title"></dialog>
+<div id="toasts" role="status" aria-live="polite"></div>
+<script>window.LifeScoring=(function(){const exports={};
+"use strict";
+/**
+ * Life RPG v0.1 — dependency-free scoring core and data contracts.
+ * XP represents logged effort, not measured ability, health, or personal worth.
+ * Input is a complete activity snapshot for ONE user. No persistence or UI is included.
+ * The caller splits focus sessions into local calendar days and checks overlapping
+ * sessions before calling scoreActivities. Minutes may be self-reported.
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RULES = void 0;
+exports.xpThreshold = xpThreshold;
+exports.getLevelProgress = getLevelProgress;
+exports.scoreActivities = scoreActivities;
+exports.RULES = Object.freeze({
+    version: "0.1.0",
+    secondsPerBlock: 300,
+    xpPerBlock: 2,
+    actionXP: 5,
+    rewardedActionsPerDay: 4,
+    dailyXPCap: 100,
+    characterLevelBase: 100,
+    skillLevelBase: 50,
+});
+const MAX_XP = 1_000_000_000_000;
+function requireText(value, field) {
+    if (typeof value !== "string" || value.trim().length === 0) {
+        throw new TypeError(`${field} must be a non-empty string.`);
+    }
+}
+function requireInteger(value, field, min, max) {
+    if (typeof value !== "number" || !Number.isSafeInteger(value) || value < min || value > max) {
+        throw new RangeError(`${field} must be an integer in [${min}, ${max}].`);
+    }
+}
+function validateLocalDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        throw new TypeError("localDate must use YYYY-MM-DD.");
+    }
+    const date = new Date(`${value}T00:00:00.000Z`);
+    if (!Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== value) {
+        throw new RangeError("localDate is not a valid calendar date.");
+    }
+}
+function validateActivity(activity) {
+    if (activity == null || typeof activity !== "object") {
+        throw new TypeError("Activity must be an object.");
+    }
+    requireText(activity.id, "id");
+    requireText(activity.questInstanceId, "questInstanceId");
+    requireText(activity.skillId, "skillId");
+    requireText(activity.localDate, "localDate");
+    validateLocalDate(activity.localDate);
+    requireText(activity.recordedAt, "recordedAt");
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(activity.recordedAt) ||
+        !Number.isFinite(Date.parse(activity.recordedAt))) {
+        throw new TypeError("recordedAt must be an ISO timestamp with a timezone.");
+    }
+    validateLocalDate(activity.recordedAt.slice(0, 10));
+    if (activity.kind === "focus") {
+        requireInteger(activity.focusSeconds, "focusSeconds", 1, 86_400);
+    }
+    else if (activity.kind !== "action") {
+        throw new TypeError("Activity kind must be focus or action.");
+    }
+}
+function fingerprint(activity) {
+    return JSON.stringify([
+        activity.kind, activity.questInstanceId, activity.skillId,
+        activity.localDate, activity.recordedAt,
+        activity.kind === "focus" ? activity.focusSeconds : null,
+    ]);
+}
+/** Cumulative XP required to ENTER a level. Level 1 begins at zero XP. */
+function xpThreshold(level, base = exports.RULES.characterLevelBase) {
+    requireInteger(level, "level", 1, 1_500_000);
+    requireInteger(base, "base", 1, 1_000_000);
+    const xp = base * level * (level - 1) / 2;
+    if (!Number.isSafeInteger(xp))
+        throw new RangeError("Threshold exceeds safe integer precision.");
+    return xp;
+}
+function getLevelProgress(totalXP, base = exports.RULES.characterLevelBase) {
+    requireInteger(totalXP, "totalXP", 0, MAX_XP);
+    requireInteger(base, "base", 1, 1_000_000);
+    let level = Math.floor((1 + Math.sqrt(1 + 8 * totalXP / base)) / 2);
+    // Guard exact threshold boundaries against floating-point rounding.
+    while (xpThreshold(level + 1, base) <= totalXP)
+        level++;
+    while (xpThreshold(level, base) > totalXP)
+        level--;
+    const levelStartXP = xpThreshold(level, base);
+    const nextLevelXP = xpThreshold(level + 1, base);
+    return {
+        level, totalXP, levelStartXP, nextLevelXP,
+        xpIntoLevel: totalXP - levelStartXP,
+        xpToNextLevel: nextLevelXP - totalXP,
+        progress: (totalXP - levelStartXP) / (nextLevelXP - levelStartXP),
+    };
+}
+/**
+ * Deterministic replay for one user's complete v0.1 activity history.
+ * Identical event retries are ignored; conflicting reuse of an ID is rejected.
+ * Pass voidedIds to correct/undo records, then replay the complete snapshot.
+ * A storage layer must replace this derived snapshot or append adjustment deltas;
+ * it must NOT append all returned entries again on every replay.
+ */
+function scoreActivities(activities, options = {}) {
+    const unique = new Map();
+    for (const activity of activities) {
+        validateActivity(activity);
+        const previous = unique.get(activity.id);
+        if (previous && fingerprint(previous) !== fingerprint(activity)) {
+            throw new Error(`Conflicting activity ID: ${activity.id}`);
+        }
+        if (!previous)
+            unique.set(activity.id, activity);
+    }
+    const voided = new Set(options.voidedIds ?? []);
+    for (const id of voided) {
+        requireText(id, "voided ID");
+        if (!unique.has(id))
+            throw new Error(`Cannot void unknown activity: ${id}`);
+    }
+    const ordered = [...unique.values()].filter(a => !voided.has(a.id)).sort((a, b) => {
+        const timeDifference = Date.parse(a.recordedAt) - Date.parse(b.recordedAt);
+        return timeDifference || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+    });
+    const days = new Map();
+    const focusByDayAndSkill = new Map();
+    const occurrenceDefinitions = new Map();
+    const completedActions = new Set();
+    const skillXP = new Map();
+    const ledger = [];
+    let totalXP = 0;
+    for (const activity of ordered) {
+        const definition = JSON.stringify([activity.kind, activity.skillId]);
+        const existingDefinition = occurrenceDefinitions.get(activity.questInstanceId);
+        if (existingDefinition && existingDefinition !== definition) {
+            throw new Error(`A quest instance cannot change XP mode or skill: ${activity.questInstanceId}`);
+        }
+        occurrenceDefinitions.set(activity.questInstanceId, definition);
+        let day = days.get(activity.localDate);
+        if (!day) {
+            day = { localDate: activity.localDate, focusSeconds: 0, completedActions: 0, actionXP: 0, awardedXP: 0 };
+            days.set(activity.localDate, day);
+        }
+        const flags = [];
+        let rawXP = 0;
+        let eligibleXP = 0;
+        if (activity.kind === "focus") {
+            day.focusSeconds += activity.focusSeconds;
+            if (day.focusSeconds > 86_400) {
+                throw new RangeError(`Focus time exceeds the length of a day: ${activity.localDate}`);
+            }
+            const bucket = JSON.stringify([activity.localDate, activity.skillId]);
+            const before = focusByDayAndSkill.get(bucket) ?? 0;
+            const after = before + activity.focusSeconds;
+            focusByDayAndSkill.set(bucket, after);
+            rawXP = exports.RULES.xpPerBlock * (Math.floor(after / exports.RULES.secondsPerBlock) - Math.floor(before / exports.RULES.secondsPerBlock));
+            eligibleXP = rawXP;
+            if (rawXP === 0)
+                flags.push("below_full_block");
+        }
+        else if (completedActions.has(activity.questInstanceId)) {
+            flags.push("duplicate_action");
+        }
+        else {
+            completedActions.add(activity.questInstanceId);
+            day.completedActions++;
+            rawXP = exports.RULES.actionXP;
+            if (day.completedActions <= exports.RULES.rewardedActionsPerDay)
+                eligibleXP = rawXP;
+            else
+                flags.push("action_cap");
+        }
+        const remainingDailyXP = Math.max(0, exports.RULES.dailyXPCap - day.awardedXP);
+        const awardedXP = Math.min(eligibleXP, remainingDailyXP);
+        if (awardedXP < eligibleXP)
+            flags.push("daily_cap");
+        day.awardedXP += awardedXP;
+        if (activity.kind === "action")
+            day.actionXP += awardedXP;
+        totalXP += awardedXP;
+        requireInteger(totalXP, "totalXP", 0, MAX_XP);
+        skillXP.set(activity.skillId, (skillXP.get(activity.skillId) ?? 0) + awardedXP);
+        ledger.push({
+            activityId: activity.id, localDate: activity.localDate,
+            skillId: activity.skillId, rawXP, awardedXP, flags,
+            ruleVersion: exports.RULES.version,
+        });
+    }
+    return {
+        totalXP,
+        character: getLevelProgress(totalXP),
+        skillXP: Object.fromEntries(skillXP),
+        skillLevels: Object.fromEntries([...skillXP].map(([id, xp]) => [id, getLevelProgress(xp, exports.RULES.skillLevelBase)])),
+        days: Object.fromEntries([...days].sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)),
+        ledger,
+    };
+}
+
+return exports;})();</script>
+<script>/* LifeRPG taxonomy: 7 domains, 21 groups, 63 leaf skills. */
+(function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.LifeTaxonomy=factory();})(globalThis,function(){
+'use strict';
+const domains=[{"id": "learning", "name": "學習與知識", "en": "ACADEMIC CITADEL", "boss": "知識石像", "icon": "book", "color": "#b998ff", "visual": "符文書與光束", "groups": [{"id": "learning.subjects", "name": "課業理解", "skills": [{"id": "learning.subjects.intro_psych", "name": "心理學概論", "en": "Introductory psychology"}, {"id": "learning.subjects.psych_statistics", "name": "心理統計", "en": "Psychological statistics"}, {"id": "learning.subjects.physiological_psych", "name": "生理心理學", "en": "Physiological psychology"}]}, {"id": "learning.research", "name": "研究素養", "skills": [{"id": "learning.research.search", "name": "文獻檢索", "en": "Literature search"}, {"id": "learning.research.critical_reading", "name": "文獻批判閱讀", "en": "Critical reading"}, {"id": "learning.research.design", "name": "研究設計", "en": "Research design"}]}, {"id": "learning.output", "name": "學習輸出", "skills": [{"id": "learning.output.synthesis", "name": "知識統整", "en": "Knowledge synthesis"}, {"id": "learning.output.practice_review", "name": "解題與訂正", "en": "Practice and error review"}, {"id": "learning.output.academic_writing", "name": "學術寫作", "en": "Academic writing"}]}]}, {"id": "language", "name": "語言與溝通", "en": "LANGUAGE ISLES", "boss": "語音龍", "icon": "spark", "color": "#80dfff", "visual": "聲波與文字法陣", "groups": [{"id": "language.english_input", "name": "英語理解", "skills": [{"id": "language.english_input.listening", "name": "英文聽力", "en": "English listening"}, {"id": "language.english_input.reading", "name": "英文閱讀", "en": "English reading"}, {"id": "language.english_input.usage", "name": "英文詞彙與用法", "en": "English vocabulary and usage"}]}, {"id": "language.english_output", "name": "英語輸出", "skills": [{"id": "language.english_output.speaking", "name": "英文口說", "en": "English speaking"}, {"id": "language.english_output.writing", "name": "英文寫作", "en": "English writing"}, {"id": "language.english_output.pronunciation", "name": "英文發音", "en": "English pronunciation"}]}, {"id": "language.expression", "name": "通用表達", "skills": [{"id": "language.expression.chinese_writing", "name": "中文寫作", "en": "Chinese writing"}, {"id": "language.expression.public_speaking", "name": "演說表達", "en": "Public speaking"}, {"id": "language.expression.presentation", "name": "簡報敘事", "en": "Presentation storytelling"}]}]}, {"id": "career", "name": "工作與職涯", "en": "CRAFT HARBOR", "boss": "教學試煉官", "icon": "flag", "color": "#ffc47a", "visual": "戰術卡與支援光環", "groups": [{"id": "career.teaching_design", "name": "教學設計", "skills": [{"id": "career.teaching_design.lesson_planning", "name": "教案設計", "en": "Lesson planning"}, {"id": "career.teaching_design.materials", "name": "教材設計", "en": "Learning material design"}, {"id": "career.teaching_design.assessment", "name": "學習評量", "en": "Learning assessment"}]}, {"id": "career.delivery", "name": "工作交付", "skills": [{"id": "career.delivery.teaching", "name": "授課實作", "en": "Teaching practice"}, {"id": "career.delivery.client_communication", "name": "客戶溝通", "en": "Client communication"}, {"id": "career.delivery.project_management", "name": "專案管理", "en": "Project management"}]}, {"id": "career.development", "name": "職涯發展", "skills": [{"id": "career.development.portfolio", "name": "作品集整理", "en": "Portfolio curation"}, {"id": "career.development.applications", "name": "履歷與申請", "en": "Resumes and applications"}, {"id": "career.development.interviews", "name": "面試演練", "en": "Interview practice"}]}]}, {"id": "creation", "name": "創作與技術", "en": "CREATION FORGE", "boss": "星核鍛造者", "icon": "code", "color": "#a8a0ff", "visual": "機械使魔與能量刃", "groups": [{"id": "creation.software", "name": "軟體開發", "skills": [{"id": "creation.software.frontend", "name": "前端開發", "en": "Frontend development"}, {"id": "creation.software.backend", "name": "後端開發", "en": "Backend development"}, {"id": "creation.software.testing", "name": "測試與除錯", "en": "Testing and debugging"}]}, {"id": "creation.product", "name": "產品設計", "skills": [{"id": "creation.product.research", "name": "使用者研究", "en": "User research"}, {"id": "creation.product.uiux", "name": "介面與流程設計", "en": "UI/UX design"}, {"id": "creation.product.visuals", "name": "視覺設計", "en": "Visual design"}]}, {"id": "creation.data", "name": "資料與自動化", "skills": [{"id": "creation.data.analysis", "name": "資料分析", "en": "Data analysis"}, {"id": "creation.data.ai", "name": "AI 應用", "en": "AI applications"}, {"id": "creation.data.automation", "name": "流程自動化", "en": "Workflow automation"}]}]}, {"id": "health", "name": "健康與身體", "en": "VITALITY GARDEN", "boss": "節律守護者", "icon": "leaf", "color": "#82e4b5", "visual": "自然光與防護結界", "groups": [{"id": "health.movement", "name": "身體活動", "skills": [{"id": "health.movement.aerobic", "name": "有氧活動", "en": "Aerobic activity"}, {"id": "health.movement.strength", "name": "肌力練習", "en": "Strength practice"}, {"id": "health.movement.mobility", "name": "伸展與活動度", "en": "Stretching and mobility"}]}, {"id": "health.care", "name": "日常照護", "skills": [{"id": "health.care.meals", "name": "飲食準備", "en": "Meal preparation"}, {"id": "health.care.wind_down", "name": "睡前準備", "en": "Wind-down routine"}, {"id": "health.care.planning", "name": "照護安排", "en": "Care planning"}]}, {"id": "health.recovery", "name": "恢復與休息", "skills": [{"id": "health.recovery.relaxation", "name": "放鬆練習", "en": "Relaxation practice"}, {"id": "health.recovery.screen_breaks", "name": "離屏休息", "en": "Screen breaks"}, {"id": "health.recovery.planning", "name": "休息安排", "en": "Rest planning"}]}]}, {"id": "life", "name": "生活管理", "en": "EVERYDAY HAVEN", "boss": "生活迷宮守衛", "icon": "home", "color": "#edc277", "visual": "秩序符印與結界", "groups": [{"id": "life.time", "name": "時間規劃", "skills": [{"id": "life.time.daily", "name": "每日安排", "en": "Daily planning"}, {"id": "life.time.weekly", "name": "每週回顧", "en": "Weekly review"}, {"id": "life.time.breakdown", "name": "任務拆解", "en": "Task breakdown"}]}, {"id": "life.environment", "name": "環境與行政", "skills": [{"id": "life.environment.space", "name": "空間整理", "en": "Space organization"}, {"id": "life.environment.documents", "name": "文件與行政", "en": "Documents and administration"}, {"id": "life.environment.digital", "name": "數位整理", "en": "Digital organization"}]}, {"id": "life.finance", "name": "個人財務", "skills": [{"id": "life.finance.bookkeeping", "name": "記帳", "en": "Bookkeeping"}, {"id": "life.finance.budget", "name": "預算安排", "en": "Budget planning"}, {"id": "life.finance.bills", "name": "帳單管理", "en": "Bill management"}]}]}, {"id": "relationships", "name": "關係與內在成長", "en": "ECHO SANCTUARY", "boss": "迴聲守門人", "icon": "shield", "color": "#edafcf", "visual": "星光與鏡面結界", "groups": [{"id": "relationships.interaction", "name": "人際互動", "skills": [{"id": "relationships.interaction.listening", "name": "傾聽", "en": "Active listening"}, {"id": "relationships.interaction.needs", "name": "需求表達", "en": "Expressing needs"}, {"id": "relationships.interaction.conflict", "name": "衝突討論", "en": "Conflict discussion"}]}, {"id": "relationships.care", "name": "關係維繫", "skills": [{"id": "relationships.care.time", "name": "共同相處", "en": "Shared time"}, {"id": "relationships.care.contact", "name": "主動關心", "en": "Thoughtful contact"}, {"id": "relationships.care.boundaries", "name": "界線練習", "en": "Boundary practice"}]}, {"id": "relationships.self", "name": "自我理解", "skills": [{"id": "relationships.self.reflection", "name": "自我反思", "en": "Self-reflection"}, {"id": "relationships.self.values", "name": "價值澄清", "en": "Values clarification"}, {"id": "relationships.self.emotions", "name": "情緒辨識", "en": "Emotion awareness"}]}]}];
+const skills=domains.flatMap(d=>d.groups.flatMap(g=>g.skills.map(k=>({...k,domainId:d.id,groupId:g.id,domainName:d.name,groupName:g.name,color:d.color}))));
+const byId=Object.assign(Object.create(null),Object.fromEntries(skills.map(s=>[s.id,s])));
+const aliases={academic:'learning',coding:'creation',english:'language'};
+const initial=["learning.subjects.physiological_psych", "learning.subjects.psych_statistics", "language.english_input.listening", "language.english_output.speaking", "career.teaching_design.lesson_planning", "career.teaching_design.materials", "creation.software.frontend", "creation.product.uiux", "life.time.weekly", "relationships.self.reflection"];
+const defaults=Object.fromEntries(domains.map(d=>[d.id,initial.find(id=>byId[id]?.domainId===d.id)||d.groups[0].skills[0].id]));
+const canonical=id=>aliases[id]||id;
+const path=id=>byId[id]?[byId[id].domainName,byId[id].groupName,byId[id].name].join(' › '):id;
+return {domains,skills,byId,initial,defaults,canonical,path};
+});</script>
+<script>/* LifeRPG v0.6: source records, focus state machine and projections.
+   Pure functions: no network, UI, or persistent side effects. */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./scoring.cjs'),require('./taxonomy.js'));
+  else root.LifeDomain = factory(root.LifeScoring,root.LifeTaxonomy);
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (Core,T) {
+  'use strict';
+  const VERSION = '0.6.0', OFFSET = 28800;
+  const MODES = ['countdown','countup','pomodoro'], MAX_FOCUS = 86400;
+  const DEFAULT_FOCUS = Object.freeze({mode:'countdown',minutes:25,shortBreakMinutes:5,longBreakMinutes:15,roundsBeforeLongBreak:4});
+  const DOMAINS = T.domains.map(d=>({...d,skill:T.byId[T.defaults[d.id]].name}));
+  const now = () => Math.floor(Date.now()/1000);
+  const uid = () => {
+    if (globalThis.crypto.randomUUID) return globalThis.crypto.randomUUID();
+    const b=globalThis.crypto.getRandomValues(new Uint8Array(16));b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;
+    const h=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');return h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+  };
+  const clone = s => JSON.parse(JSON.stringify(s));
+  function assert(b,m) { if(!b) throw new Error(m); }
+  function text(v,n,max=160) { assert(typeof v==='string' && v.trim().length>0 && v.length<=max, `${n}格式不正確`); return v.trim(); }
+  const iso = t => new Date(t*1000).toISOString();
+  const day = t => new Date((t+OFFSET)*1000).toISOString().slice(0,10);
+  const dayStart = d => Date.parse(d+'T00:00:00+08:00')/1000;
+  function empty(demo=false) {
+    return { schemaVersion:VERSION,ruleVersion:Core.RULES.version,datasetId:uid(),demo,revision:0,
+      player:{name:'冒險者',timeZone:'Asia/Taipei'},goals:[],sessions:[],active:null,customSkills:[],
+      preferences:{scene:'dynamic',pinnedSkills:[...T.initial],subjectByGoal:{},focus:{...DEFAULT_FOCUS}},createdAt:iso(now()) };
+  }
+  // Custom subjects are real leaf skills. Their parent metadata is derived from
+  // the built-in taxonomy (never trusted HTML/colors in imported data).
+  function customMeta(k) {
+    const d=T.domains.find(d=>d.id===k.domainId),g=d?.groups.find(g=>g.id===k.groupId);
+    return g?{...k,en:'Custom subject',domainName:d.name,groupName:g.name,color:d.color,icon:d.icon,custom:true}:null;
+  }
+  function findSkill(s,id) {return T.byId[id] || customMeta((s.customSkills||[]).find(k=>k.id===id)||{});}
+  function allSkills(s) {return T.skills.concat((s.customSkills||[]).map(customMeta).filter(Boolean));}
+  function skillTree(s) {return T.domains.map(d=>({...d,groups:d.groups.map(g=>({...g,skills:allSkills(s).filter(k=>k.groupId===g.id)}))}));}
+  const normalizedName = name => name.normalize('NFKC').trim().toLocaleLowerCase('zh-TW');
+  function ensureSubject(s,input,t=now()) {
+    const name=text(input.name,'科目名稱',40),group=T.domains.flatMap(d=>d.groups).find(g=>g.id===input.groupId);
+    assert(group,'請選擇科目的分類');
+    const existing=allSkills(s).find(k=>k.groupId===group.id&&normalizedName(k.name)===normalizedName(name));
+    if(existing)return existing;
+    assert(s.customSkills.length<300,'最多可新增 300 個自訂科目');
+    const domain=T.domains.find(d=>d.groups.some(g=>g.id===group.id));
+    const k={id:'custom.'+uid(),name,domainId:domain.id,groupId:group.id,createdAt:iso(t)};
+    s.customSkills.push(k);s.preferences.pinnedSkills.push(k.id);return customMeta(k);
+  }
+  function createGoal(s,input,t=now()) {
+    const domain=DOMAINS.find(d=>d.id===T.canonical(input.domainId));
+    assert(domain,'請選擇人生領域');
+    const labels=input.checkpoints.map(x=>x.trim()).filter(Boolean);
+    assert(labels.length>=1 && labels.length<=8,'請設定 1 到 8 個成果關卡');
+    assert(new Set(labels).size===labels.length,'成果關卡不能重複');
+    const leaf=findSkill(s,input.skillId)||T.skills.find(k=>k.domainId===domain.id&&k.name===input.skill)||T.byId[T.defaults[domain.id]];
+    assert(!input.skillId||findSkill(s,input.skillId),'請選擇有效的細技能');
+    const budget=Number(input.budgetMinutes??150);assert(Number.isSafeInteger(budget)&&budget>=1&&budget<=100000,'Boss 專注預算需為 1 到 100000 分鐘');
+    const g={id:input.id||uid(),title:text(input.title,'目標名稱',100),domainId:domain.id,
+      skillId:leaf.id,skill:leaf.name,budgetMinutes:budget,
+      boss:text(input.boss||domain.boss,'Boss 名稱',60),nextAction:text(input.nextAction||'推進下一個成果關卡','下一步',160),
+      dueDate:input.dueDate||'',status:'active',createdAt:iso(t),
+      checkpoints:labels.map(label=>({id:uid(),title:text(label,'成果條件',160),completedAt:null,note:''}))};
+    assert(!s.goals.some(x=>x.id===g.id),'目標 ID 重複');
+    if(g.dueDate) assert(/^\d{4}-\d{2}-\d{2}$/.test(g.dueDate)&&day(dayStart(g.dueDate))===g.dueDate,'日期格式不正確');
+    s.goals.push(g); return g;
+  }
+  function goal(s,id) {const g=s.goals.find(x=>x.id===id);assert(g,'找不到這個人生目標');return g;}
+  function active(s,id) {assert(s.active&&s.active.id===id,'這個回合已在其他視窗變更，請重新查看');return s.active;}
+  function closedSeconds(a) {return a.segments.reduce((n,p)=>n+p.end-p.start,0);}
+  // A frame/interval never awards time. Wall-clock intervals are the only source.
+  // Pomodoro rests and the wait for the next round never open a focus interval.
+  const timerMode = a => a.timerMode || 'countdown';
+  const targetSeconds = a => timerMode(a)==='countup'?null:(a.targetSeconds || a.plannedSeconds);
+  function remainingCapacity(a) {
+    const base=closedSeconds(a), mode=timerMode(a);
+    if(mode==='countup') return Math.max(0,MAX_FOCUS-base);
+    const used=mode==='pomodoro'?base-a.roundStartSeconds:base;
+    return Math.max(0,Math.min(MAX_FOCUS-base,targetSeconds(a)-used));
+  }
+  function seconds(a,t=now()) {
+    const base=closedSeconds(a);
+    return base+(a.state==='running'?Math.min(remainingCapacity(a),Math.max(0,t-a.runStartedAt)):0);
+  }
+  function timerView(a,t=now()) {
+    const mode=timerMode(a),total=seconds(a,t),target=targetSeconds(a);
+    const roundSeconds=mode==='pomodoro'?Math.max(0,total-a.roundStartSeconds):total;
+    const progress=mode==='countup'?null:Math.min(1,roundSeconds/target);
+    const resting=a.state==='break'||a.state==='ready';
+    const restRemaining=a.state==='break'?Math.max(0,a.breakUntil-t):0;
+    return {mode,total,roundSeconds,target,progress,resting,restRemaining,
+      displaySeconds:resting?restRemaining:mode==='countup'?total:Math.max(0,target-roundSeconds),
+      round:a.round||1,completedRounds:a.completedRounds||0,
+      atLimit:total>=MAX_FOCUS};
+  }
+  function start(s,options,t=now()) {
+    assert(!s.active,'已有未結束的回合；請先繼續或結算');
+    const g=goal(s,options.goalId);assert(g.status==='active','請先將目標設為進行中');
+    const mode=options.timerMode||'countdown',duration=mode==='countup'?null:options.plannedSeconds;
+    assert(MODES.includes(mode),'請選擇倒數、正計時或番茄鐘');
+    if(mode!=='countup')assert(Number.isSafeInteger(duration)&&duration>=(s.demo?30:60)&&duration<=10800,'專注時段需為 1 到 180 分鐘');
+    const skillId=options.skillId||g.skillId;assert(findSkill(s,skillId)||skillId===g.skillId,'請選擇有效的細技能');
+    const shortBreakSeconds=options.shortBreakSeconds??300,longBreakSeconds=options.longBreakSeconds??900;
+    const roundsBeforeLongBreak=options.roundsBeforeLongBreak??4;
+    assert(Number.isSafeInteger(shortBreakSeconds)&&shortBreakSeconds>=(s.demo?5:60)&&shortBreakSeconds<=3600,'短休息需為 1 到 60 分鐘');
+    assert(Number.isSafeInteger(longBreakSeconds)&&longBreakSeconds>=(s.demo?5:60)&&longBreakSeconds<=7200,'長休息需為 1 到 120 分鐘');
+    assert(Number.isSafeInteger(roundsBeforeLongBreak)&&roundsBeforeLongBreak>=1&&roundsBeforeLongBreak<=12,'長休息週期無效');
+    s.active={id:options.id||uid(),goalId:g.id,skillId,task:text(options.task||g.nextAction,'本次行動',160),
+      timerMode:mode,targetSeconds:duration,plannedSeconds:duration,
+      segments:[],runStartedAt:t,state:'running',createdAt:iso(t),
+      round:1,roundStartSeconds:0,completedRounds:0,
+      shortBreakSeconds,longBreakSeconds,roundsBeforeLongBreak,
+      breakStartedAt:null,breakUntil:null,breakDurationSeconds:0};
+    s.preferences.subjectByGoal[g.id]=skillId;
+    return s.active;
+  }
+  function closeSegment(a,t) {
+    if(a.state!=='running')return;
+    assert(t>=a.runStartedAt,'系統時間往回變更，請確認本次時段');
+    const end=Math.min(t,a.runStartedAt+remainingCapacity(a));
+    if(end>a.runStartedAt)a.segments.push({start:a.runStartedAt,end});
+    a.runStartedAt=null;
+  }
+  function needsAdvance(a,t=now()) {
+    return (a.state==='running'&&t>=a.runStartedAt+remainingCapacity(a))||
+      (a.state==='break'&&t>=a.breakUntil);
+  }
+  function advance(s,id,t=now()) {
+    const a=active(s,id);
+    if(a.state==='running'&&needsAdvance(a,t)) {
+      // Close exactly at the scheduled boundary even if the tab was hidden.
+      closeSegment(a,t);
+      if(timerMode(a)==='pomodoro'&&closedSeconds(a)<MAX_FOCUS) {
+        a.completedRounds+=1;
+        a.breakDurationSeconds=a.completedRounds%a.roundsBeforeLongBreak===0?a.longBreakSeconds:a.shortBreakSeconds;
+        a.breakStartedAt=a.segments.at(-1).end;
+        a.breakUntil=a.breakStartedAt+a.breakDurationSeconds;
+        a.state=t>=a.breakUntil?'ready':'break';
+      } else {
+        a.state='review';a.endedByLimit=closedSeconds(a)>=MAX_FOCUS;
+      }
+    } else if(a.state==='break'&&t>=a.breakUntil) a.state='ready';
+    return a;
+  }
+  function pause(s,id,t=now(),review=false) {
+    const a=active(s,id);advance(s,id,t);
+    if(review) {closeSegment(a,t);a.state='review';return a;}
+    if(a.state==='review'||a.state==='break'||a.state==='ready')return a;
+    if(a.state==='running'){closeSegment(a,t);a.state='paused';}
+    return a;
+  }
+  function resume(s,id,t=now()) {
+    const a=active(s,id);assert(a.state==='paused','只有暫停的回合可以繼續');
+    assert(remainingCapacity(a)>0,'本回合已完成，請先結算');
+    assert(!a.segments.length||t>=a.segments.at(-1).end,'系統時間不正確');
+    a.runStartedAt=t;a.state='running';return a;
+  }
+  function nextRound(s,id,t=now()) {
+    const a=active(s,id);assert(timerMode(a)==='pomodoro','只有番茄鐘可以開始下一回合');
+    assert(a.state==='break'||a.state==='ready','請先完成本回合的專注');
+    assert(t>=a.segments.at(-1).end&&closedSeconds(a)<MAX_FOCUS,'本次紀錄已達上限或系統時間不正確');
+    a.round+=1;a.roundStartSeconds=closedSeconds(a);
+    a.breakStartedAt=null;a.breakUntil=null;a.breakDurationSeconds=0;
+    a.state='running';a.runStartedAt=t;return a;
+  }
+
+  function trimSegments(parts,limit) {
+    let remaining=limit;return parts.flatMap(p=>{const n=Math.min(remaining,p.end-p.start);remaining-=n;return n>0?[{start:p.start,end:p.start+n}]:[];});
+  }
+  function reviewTrim(s,id,keepSeconds) {
+    const a=active(s,id);assert(a.state==='review','請先結束回合');
+    assert(Number.isSafeInteger(keepSeconds)&&keepSeconds>=1&&keepSeconds<=closedSeconds(a),'保留秒數超出實際紀錄');
+    a.segments=trimSegments(a.segments,keepSeconds);
+    if(timerMode(a)==='pomodoro'){a.completedRounds=Math.floor(keepSeconds/targetSeconds(a));a.roundStartSeconds=Math.min(a.roundStartSeconds,keepSeconds);}
+    return a;
+  }
+  function verifySegments(parts,reference=now()) {
+    assert(Array.isArray(parts)&&parts.length<=5000,'時段格式不正確');let last=-1;
+    for(const p of parts){assert(p&&Number.isSafeInteger(p.start)&&Number.isSafeInteger(p.end)&&p.start>0&&p.end>p.start&&p.end<=reference+2,'時段無效或位於未來');assert(p.start>=last,'同一回合的時段重疊');last=p.end;}
+  }
+  function ensureNoOverlap(s,parts,ignoreId=null) {
+    const intervals=s.sessions.filter(x=>!x.voidedAt&&x.id!==ignoreId).flatMap(x=>x.segments).concat(parts).sort((a,b)=>a.start-b.start);
+    for(let i=1;i<intervals.length;i++)assert(intervals[i].start>=intervals[i-1].end,'這個時段與另一筆專注紀錄重疊');
+  }
+  function save(s,id,note='',t=now()) {
+    const exists=s.sessions.find(x=>x.id===id);if(exists)return exists;
+    const a=active(s,id);assert(a.state==='review','請先檢視並確認本次回合');
+    assert(closedSeconds(a)>0,'尚無可儲存的時間；可以返回或捨棄回合');
+    assert(typeof note==='string'&&note.length<=1000,'備註最多 1000 字');
+    verifySegments(a.segments,t);ensureNoOverlap(s,a.segments);
+    const record={id:a.id,goalId:a.goalId,skillId:a.skillId,task:a.task,plannedSeconds:Math.max(a.plannedSeconds,closedSeconds(a)),
+      timerMode:timerMode(a),targetSeconds:targetSeconds(a),completedRounds:timerMode(a)==='pomodoro'?Math.floor(closedSeconds(a)/targetSeconds(a)):undefined,
+      segments:clone(a.segments),recordedAt:iso(t),note,source:'self_report',voidedAt:null};
+    s.sessions.push(record);s.active=null;return record;
+  }
+  function discard(s,id) {active(s,id);s.active=null;}
+  function manual(s,input,t=now()) {
+    assert(!s.active,'補登前請先結算進行中的回合');const g=goal(s,input.goalId);
+    assert(g.status!=='archived','請先恢復封存目標');
+    const parts=[{start:input.start,end:input.end}];verifySegments(parts,t);ensureNoOverlap(s,parts);
+    assert(input.end-input.start<=86400,'一筆補登最多 24 小時；休息請另分段');
+    const id=input.id||uid();assert(!s.sessions.some(x=>x.id===id),'補登 ID 重複');
+    const skillId=input.skillId||g.skillId;assert(findSkill(s,skillId)||skillId===g.skillId,'請選擇有效的細技能');
+    const record={id,goalId:g.id,skillId,task:text(input.task,'本次行動',160),plannedSeconds:input.end-input.start,
+      segments:parts,recordedAt:iso(t),note:typeof input.note==='string'?input.note.slice(0,1000):'',source:'self_report',voidedAt:null};
+    s.sessions.push(record);return record;
+  }
+  function checkpoint(s,gid,cid,done,note='',t=now()) {
+    const g=goal(s,gid);assert(g.status!=='archived','請先恢復封存目標');
+    const c=g.checkpoints.find(x=>x.id===cid);assert(c,'找不到成果關卡');
+    if(done&&!c.completedAt){c.completedAt=iso(t);c.note=String(note).slice(0,1000);}
+    if(!done){c.completedAt=null;c.note='';}
+    if(g.checkpoints.every(x=>x.completedAt))g.status='completed';
+    else if(g.status==='completed')g.status='active';
+    return c;
+  }
+  function setGoalStatus(s,id,status) {
+    const g=goal(s,id);assert(['active','paused','archived'].includes(status),'無效的目標狀態');
+    assert(!s.active||s.active.goalId!==id,'請先結算這個目標的回合');
+    g.status=status==='active'&&g.checkpoints.every(x=>x.completedAt)?'completed':status;
+  }
+  function voidSession(s,id,t=now()) {const r=s.sessions.find(x=>x.id===id);assert(r,'找不到紀錄');if(!r.voidedAt)r.voidedAt=iso(t);return r;}
+  function splitDays(parts) {
+    const buckets=new Map();
+    for(const p of parts){let t=p.start;while(t<p.end){const boundary=(Math.floor((t+OFFSET)/86400)+1)*86400-OFFSET;const end=Math.min(boundary,p.end),d=day(t);buckets.set(d,(buckets.get(d)||0)+end-t);t=end;}}
+    return [...buckets].sort(([a],[b])=>a.localeCompare(b));
+  }
+  function activities(s) {
+    return s.sessions.filter(x=>!x.voidedAt).flatMap(x=>splitDays(x.segments).map(([d,n])=>({id:x.id+':'+d,questInstanceId:x.id,skillId:x.skillId,localDate:d,recordedAt:x.recordedAt,kind:'focus',focusSeconds:n})));
+  }
+  const score = s => Core.scoreActivities(activities(s));
+  function validate(s,t=now()) {
+    assert(s&&s.schemaVersion===VERSION&&s.ruleVersion===Core.RULES.version,'資料版本不相容；可匯入 LifeRPG v0.3 至 v0.6 的備份');
+    text(s.datasetId,'資料集 ID');assert(typeof s.demo==='boolean','缺少資料集類型');
+    assert(Number.isSafeInteger(s.revision)&&s.revision>=0,'資料修訂版本無效');
+    assert(s.player&&s.player.timeZone==='Asia/Taipei','本版固定台北時區');text(s.player.name,'玩家名稱',40);
+    assert(Array.isArray(s.goals)&&s.goals.length<=500&&Array.isArray(s.sessions)&&s.sessions.length<=20000,'資料數量或格式不正確');
+    assert(s.preferences&&['dynamic','static','minimal'].includes(s.preferences.scene),'場景設定無效');
+    assert(Array.isArray(s.customSkills)&&s.customSkills.length<=300,'自訂科目格式不正確');
+    assert(s.preferences.subjectByGoal&&typeof s.preferences.subjectByGoal==='object'&&!Array.isArray(s.preferences.subjectByGoal),'科目偏好格式不正確');
+    assert(Array.isArray(s.preferences.pinnedSkills)&&s.preferences.pinnedSkills.length<=363&&new Set(s.preferences.pinnedSkills).size===s.preferences.pinnedSkills.length&&s.preferences.pinnedSkills.every(id=>findSkill(s,id)),'釘選技能格式不正確');
+    const pref=s.preferences.focus;
+    assert(pref&&MODES.includes(pref.mode),'計時偏好無效');
+    assert(Number.isSafeInteger(pref.minutes)&&pref.minutes>=1&&pref.minutes<=180,'預設分鐘無效');
+    assert(Number.isSafeInteger(pref.shortBreakMinutes)&&pref.shortBreakMinutes>=1&&pref.shortBreakMinutes<=60,'短休息偏好無效');
+    assert(Number.isSafeInteger(pref.longBreakMinutes)&&pref.longBreakMinutes>=1&&pref.longBreakMinutes<=120,'長休息偏好無效');
+    assert(Number.isSafeInteger(pref.roundsBeforeLongBreak)&&pref.roundsBeforeLongBreak>=1&&pref.roundsBeforeLongBreak<=12,'休息週期偏好無效');
+    const ids=new Set();function unique(id){text(id,'ID');assert(/^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$/.test(id),'ID 包含不安全字元');assert(!ids.has(id),'ID 重複');ids.add(id);}
+    const subjectNames=new Set();
+    for(const k of s.customSkills){
+      unique(k.id);assert(k.id.startsWith('custom.')&&!T.byId[k.id],'自訂科目 ID 無效');
+      text(k.name,'科目名稱',40);assert(k.name===k.name.trim(),'科目名稱不可有前後空白');
+      assert(customMeta(k),'自訂科目的分類無效');
+      const nameKey=k.groupId+':'+normalizedName(k.name);assert(!subjectNames.has(nameKey),'自訂科目重複');subjectNames.add(nameKey);
+      assert(!T.skills.some(p=>p.groupId===k.groupId&&normalizedName(p.name)===normalizedName(k.name)),'科目與內建技能重複');
+      assert(Number.isFinite(Date.parse(k.createdAt))&&Date.parse(k.createdAt)<=t*1000+2000,'科目建立日期無效');
+    }
+    for(const g of s.goals){unique(g.id);text(g.title,'目標',100);text(g.boss,'Boss',60);text(g.skillId,'技能 ID');text(g.skill,'技能',40);text(g.nextAction,'下一步',160);
+      assert(DOMAINS.some(d=>d.id===g.domainId),'未知領域');assert(findSkill(s,g.skillId)||g.skillId.endsWith(':'+g.skill),'技能歸屬格式不一致');assert(Number.isSafeInteger(g.budgetMinutes)&&g.budgetMinutes>=1&&g.budgetMinutes<=100000,'Boss 專注預算無效');assert(['active','paused','completed','archived'].includes(g.status),'未知目標狀態');
+      assert(Array.isArray(g.checkpoints)&&g.checkpoints.length>=1&&g.checkpoints.length<=8,'成果關卡格式不正確');
+      for(const c of g.checkpoints){unique(c.id);text(c.title,'成果',160);assert(typeof c.note==='string'&&c.note.length<=1000,'成果備註無效');if(c.completedAt)assert(Number.isFinite(Date.parse(c.completedAt))&&Date.parse(c.completedAt)<=t*1000+2000,'成果日期無效');}
+      if(g.status==='completed')assert(g.checkpoints.every(c=>c.completedAt),'完成狀態與成果關卡不一致');
+    }
+    for(const r of s.sessions){unique(r.id);const g=goal(s,r.goalId);assert(findSkill(s,r.skillId)||g.skillId===r.skillId,'紀錄技能無效');text(r.task,'行動',160);
+      if(r.timerMode){assert(MODES.includes(r.timerMode),'紀錄計時模式無效');if(r.timerMode==='countup')assert(r.targetSeconds===null,'木樁訓練不設定目標時間');else assert(Number.isSafeInteger(r.targetSeconds)&&r.targetSeconds>=1&&r.targetSeconds<=10800,'紀錄目標時間無效');if(r.timerMode==='pomodoro')assert(r.completedRounds===Math.floor(closedSeconds(r)/r.targetSeconds),'番茄回合數與專注時間不一致');}
+      assert(r.source==='self_report'&&typeof r.note==='string'&&r.note.length<=1000,'紀錄來源或備註無效');verifySegments(r.segments,t);assert(closedSeconds(r)>0,'空白紀錄');
+      assert(Number.isSafeInteger(r.plannedSeconds)&&r.plannedSeconds>=closedSeconds(r)&&r.plannedSeconds<=86400,'預計時間與紀錄不一致');
+      assert(Number.isFinite(Date.parse(r.recordedAt))&&Date.parse(r.recordedAt)<=t*1000+2000,'儲存日期無效');
+      assert(Date.parse(r.recordedAt)/1000>=Math.max(...r.segments.map(p=>p.end)),'儲存時間早於行動');
+      if(r.voidedAt)assert(Number.isFinite(Date.parse(r.voidedAt))&&Date.parse(r.voidedAt)>=Date.parse(r.recordedAt)&&Date.parse(r.voidedAt)<=t*1000+2000,'撤銷日期無效');
+    }
+    for(const [gid,kid] of Object.entries(s.preferences.subjectByGoal)){const g=goal(s,gid);assert(findSkill(s,kid)||g.skillId===kid,'上次科目無效');}
+    ensureNoOverlap(s,[]);
+    if(s.active){
+      const a=s.active;unique(a.id);const g=goal(s,a.goalId);
+      assert(findSkill(s,a.skillId)||g.skillId===a.skillId,'回合技能不一致');text(a.task,'回合行動',160);verifySegments(a.segments,t);
+      assert(MODES.includes(a.timerMode),'回合模式無效');
+      assert(['running','paused','review','break','ready'].includes(a.state),'回合狀態無效');
+      if(a.timerMode==='countup')assert(a.targetSeconds===null&&a.plannedSeconds===null,'木樁訓練不設定目標時間');else assert(Number.isSafeInteger(a.targetSeconds)&&a.targetSeconds>=1&&a.targetSeconds<=10800&&a.plannedSeconds===a.targetSeconds,'回合目標時間無效');
+      assert(closedSeconds(a)<=MAX_FOCUS,'單次專注紀錄最多 24 小時');
+      assert(Number.isSafeInteger(a.round)&&a.round>=1&&Number.isSafeInteger(a.completedRounds)&&a.completedRounds>=0,'番茄回合數無效');
+      assert(Number.isSafeInteger(a.roundStartSeconds)&&a.roundStartSeconds>=0&&a.roundStartSeconds<=closedSeconds(a),'回合起點無效');
+      if(a.timerMode==='countdown')assert(closedSeconds(a)<=a.targetSeconds,'倒數紀錄不能超過設定時間');
+      if(a.timerMode==='pomodoro'){
+        assert(Number.isSafeInteger(a.shortBreakSeconds)&&a.shortBreakSeconds>0&&a.shortBreakSeconds<=3600,'短休息時間無效');
+        assert(Number.isSafeInteger(a.longBreakSeconds)&&a.longBreakSeconds>0&&a.longBreakSeconds<=7200,'長休息時間無效');
+        assert(Number.isSafeInteger(a.roundsBeforeLongBreak)&&a.roundsBeforeLongBreak>=1&&a.roundsBeforeLongBreak<=12,'長休息週期無效');
+        if(a.state!=='review')assert(closedSeconds(a)-a.roundStartSeconds<=a.targetSeconds,'番茄回合超過設定時間');
+        if(a.state==='break'||a.state==='ready'){
+          assert(closedSeconds(a)-a.roundStartSeconds===a.targetSeconds,'專注未完成，不可自動開始休息');
+          assert(Number.isSafeInteger(a.breakStartedAt)&&Number.isSafeInteger(a.breakUntil)&&a.breakUntil>a.breakStartedAt&&a.breakStartedAt===a.segments.at(-1).end,'休息區間無效');
+        }
+      } else assert(a.state!=='break'&&a.state!=='ready','此計時模式沒有休息階段');
+      if(a.state==='running')assert(Number.isSafeInteger(a.runStartedAt)&&a.runStartedAt>0&&a.runStartedAt<=t+2&&(!a.segments.length||a.runStartedAt>=a.segments.at(-1).end),'回合開始時間無效');
+      else assert(a.runStartedAt===null,'暫停回合的時間狀態無效');
+      ensureNoOverlap(s,a.segments);
+    }
+
+    score(s);return s;
+  }
+  function demo(t=now()) {
+    const s=empty(true);s.player.name='冒險者（示範）';
+    const templates=[
+      {title:'讓 LifeRPG 成為可用的作品',domainId:'coding',skill:'前端開發',boss:'星核鍛造者',nextAction:'完成專注戰鬥介面',checkpoints:['完成可操作版本','邀請一位使用者試玩','根據回饋發布修正版']},
+      {title:'完成心理學課程複習',domainId:'academic',skill:'心理學',boss:'知識守門者',nextAction:'整理本週重點與例題',checkpoints:['完成重點整理','完成一回自我練習','釐清練習中的問題']},
+      {title:'完成一段英文自我介紹',domainId:'english',skill:'英文口說',boss:'回聲之龍',nextAction:'練習開場與轉場',checkpoints:['寫好一分鐘講稿','完成一次錄音並回聽','完成最終展示']}
+    ];
+    templates.forEach(x=>createGoal(s,x,t-86400*8));
+    const counts=[25,40,15,50,25,35,25];
+    counts.forEach((n,i)=>{const end=dayStart(day(t))-86400*(7-i)+16*3600;manual(s,{goalId:s.goals[i%3].id,task:templates[i%3].nextAction,start:end-n*60,end,note:'示範資料，不代表你的真實紀錄'},end+10);});
+    checkpoint(s,s.goals[0].id,s.goals[0].checkpoints[0].id,true,'示範成果',t-2*86400);
+    checkpoint(s,s.goals[1].id,s.goals[1].checkpoints[0].id,true,'示範成果',t-86400);
+    return validate(s,t);
+  }
+
+  // Preserve source intervals, record IDs, skill attribution and historical XP.
+  // Old goal budgets remain in backups only; battle HP no longer reads them.
+  function migrate(source) {
+    const s=clone(source);
+    if(s.schemaVersion===VERSION)return validate(s);
+    assert(['0.3.0','0.4.0','0.5.0'].includes(s.schemaVersion),'無法辨識這個資料版本');
+    const before=score(s).totalXP;
+    if(s.schemaVersion==='0.3.0') {
+      for(const g of s.goals){g.domainId=T.canonical(g.domainId);g.budgetMinutes=150;}
+      s.preferences.pinnedSkills=[...T.initial];
+    }
+    if(s.schemaVersion!=='0.5.0') {
+      s.preferences.focus={...DEFAULT_FOCUS};
+      if(s.active)Object.assign(s.active,{timerMode:'countdown',targetSeconds:s.active.plannedSeconds,
+        round:1,roundStartSeconds:0,completedRounds:0,shortBreakSeconds:300,longBreakSeconds:900,
+        roundsBeforeLongBreak:4,breakStartedAt:null,breakUntil:null,breakDurationSeconds:0});
+    }
+    s.customSkills=[];s.preferences.subjectByGoal={};
+    // The old count-up target was purely visual. Remove it without changing
+    // timestamps, saved minutes, completed real-world outcomes, or awarded XP.
+    if(s.active?.timerMode==='countup'){s.active.targetSeconds=null;s.active.plannedSeconds=null;}
+    for(const r of s.sessions)if(r.timerMode==='countup')r.targetSeconds=null;
+    s.schemaVersion=VERSION;validate(s);
+    assert(score(s).totalXP===before,'遷移不能改變歷史 XP');return s;
+  }
+
+  function skillMeta(s,id) {
+    if(findSkill(s,id))return findSkill(s,id);
+    const g=s.goals.find(x=>x.skillId===id);
+    return {id,name:g?.skill||id,domainId:g?.domainId||T.canonical(id.split(':')[0]),groupName:'舊版自訂技能',domainName:DOMAINS.find(d=>d.id===g?.domainId)?.name||'舊版紀錄'};
+  }
+  function battleProgress(s,gid,t=now()) {
+    const g=goal(s,gid),a=s.active?.goalId===gid?s.active:null;
+    const view=a?timerView(a,t):null;
+    if(view?.mode==='countup')return {kind:'training',maxHP:null,ratio:null,hp:null,previewDamage:0,savedDamage:0,savedSeconds:0,liveSeconds:view.total,targetSeconds:null,round:1,defeated:false,outcomesComplete:g.checkpoints.every(c=>c.completedAt)};
+    const ratio=1-(view?.progress||0),maxHP=100;
+    return {kind:'boss',maxHP,ratio,hp:maxHP*ratio,previewDamage:maxHP*(1-ratio),savedDamage:0,savedSeconds:0,
+      liveSeconds:view?.roundSeconds||0,targetSeconds:a?targetSeconds(a):s.preferences.focus.minutes*60,
+      round:view?.round||1,defeated:ratio===0,outcomesComplete:g.checkpoints.every(c=>c.completedAt)};
+  }
+
+  function pinSkill(s,id){assert(findSkill(s,id),'未知細技能');const a=s.preferences.pinnedSkills;const i=a.indexOf(id);if(i<0)a.push(id);else a.splice(i,1);}
+  function updateGoal(s,id,input){const g=goal(s,id);assert(!s.active||s.active.goalId!==id,'請先結算這個目標的回合');
+    g.title=text(input.title,'目標名稱',100);g.nextAction=text(input.nextAction,'下一步',160);g.boss=text(input.boss,'Boss 名稱',60);
+    if(input.budgetMinutes!==undefined){const budget=Number(input.budgetMinutes);assert(Number.isSafeInteger(budget)&&budget>=1&&budget<=100000,'舊版預算無效');g.budgetMinutes=budget;}
+    g.dueDate=input.dueDate||'';if(g.dueDate)assert(/^\d{4}-\d{2}-\d{2}$/.test(g.dueDate)&&day(dayStart(g.dueDate))===g.dueDate,'日期格式不正確');
+    return g;
+  }
+  return {findSkill,allSkills,skillTree,ensureSubject,VERSION,MODES,MAX_FOCUS,DEFAULT_FOCUS,timerMode,targetSeconds,timerView,needsAdvance,advance,nextRound,DOMAINS,T,migrate,skillMeta,battleProgress,pinSkill,updateGoal,now,uid,clone,iso,day,dayStart,empty,createGoal,goal,start,pause,resume,save,manual,discard,checkpoint,setGoalStatus,voidSession,closedSeconds,seconds,reviewTrim,splitDays,activities,score,validate,demo};
+});
+</script>
+<script>/* Atomic read-modify-write: all tabs share one active session per dataset.
+   UI success is emitted only after the IndexedDB transaction commits. */
+(function(root){
+'use strict';
+class LifeStore {
+  constructor(){this.db=null;}
+  open(){return new Promise((resolve,reject)=>{
+    if(!root.indexedDB)return reject(new Error('瀏覽器無法使用本機資料庫；請用一般模式或本機伺服器開啟。'));
+    const r=indexedDB.open('LifeRPG-v03',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('datasets');
+    r.onerror=()=>reject(r.error);r.onblocked=()=>reject(new Error('資料庫被其他版本占用，請關閉其他 LifeRPG 分頁後重試。'));
+    r.onsuccess=()=>{this.db=r.result;this.db.onversionchange=()=>this.db.close();resolve(this);};
+  });}
+  read(key){return new Promise((resolve,reject)=>{const tx=this.db.transaction('datasets','readonly');let value;
+    const r=tx.objectStore('datasets').get(key);r.onsuccess=()=>{try{value=r.result?root.LifeDomain.migrate(r.result):undefined;}catch(e){reject(e);}};
+    tx.oncomplete=()=>resolve(value);tx.onabort=tx.onerror=()=>reject(tx.error||r.error||new Error('讀取失敗'));});}
+  update(key,fn,factory){return new Promise((resolve,reject)=>{
+    const tx=this.db.transaction('datasets','readwrite');const store=tx.objectStore('datasets');let value,result,failure;
+    const r=store.get(key);r.onsuccess=()=>{try{value=r.result?root.LifeDomain.migrate(r.result):factory();result=fn(value);if(result&&typeof result.then==='function')throw new Error('資料交易不得包含非同步操作');value.revision=(value.revision||0)+1;store.put(value,key);}catch(e){failure=e;tx.abort();}};
+    tx.oncomplete=()=>resolve({state:value,result});tx.onabort=tx.onerror=()=>reject(failure||tx.error||new Error('無法儲存；內容仍保留，請重試。'));
+  });}
+  replace(key,value,expectedRevision){return new Promise((resolve,reject)=>{
+    const tx=this.db.transaction('datasets','readwrite'),store=tx.objectStore('datasets');let failure;
+    store.get(key).onsuccess=e=>{const current=e.target.result;try{if(current?.active)throw new Error('請先結算目前回合，再還原資料。');if(current&&current.revision!==expectedRevision)throw new Error('資料已在另一個分頁改變，請重新預覽匯入。');value.revision=(current?.revision||0)+1;store.put(value,key);}catch(err){failure=err;tx.abort();}};
+    tx.oncomplete=()=>resolve(value);tx.onabort=tx.onerror=()=>reject(failure||tx.error||new Error('還原失敗，原資料未更動。'));
+  });}
+}
+root.LifeStore=LifeStore;
+})(globalThis);
+</script>
+<script>/* LifeRPG battle renderer. Cosmetic only: no writes, XP, timers, or damage calculations.
+ * World-space coordinates are independent of display density. 30fps cap; hidden tabs rest.
+ * Every frame is derived from the session's elapsed time, never from animation counts.
+ */
+(function(root){
+'use strict';
+let frame=0,observer=null;
+function stop(){cancelAnimationFrame(frame);frame=0;observer?.disconnect();observer=null;}
+function mount(canvas,config){
+ stop();if(!canvas)return;
+ const ctx=canvas.getContext('2d');if(!ctx)return;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const animated=config.scene==='dynamic'&&!config.paused&&!reduced;
+ const training=!!config.training;
+ const color=config.color||'#bca5ff';let last=-Infinity,ready=false;
+ const dom=new DOMParser().parseFromString(config.bossSvg,'image/svg+xml');
+ const defs=dom.querySelector('defs')?.outerHTML||'';
+ const body=dom.querySelector('.floating-boss')?.outerHTML||'';
+ const image=new Image();
+ image.onload=()=>{ready=true;draw();};
+ image.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="45 70 510 415">${defs}${body}</svg>`);
+ const W=1000,H=500;
+ function resize(){const r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(r.width*d));canvas.height=Math.max(1,Math.round(r.height*d));draw();}
+ function poly(points,fill,stroke,line=1){ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(...p):ctx.moveTo(...p));ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=line;ctx.stroke();}}
+ function ellipse(x,y,rx,ry,c){ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fillStyle=c;ctx.fill();}
+ function line(x,y,x2,y2,c,w=1){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x2,y2);ctx.strokeStyle=c;ctx.lineWidth=w;ctx.stroke();}
+ function glow(x,y,r,c){const g=ctx.createRadialGradient(x,y,1,x,y,r);g.addColorStop(0,c);g.addColorStop(1,'transparent');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2);}
+ function star(x,y,r,c){poly([[x,y-r],[x+r*.25,y-r*.25],[x+r,y],[x+r*.25,y+r*.25],[x,y+r],[x-r*.25,y+r*.25],[x-r,y],[x-r*.25,y-r*.25]],c);}
+ function roundRect(x,y,w,h,r,fill){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();}
+ function background(t){
+  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#17142e');g.addColorStop(.64,'#302447');g.addColorStop(1,'#201c35');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  glow(650,180,280,'#4e337350');glow(230,280,220,'#6156a025');
+  ctx.globalAlpha=.55;ellipse(725,84,45,45,'#c7b2ee');ellipse(739,72,40,43,'#201a35');ctx.globalAlpha=1;
+  for(let i=0;i<70;i++){let x=(i*137+83)%1000,y=(i*79+13)%270;ctx.globalAlpha=.16+.5*(.5+.5*Math.sin(t*.6+i));star(x,y,i%9===0?3:1.3,'#e0d6ff');}ctx.globalAlpha=1;
+  poly([[0,315],[0,245],[65,201],[114,238],[179,150],[263,258],[350,199],[419,275],[506,148],[606,250],[680,182],[777,268],[888,177],[970,231],[1000,192],[1000,355]],'#28243d');
+  poly([[0,363],[0,286],[101,259],[193,311],[273,262],[370,342],[489,280],[598,332],[681,267],[780,340],[901,294],[1000,253],[1000,371]],'#332a47');
+  // Ancient pillars and a broken causeway frame the characters.
+  for(const [x,y,w,h] of [[45,234,28,146],[918,206,36,180],[116,278,18,95],[861,286,20,95]]){roundRect(x,y,w,h,2,'#3a304d');poly([[x-7,y],[x+w+7,y],[x+w+5,y-12],[x-3,y-16]],'#58405f');line(x+5,y+13,x+5,y+h,'#736280',1);}
+  ellipse(510,413,395,42,'#171428');ellipse(510,403,390,42,'#4c3c65');ellipse(510,397,385,39,'#3b304d');
+  ctx.save();ctx.translate(510,399);ctx.scale(1,.115);ctx.beginPath();ctx.arc(0,0,350,0,Math.PI*2);ctx.strokeStyle='#aa89d644';ctx.lineWidth=8;ctx.stroke();ctx.restore();
+  for(let i=0;i<8;i++){let x=190+i*93;line(x,378,x+18,421,'#8c6f9a24',1);}
+  glow(500,418,260,'#7453bc12');
+ }
+ function hero(x,y,t,p,burst){
+  const slash=p>.12&&p<.45?Math.sin((p-.12)/.33*Math.PI):0;
+  const bob=Math.sin(t*2)*2,jump=-slash*26;
+  ellipse(x,y+6,64-slash*14,12,'#12122088');ctx.save();ctx.translate(x,y+jump+bob);
+  // Moving cloak and armored boots.
+  poly([[-18,-126],[-46,-97],[-63-Math.sin(t*3)*9,-25],[-89-slash*45,-3],[-36,0],[3,-49],[25,-16],[35,-43],[20,-103]],'#303055','#9282b1',1.5);
+  poly([[-21,-120],[-43,-75],[-62,-12],[-31,-25],[2,-89]],'#645589');
+  line(-48,-40,-32,-88,'#aba0d56b',2);
+  ctx.save();ctx.translate(-8,-48);ctx.rotate(-.14-slash*.34);roundRect(-14,0,23,42,6,'#292a40');poly([[-17,30],[12,29],[25,47],[-18,47]],'#454358','#8e83a6');ctx.restore();
+  ctx.save();ctx.translate(13,-48);ctx.rotate(.18+slash*.6);roundRect(-8,0,21,38,6,'#393448');poly([[-8,29],[13,28],[30,43],[-10,44]],'#5a526b','#9383a6');ctx.restore();
+  poly([[-30,-111],[14,-115],[32,-64],[15,-34],[-19,-36],[-34,-69]],'#696083','#b0a0c5',1.5);
+  poly([[-27,-108],[15,-112],[15,-91],[-19,-67]],'#a093b7');
+  roundRect(-26,-57,57,10,2,'#c8b38b');roundRect(-3,-59,12,14,2,'#e5d0ac');
+  line(-6,-96,8,-66,'#49405c',6);
+  // Neck, face, and dark chestnut hair.
+  roundRect(-9,-138,18,23,5,'#d6a991');ellipse(-4,-156,29,34,'#ead0b4');
+  poly([[-31,-145],[-40,-160],[-28,-189],[-11,-199],[20,-190],[32,-165],[21,-172],[12,-161],[7,-183],[-1,-162],[-12,-174],[-22,-145]],'#292739','#6c5463',1);
+  poly([[-30,-158],[-27,-128],[-16,-142],[-20,-170]],'#343047');
+  ellipse(10,-155,3.2,4.7,'#25243a');ellipse(11,-156,1,1.2,'#fff');line(4,-165,15,-167,'#443044',2);line(15,-138,23,-141,'#a16c6b',1.5);
+  // Scarf and shoulder pauldrons.
+  poly([[-32,-131],[-12,-125],[20,-134],[24,-118],[-11,-111],[-35,-119]],'#b5a2da');
+  poly([[-26,-128],[-63-slash*25,-112],[-42,-93],[-12,-117]],'#8674b0');
+  ellipse(-27,-102,15,16,'#4c4568');line(-39,-103,-21,-111,'#b6a4d2',2);
+  // Front arm and animated energy sword.
+  ctx.save();ctx.translate(24,-101);ctx.rotate(-.45+slash*1.8);
+  roundRect(-10,0,19,43,7,'#706382');ellipse(0,42,10,9,'#dfba9e');
+  line(0,37,0,68,'#493a5a',7);line(-16,44,16,44,'#cebbea',5);
+  poly([[-5,45],[-8,-46],[0,-89],[8,-46],[5,45]],'#d9d3f8',color,1.7);
+  poly([[0,-89],[2,44],[5,45],[8,-46]],color);ctx.restore();
+  // Domain-specific familiar. Skill changes style, never damage or XP.
+  const fy=-157+Math.sin(t*2.2)*6;ctx.save();ctx.translate(-62,fy);
+  glow(0,0,34,color+'25');ctx.strokeStyle=color;ctx.lineWidth=2;
+  if(config.domain==='learning'){poly([[-22,-10],[0,-5],[22,-10],[22,13],[0,17],[-22,13]],'#383451',color);line(0,-5,0,17,color);line(-15,-1,-6,2,'#eadfff');line(6,2,15,-1,'#eadfff');}
+  else if(config.domain==='creation'){ctx.rotate(t*.3);poly([[-18,0],[0,-18],[18,0],[0,18]],'#302a48',color,2);ellipse(0,0,6,6,color);}
+  else if(config.domain==='language'){for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(0,0,8+i*9,-.9,.9);ctx.stroke();}}
+  else if(config.domain==='career'){for(let i=0;i<3;i++){ctx.save();ctx.rotate((i-1)*.25);roundRect(-10,-16+i*2,20,29,3,color);ctx.restore();}star(0,0,7,'#443655');}
+  else if(config.domain==='health'){poly([[0,-20],[16,0],[0,20],[-16,0]],'#416e69',color,2);line(0,-11,0,11,color,2);line(-9,0,9,0,color,2);}
+  else if(config.domain==='life'){ctx.rotate(t*.3);for(let i=0;i<4;i++){ctx.rotate(Math.PI/2);roundRect(5,5,12,12,2,color);}}
+  else{star(0,0,23,color);ellipse(0,0,6,6,'#4a3659');}
+  ctx.restore();
+  if(burst){glow(0,-83,160,color+'45');ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(0,-80,80,117,0,0,Math.PI*2);ctx.stroke();}
+  ctx.restore();
+ }
+ // A durable wooden training dummy: it recoils but never has HP or dies.
+ function dummy(x,y,t,hit){
+  ellipse(x,399,78,14,'#13122580');
+  ctx.save();ctx.translate(x,389);ctx.rotate(hit?Math.sin(t*58)*.035:Math.sin(t*.9)*.008);
+  // Cross-footed stand, timber column, and tapered wood grain.
+  poly([[-77,0],[19,-18],[75,4],[47,16],[-30,5]],'#635042','#ad8867',2);
+  poly([[-18,9],[22,-16],[61,-8],[3,18]],'#81644b','#bba082',1.5);
+  roundRect(-16,-134,32,135,6,'#61473d');
+  line(-7,-120,-5,-8,'#c09a6c',2);line(6,-123,8,-12,'#392f32',2);
+  // Practice arms are wooden, not hostile attacks.
+  ctx.save();ctx.translate(0,-185);ctx.rotate(-.1);
+  roundRect(-130,-12,260,27,7,'#946c46');
+  line(-118,-5,118,-5,'#c69e6a',2);line(-120,9,124,9,'#4b3940',2);
+  for(const side of [-1,1]){roundRect(side*109-12,-16,24,34,7,'#d3b68a');for(let i=0;i<4;i++)line(side*109-12,-10+i*7,side*109+12,-10+i*7,'#a38867',1);}
+  ctx.restore();
+  const body=ctx.createLinearGradient(-48,0,54,0);body.addColorStop(0,'#815638');body.addColorStop(.45,'#bd925d');body.addColorStop(1,'#664639');
+  roundRect(-51,-242,102,152,19,body);
+  for(let i=0;i<7;i++){const dx=-40+i*13;ctx.strokeStyle=i%2?'#ceaa763d':'#46333160';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(dx,-230);ctx.bezierCurveTo(dx+9,-188,dx-8,-135,dx+4,-101);ctx.stroke();}
+  ellipse(0,-240,46,11,'#d6b583');ellipse(0,-240,30,7,'#b58855');ellipse(0,-240,13,3.5,'#79503b');
+  // Rope wraps and painted bullseye, readable in mobile view.
+  for(const ry of [-222,-115]){roundRect(-55,ry,110,13,4,'#cdb284');for(let i=0;i<13;i++)line(-53+i*8,ry+1,-48+i*8,ry+11,'#967552',1);}
+  ellipse(0,-173,33,35,'#ae6657');ellipse(0,-173,23,25,'#e3c69a');ellipse(0,-173,11,13,'#8c4642');
+  // Round padded head and a simple cloth band.
+  roundRect(-10,-264,20,27,3,'#6c4b3c');ellipse(0,-287,34,33,'#b98e54');
+  ctx.strokeStyle='#886037';ctx.lineWidth=2;for(let i=-2;i<=2;i++){ctx.beginPath();ctx.ellipse(i*4,-287,20+i,30,0,-1.45,1.45);ctx.stroke();}
+  roundRect(-35,-294,70,12,4,'#947cab');line(-33,-288,33,-288,'#d0bbdb',1);
+  if(hit){glow(0,-173,89,'#f3c67538');for(let i=0;i<9;i++){const q=i*2.4;star(Math.cos(q)*65,-173+Math.sin(q)*49,2+i%3,'#ead3a8');}}
+  ctx.restore();
+ }
+ function draw(){
+  if(!canvas.isConnected)return;
+  const raw=config.elapsed(),victory=!training&&config.hpRatio()<=0;
+  const motion=animated&&!victory;
+  const t=motion?raw:config.frozenTime||0;
+  const p=(t%5.2)/5.2;
+  const dash=motion&&p>.12&&p<.5?Math.sin((p-.12)/.38*Math.PI)*135:0;
+  const hit=motion&&p>.37&&p<.52;
+  const burst=motion&&raw>=300&&raw%300<2.4;
+  ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);ctx.clearRect(0,0,W,H);background(t);
+  // Boss aura, body bob, and recoil. The source art is vector, embedded locally.
+  const bx=730+(hit?Math.sin(t*75)*6:0),by=221+Math.sin(t*1.7)*5;
+  if(training){dummy(bx,by,t,hit);}
+  else {
+  glow(bx,by,170,config.hpRatio()<.25?'#b85aa72d':'#a27dda28');
+  ctx.save();ctx.translate(bx,by);ctx.rotate(Math.sin(t*.9)*.012);
+  ctx.filter=hit?'brightness(1.8) drop-shadow(0 0 7px #dbbdff)':'none';
+  if(victory)ctx.globalAlpha=.22;
+  if(ready)ctx.drawImage(image,-192,-166,384,318);ctx.restore();
+  if(victory){glow(bx,by,110,'#d2b4ff20');star(bx,by,22,color);ctx.textAlign='center';ctx.font='600 18px system-ui';ctx.fillStyle='#e2cff6';ctx.fillText('本回合討伐成功',bx,by+63);}
+  }
+  if(!training&&motion&&p>.59&&p<.89){
+   const q=(p-.59)/.3,x=bx-45-(bx-315)*q,y=240-Math.sin(q*Math.PI)*72;
+   glow(x,y,26,'#dc91f475');star(x,y,9,'#f0c1ff');
+   if(q>.83){ctx.strokeStyle='#c3b0ff';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(325,306,49,83,0,-1.7,1.7);ctx.stroke();}
+  }
+  hero(267+dash,391,t,p,burst);
+  if(motion&&p>.2&&p<.54){
+   const q=Math.min(1,(p-.2)/.23),x=385+(bx-410)*q,y=248-Math.sin(q*Math.PI)*38;
+   ctx.save();ctx.globalAlpha=1-Math.max(0,(p-.43)/.11);
+   glow(x,y,68,color+'4c');ctx.strokeStyle=color;ctx.lineWidth=4;
+   ctx.beginPath();ctx.moveTo(x-70,y+50);ctx.quadraticCurveTo(x+5,y-57,x+29,y+15);ctx.stroke();
+   ctx.strokeStyle='#f9edff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x-60,y+42);ctx.quadraticCurveTo(x+7,y-46,x+21,y+10);ctx.stroke();
+   if(config.domain==='language'){for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(x-i*18,y,9+i*6,20+i*12,0,0,Math.PI*2);ctx.stroke();}}
+   for(let i=0;i<8;i++){let angle=i*2.399,spread=hit?40:15;star(x+Math.cos(angle)*spread,y+Math.sin(angle)*spread,2+i%3,color);}ctx.restore();
+  }
+  if(hit){ctx.fillStyle='#ead8ff';ctx.font='600 18px system-ui';ctx.textAlign='center';ctx.fillText(training?(burst?'練習節奏':'練習一擊'):(burst?'專注爆發':'專注一擊'),bx,by-175-(p-.37)*110);}
+  // Labels remain quiet. Timer / real HP / rewards are DOM content for accessibility.
+  ctx.textAlign='center';ctx.font='500 12px system-ui';ctx.fillStyle='#b7a7cc';ctx.fillText('ADVENTURER',265,461);ctx.fillText(training?'TRAINING DUMMY':'BOSS',731,461);
+  line(385,457,610,457,'#87749930');star(500,457,4,'#a892ce');
+  if(config.paused){ctx.fillStyle='#1a152533';ctx.fillRect(0,0,W,H);}
+  canvas.dataset.frameTime=raw.toFixed(2);
+ }
+ function animate(time){if(!canvas.isConnected)return;if(time-last>=32){if(!document.hidden)draw();last=time;}frame=requestAnimationFrame(animate);}
+ observer=new ResizeObserver(resize);observer.observe(canvas);resize();
+ if(animated)frame=requestAnimationFrame(animate);
+ return stop;
+}
+root.LifeBattle={mount,stop};
+})(globalThis);
+</script>
+<script>/* LifeRPG v0.6 — zero-dependency interactive prototype, Traditional Chinese first.
+   All user-provided strings are escaped before insertion into markup. */
+(async function(){
+'use strict';
+const D=LifeDomain,store=new LifeStore(),$=q=>document.querySelector(q),app=$('#app'),modal=$('#modal');
+let skillFilter='pinned',skillQuery='';
+let state,mode=location.hash==='#demo'?'demo':'real',tab='today',selected=null,filter='all',range=30,busy=false,recovered=false,toastTimeout,previousFocus;
+const channel=typeof BroadcastChannel==='function'?new BroadcastChannel('LifeRPG-v03-updates'):null;
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icons={
+ home:'<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>',
+ compass:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/>',
+ map:'<path d="m3 5 6-2 6 3 6-2v15l-6 2-6-3-6 2Z"/><path d="M9 3v15M15 6v15"/>',
+ growth:'<path d="M3 3v18h18M6 15l5-5 4 2 6-7"/><path d="M17 5h4v4"/>',
+ user:'<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+ sword:'<path d="m5 3 6 2 9 12-3 3L5 11Z"/><path d="m3 14 7-7M4 13l-2 3m3-2 2 2"/>',
+ flag:'<path d="M5 22V3c5-4 9 4 15 0v10c-6 4-10-4-15 0"/>',
+ spark:'<path d="m12 2 2.8 7.2L22 12l-7.2 2.8L12 22l-2.8-7.2L2 12l7.2-2.8Z"/>',
+ shield:'<path d="m12 2 8 3v7c0 5-8 10-8 10S4 17 4 12V5Z"/><path d="m8 12 3 3 5-6"/>',
+ book:'<path d="M12 5C8 2 5 2 2 3v16c4-1 6-1 10 2 4-3 6-3 10-2V3c-3-1-6-1-10 2Z"/><path d="M12 5v16M5 7l4 1M15 8l4-1"/>',
+ code:'<path d="m8 6-6 6 6 6m8-12 6 6-6 6M14 3l-4 18"/>',
+ leaf:'<path d="M20 3C7 1 1 10 6 17c7 7 16-1 14-14Z"/><path d="M3 22 16 9"/>',
+ plus:'<path d="M12 4v16M4 12h16"/>',
+ arrow:'<path d="M4 12h16m-6-6 6 6-6 6"/>',
+ back:'<path d="M20 12H4m6-6-6 6 6 6"/>',
+ check:'<path d="m5 12 4 4L19 6"/>',
+ close:'<path d="m6 6 12 12M6 18 18 6"/>',
+ play:'<path d="m8 4 12 8-12 8Z"/>',
+ pause:'<path d="M8 5v14M16 5v14"/>',
+ export:'<path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/>',
+ restore:'<path d="M3 11a9 9 0 1 1 2 7M3 4v7h7"/>',
+ eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+ trophy:'<path d="M8 3h8v6a4 4 0 0 1-8 0ZM8 5H4v3a4 4 0 0 0 4 4m8-7h4v3a4 4 0 0 1-4 4M12 13v6m-5 2h10M9 19h6"/>',
+ archive:'<path d="M3 3h18v5H3Zm2 5v13h14V8M9 12h6"/>',
+ edit:'<path d="m4 16 12-12 4 4L8 20H4ZM13 7l4 4"/>',
+ chevron:'<path d="m9 5 7 7-7 7"/>',
+ lock:'<rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/>'
+};
+function I(name,extra=''){return `<svg class="icon ${extra}" aria-hidden="true" viewBox="0 0 24 24">${icons[name]||icons.spark}</svg>`;}
+function mark(){return '<svg class="brand-mark" aria-hidden="true" viewBox="0 0 42 45"><path d="M21 1 3 31l14-7 4-9 8 12 10 5Z" fill="currentColor"/><path d="m1 39 18-11-3 13Zm19 3 10-12 12 11Z" fill="currentColor" opacity=".55"/></svg>';}
+function brand(){return `<div class="brand">${mark()}<div><div class="brand-name">LifeRPG</div><div class="brand-sub">FOCUS · FIGHT · GROW</div></div></div>`;}
+let artCount=0;
+function bossSvg(){const id='boss'+(++artCount);return `<svg class="boss-art" viewBox="0 0 600 540" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="${id}a" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#9b85bc"/><stop offset=".42" stop-color="#524078"/><stop offset="1" stop-color="#292138"/></linearGradient><linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ae83d4"/><stop offset=".5" stop-color="#59416f"/><stop offset="1" stop-color="#30263e"/></linearGradient><linearGradient id="${id}c"><stop stop-color="#a990ed"/><stop offset=".5" stop-color="#e8c4ff"/><stop offset="1" stop-color="#9981d5"/></linearGradient><radialGradient id="${id}h"><stop stop-color="#b683e4" stop-opacity=".35"/><stop offset="1" stop-color="#8251ba" stop-opacity="0"/></radialGradient><filter id="${id}g"><feGaussianBlur stdDeviation="3"/></filter></defs>
+<circle cx="300" cy="269" r="245" fill="url(#${id}h)"/>
+<g class="portal-ring" fill="none" stroke="#b393d3"><circle cx="300" cy="276" r="182" opacity=".24"/><circle cx="300" cy="276" r="197" opacity=".15"/><circle cx="300" cy="276" r="169" stroke-dasharray="2 22" opacity=".46"/><path d="M300 67v38m0 342v38M91 276h38m342 0h38M153 129l27 27m240 240 27 27M153 423l27-27m240-240 27-27" opacity=".48"/></g>
+<g fill="#d6bcf1"><path d="m118 186 2-8 2 8 8 2-8 2-2 8-2-8-8-2Z" opacity=".7"/><path d="m472 210 2-8 2 8 8 2-8 2-2 8-2-8-8-2Z" opacity=".6"/><path d="m372 91 2-6 2 6 6 2-6 2-2 6-2-6-6-2Z" opacity=".8"/></g>
+<ellipse cx="300" cy="479" rx="160" ry="20" fill="#151221" opacity=".55"/><ellipse cx="300" cy="476" rx="133" ry="9" fill="none" stroke="#b186d4" opacity=".3"/>
+<g class="floating-boss">
+<path d="M240 222 129 153 153 239 66 223 121 295 66 339 169 355 216 300Z" fill="#382c4e" stroke="#76618f" stroke-width="1.5"/>
+<path d="m242 234-87-60 37 99-102-32 55 64-52 26 105-17Z" fill="#645078" opacity=".6"/>
+<path d="M360 222 471 153 447 239 534 223 479 295 534 339 431 355 384 300Z" fill="#382c4e" stroke="#76618f" stroke-width="1.5"/>
+<path d="m358 234 87-60-37 99 102-32-55 64 52 26-105-17Z" fill="#645078" opacity=".6"/>
+<path d="m237 327-34 93 29 52 39-14 25-87 10-26Z" fill="url(#${id}a)" stroke="#9176ac"/>
+<path d="m363 327 34 93-29 52-39-14-25-87-10-26Z" fill="url(#${id}a)" stroke="#9176ac"/>
+<path d="m229 419 26 18-15 25-32 12-16-10Z" fill="#3b2d4e"/>
+<path d="m371 419-26 18 15 25 32 12 16-10Z" fill="#3b2d4e"/>
+<path d="m219 265 81-42 81 42-18 96-63 46-63-46Z" fill="url(#${id}a)" stroke="#b297cd" stroke-width="2"/>
+<path d="m225 267 75 30 75-30-17 37-58 27-58-27Z" fill="#9d7cb3" opacity=".45"/>
+<path d="m243 315 57 28 57-28-20 54-37 27-37-27Z" fill="#282039"/>
+<path d="m300 280 27 39-27 41-27-41Z" fill="#ce9ffb" filter="url(#${id}g)" opacity=".9"/>
+<path d="m300 282 23 37-23 36-23-36Z" fill="url(#${id}c)" stroke="#e7c6ff" stroke-width="2"/>
+<path d="m300 282 1 73-24-36Z" fill="#a785d5"/><path d="m301 294 11 25-11 24-10-24Z" fill="#efd6ff"/>
+<path d="m226 238-44 31-18 69 27 52 35-23 20-66Z" fill="url(#${id}a)" stroke="#9c80b7"/>
+<path d="m374 238 44 31 18 69-27 52-35-23-20-66Z" fill="url(#${id}a)" stroke="#9c80b7"/>
+<path d="m185 333 38 15-18 59-24 6-20-43Z" fill="#463453" stroke="#8f6caa"/><path d="m415 333-38 15 18 59 24 6 20-43Z" fill="#463453" stroke="#8f6caa"/>
+<path d="m181 390-10 31 14-6 5-24m8 5 0 29 11-10 2-22m208-3 10 31-14-6-5-24m-8 5 0 29-11-10-2-22" fill="#bea0ca"/>
+<path d="m238 235-38-20-20 52 38 39 38-21Z" fill="url(#${id}b)" stroke="#aa89c1"/><path d="m362 235 38-20 20 52-38 39-38-21Z" fill="url(#${id}b)" stroke="#aa89c1"/>
+<path d="m233 172-38-83 51 43 31 44m90-4 38-83-51 43-31 44" fill="url(#${id}b)" stroke="#c2a0da" stroke-width="2"/>
+<path d="m245 166 55-23 55 23 25 50-33 59-47 19-47-19-33-59Z" fill="url(#${id}a)" stroke="#bea0d3" stroke-width="2"/>
+<path d="m300 147 1 69-60-38 30-17Z" fill="#9e80b3" opacity=".75"/>
+<path d="m300 216 47-38 22 36-42 23Z" fill="#33233e"/>
+<path d="m300 216-47-38-22 36 42 23Z" fill="#33233e"/>
+<path d="m249 205 35 15-20 4-15-8m102-11-35 15 20 4 15-8" fill="#f1c7ff" filter="url(#${id}g)"/>
+<path d="m249 206 35 14-20 3-15-8m102-9-35 14 20 3 15-8" fill="#ecc5ff"/>
+<path d="m300 213 17 30-17 16-17-16Z" fill="#ad89c2"/>
+<path d="m266 249 34 10 34-10-13 24-21 10-21-10Z" fill="#302139"/>
+<path d="m278 257 9 2-4 11m39-13-9 2 4 11" fill="#d2b7de"/>
+<path d="m284 157 16-24 16 24-16 19Z" fill="#e5b8ff" opacity=".82"/>
+</g>
+<g transform="translate(91 399)"><path d="m28 8 12 5 5 16-2 13 17 44-62 6 16-48-1-16Z" fill="#191827" stroke="#8c7da3" stroke-width="1.5"/><path d="m14 38 24 2 12 41-35 9-12-8Z" fill="#584465"/><path d="m42 41 15-4 29-37 3 4-27 42-17 11" fill="#ceb9e4"/><path d="m49 42 14 10" stroke="#bc96d2" stroke-width="4"/></g>
+<path class="attack-line" d="M147 430 Q220 260 349 228" fill="none" stroke="url(#${id}c)" stroke-width="4"/>
+<path class="attack-line second" d="M129 430 Q275 333 364 274" fill="none" stroke="url(#${id}c)" stroke-width="3"/>
+</svg>`;}
+const button=(label,act,extra='',cls='')=>`<button class="btn ${cls}" data-act="${act}" ${extra}>${label}</button>`;
+const fmt=t=>`${String(Math.floor(Math.max(0,t)/60)).padStart(2,'0')}:${String(Math.max(0,t)%60).padStart(2,'0')}`;
+const minutes=t=>(t/60).toLocaleString('zh-TW',{maximumFractionDigits:1});
+const dateText=d=>d.slice(5).replace('-','/');
+const goalCount=g=>g.checkpoints.filter(c=>c.completedAt).length;
+const currentGoal=()=>state.goals.find(g=>g.id===selected)||state.goals.find(g=>g.status==='active')||state.goals[0];
+const domainOf=g=>D.DOMAINS.find(d=>d.id===g.domainId);
+const score=()=>D.score(state);
+const key=()=>mode;
+const factory=()=>mode==='demo'?D.demo():D.empty();
+function toast(message,error=false){clearTimeout(toastTimeout);$('#toasts').innerHTML=`<div class="toast ${error?'error':''}">${esc(message)}</div>`;toastTimeout=setTimeout(()=>$('#toasts').innerHTML='',5500);}
+function error(e){console.error(e);const box=modal.querySelector('.form-error');if(modal.open&&box)box.textContent=e.message||String(e);else toast(e.message||String(e),true);}
+function openModal(title,body){previousFocus=document.activeElement;modal.innerHTML=`<div class="modal-head"><h2 id="modal-title">${esc(title)}</h2>${button(I('close'),'close-modal','aria-label="關閉對話框"','ghost icononly')}</div><div class="modal-body">${body}<div class="form-error" role="alert"></div></div>`;if(!modal.open)modal.showModal();}
+function closeModal(){modal.close();modal.innerHTML='';previousFocus?.focus?.();}
+function navButton(id,name,icon,mini=false){return `<button class="${mini?'':'nav-btn '}${tab===id?'active':''}" data-act="nav" data-tab="${id}">${I(icon)}<span>${name}</span>${!mini?`<small>${id==='today'?'01':id==='goals'?'02':id==='growth'?'03':id==='skills'?'04':'05'}</small>`:''}</button>`;}
+function shell(content){const sc=score(),active=state.active;const labels={today:['YOUR DAILY ADVENTURE','冒險大廳'],goals:['ONE LIFE. MANY QUESTS.','人生目標'],growth:['PROGRESS, NOT PERFECTION','成長軌跡'],skills:['BUILD YOUR OWN SKILL TREE','技能樹'],character:['YOUR ADVENTURER PROFILE','角色檔案'],detail:['CHAPTER DETAILS','目標章節']};const [en,title]=labels[tab]||labels.today;
+return `<div class="shell"><aside class="sidebar">${brand()}<div><div class="side-label">ADVENTURE JOURNAL</div><nav class="nav-stack" aria-label="主導覽">${navButton('today','冒險大廳','compass')}${navButton('goals','人生目標','map')}${navButton('growth','成長軌跡','growth')}${navButton('skills','技能樹','spark')}${navButton('character','角色檔案','user')}</nav></div><div class="side-footer">${button(I(mode==='demo'?'back':'eye')+(mode==='demo'?'返回我的旅程':'體驗示範'),'mode','', 'ghost full')}<div class="local-card"><div class="row" style="gap:7px;margin-bottom:5px">${I('lock')}<b>本機保存 · 無追蹤</b></div>未連接雲端。重要紀錄請定期匯出，避免瀏覽器資料被清除。</div><div class="user-card"><div class="avatar">${I('compass')}</div><div><div class="user-name">${esc(state.player.name)}</div><div class="small muted">Lv. ${sc.character.level} · 冒險者</div></div></div></div></aside><main class="workspace">
+${mode==='demo'?`<div class="demo-banner"><span>示範世界 · 以下是試玩資料，不計入你的正式紀錄。</span>${button('返回我的旅程','mode')}</div>`:''}
+<header class="topbar"><div><div class="eyebrow">${en}</div><h1>${title}</h1></div><div class="top-actions"><span class="date-label">${new Intl.DateTimeFormat('zh-TW',{month:'long',day:'numeric',weekday:'short',timeZone:'Asia/Taipei'}).format(new Date())}</span>${button(I('plus')+'新增目標','goal-new','', 'primary')}</div></header>
+${active?`<div class="resume-banner"><div><strong>你有一場${({running:'進行中',paused:'暫停中',break:'休息中',ready:'等待下一回合',review:'待結算'})[active.state]}的戰鬥</strong><p>${esc(active.task)} · <span data-active-elapsed>${fmt(D.seconds(active))}</span></p></div>${button('返回戰場 '+I('arrow'),'battle','','primary')}</div>`:''}${content}</main><nav class="bottom-nav" aria-label="行動版主導覽">${navButton('today','今日','compass',true)}${navButton('goals','目標','map',true)}${navButton('growth','成長','growth',true)}${navButton('skills','技能','spark',true)}${navButton('character','角色','user',true)}</nav></div>`;}
+function levelCard(){const p=score().character;return `<section class="card level-card"><div class="level-top"><div class="avatar">${I('compass','big')}</div><div><div class="eyebrow">ADVENTURER</div><div class="level-number">Lv. ${p.level}</div></div></div><div class="between small"><b>${esc(state.player.name)}</b><span class="muted">冒險者</span></div><div class="progress" role="progressbar" aria-label="角色升級進度" aria-valuenow="${p.xpIntoLevel}" aria-valuemin="0" aria-valuemax="${p.nextLevelXP-p.levelStartXP}"><span style="width:${p.progress*100}%"></span></div><div class="between small muted"><span>${p.xpIntoLevel} / ${p.nextLevelXP-p.levelStartXP} XP</span><span>距升級 ${p.xpToNextLevel} XP</span></div><div class="mini-metrics"><div><b>${p.totalXP}</b><span>累積 XP</span></div><div><b>${state.goals.filter(g=>g.status==='completed').length}</b><span>已完成目標</span></div></div></section>`;}
+function checkpointList(g,interactive=false){return `<div class="checkpoint-list">${g.checkpoints.map((c,i)=>`<div class="checkpoint ${c.completedAt?'done':''}"><span class="checkpoint-mark">${c.completedAt?I('check'):String(i+1).padStart(2,'0')}</span><div><h4>${esc(c.title)}</h4>${c.completedAt?`<p>已確認 · ${dateText(D.day(Date.parse(c.completedAt)/1000))}</p>`:''}</div>${interactive&&g.status!=='archived'?button(c.completedAt?'更正':'確認成果','checkpoint',`data-goal="${g.id}" data-checkpoint="${c.id}"`,'ghost'):''}</div>`).join('')}</div>`;}
+function todayPage(){const sc=score(),today=sc.days[D.day(D.now())],g=currentGoal(),available=state.goals.filter(g=>g.status==='active').slice(0,3);
+return `<div class="dashboard"><div class="main-column"><section class="hero"><div class="hero-content"><div class="eyebrow">${g?'NEXT CHAPTER · '+esc(domainOf(g).name):'A NEW ADVENTURE AWAITS'}</div><h2>${g?'下一章，<br>由你開始。':'你的人生，<br>值得一場冒險。'}</h2><p>${g?esc(g.title)+'。把今天的一點專注，留在自己的成長軌跡裡。':'把真實目標變成章節，讓每一次專注成為對 Boss 的一擊。'}</p>${g&&g.status==='active'?button(I('sword')+'開始專注戰鬥','focus-new',`data-goal="${g.id}"`):button(I('plus')+'建立第一個目標','goal-new')}${!g&&mode==='real'?button('先探索示範世界 '+I('arrow'),'mode','','ghost'):''}</div><div class="hero-art">${bossSvg()}</div><div class="hero-caption">THE STARFORGE SENTINEL</div></section>
+<div class="stat-grid"><div class="stat"><div class="stat-label">${I('clock')}今日記錄</div><strong>${minutes(today?.focusSeconds||0)}</strong><small>分鐘</small></div><div class="stat"><div class="stat-label">${I('spark')}今日經驗</div><strong>+${today?.awardedXP||0}</strong><small>XP</small></div><div class="stat"><div class="stat-label">${I('flag')}進行中目標</div><strong>${state.goals.filter(g=>g.status==='active').length}</strong><small>個</small></div></div>
+<section class="card"><div class="between card-title"><h2>今天，先推進這一步</h2><span class="chip neutral">${available.length} 個目標</span></div>${available.length?available.map(g=>`<div class="quest-line"><div class="quest-icon">${I(domainOf(g).icon)}</div><div class="quest-body"><h3>${esc(g.nextAction)}</h3><p>${esc(g.title)} · ${esc(g.skill)}</p></div>${button(I('play')+'<span>開始</span>','focus-new',`data-goal="${g.id}" aria-label="開始：${esc(g.nextAction)}"`)}</div>`).join(''):`<div class="empty">${I('flag')}<p>從一個真正在乎的目標開始。</p><p class="small">不用先規劃整個人生，也不需要填滿所有領域。</p></div>`}</section>
+${smallGrowth(sc)}</div><aside class="aside-column">${levelCard()}${g?`<section class="card"><div class="between card-title"><h3>正在攻略的章節</h3><span class="chip">${goalCount(g)} / ${g.checkpoints.length}</span></div><p class="small muted" style="margin-bottom:20px">${esc(g.boss)} · 成果關卡</p>${checkpointList(g)}${button('查看人生目標 '+I('arrow'),'goal-detail',`data-goal="${g.id}"`,'ghost full')}</section>`:`<section class="card"><div class="eyebrow">HOW IT WORKS</div><h3 style="margin:14px 0 20px">把行動，變成自己的故事</h3><div class="checkpoint-list">${['建立一個真實目標','專注時自動與 Boss 戰鬥','保存時間與實際成果'].map((s,i)=>`<div class="checkpoint"><span class="checkpoint-mark">${i+1}</span><h4>${s}</h4></div>`).join('')}</div></section>`}<div class="quote-card">「不用一口氣抵達終點。<br>今天的一步，也算數。」<small>SMALL STEPS. REAL PROGRESS.</small></div></aside></div>`;}
+function smallGrowth(sc){return `<section class="card"><div class="between card-title"><div><h3>每一步，都留下軌跡</h3><p class="small muted">最近 7 天 · 累積已得 XP</p></div>${button(I('arrow'),'nav','data-tab="growth" aria-label="查看完整成長軌跡"','ghost icononly')}</div>${chart(sc,7,false)}</section>`;}
+function goalCard(g){const done=goalCount(g),status={active:'進行中',paused:'已暫停',completed:'已完成',archived:'已封存'};return `<article class="goal-card"><div class="goal-art">${I(domainOf(g).icon)}<span class="eyebrow">${domainOf(g).en}</span><span class="chip ${g.status==='completed'?'green':''}">${status[g.status]}</span></div><div class="goal-body"><h3>${esc(g.title)}</h3><p class="small muted">${esc(g.boss)} · ${esc(g.skill)}</p><div class="progress"><span style="width:${100*done/g.checkpoints.length}%"></span></div><div class="between small muted"><span>${done} / ${g.checkpoints.length} 個成果關卡</span><span>${g.dueDate?dateText(g.dueDate):'依自己的步調'}</span></div>${button('查看章節 '+I('arrow'),'goal-detail',`data-goal="${g.id}"`)}</div></article>`;}
+function goalsPage(){const gs=state.goals.filter(g=>filter==='all'||g.domainId===filter);return `<p class="muted small" style="margin:-9px 0 23px">你的世界，不必每個區域都達到 100%。選擇現在值得投入的方向。</p><div class="filters" aria-label="領域篩選"><button class="filter ${filter==='all'?'active':''}" data-act="filter" data-filter="all">全部領域</button>${D.DOMAINS.map(d=>`<button class="filter ${filter===d.id?'active':''}" data-act="filter" data-filter="${d.id}">${d.name}</button>`).join('')}</div><div class="goals-grid">${gs.map(goalCard).join('')}<button class="add-goal" data-act="goal-new">${I('plus')}<span>開啟新的人生章節</span></button></div>${!state.goals.length&&mode==='real'?`<div style="margin-top:25px">${button(I('eye')+'先體驗示範目標','mode','','ghost')}</div>`:''}`;}
+function detailPage(){const g=currentGoal();if(!g)return goalsPage();const sc=score(),sessions=state.sessions.filter(r=>r.goalId===g.id&&!r.voidedAt),total=sessions.reduce((n,r)=>n+D.closedSeconds(r),0);
+return `<div class="between" style="margin-bottom:22px">${button(I('back')+'全部目標','nav','data-tab="goals"','ghost')}<div class="row">${button(I('edit')+'編輯目標','goal-edit',`data-goal="${g.id}"`,'ghost')}${g.status!=='archived'?button(I('archive'),'goal-status',`data-goal="${g.id}" data-status="archived" aria-label="封存這個目標"`,'ghost icononly'):''}</div></div><div class="detail-grid"><div class="main-column"><section class="detail-top"><span class="chip">${esc(domainOf(g).name)} · ${esc(g.skill)}</span><h2>${esc(g.title)}</h2><p class="small muted">Boss：${esc(g.boss)}${g.dueDate?' · 預定 '+esc(g.dueDate):''}</p><div class="progress" style="margin:20px 0 8px"><span style="width:${goalCount(g)/g.checkpoints.length*100}%"></span></div><p class="small muted">已確認 ${goalCount(g)} / ${g.checkpoints.length} 個成果關卡。這不是能力評分。</p></section><section class="card"><div class="between card-title"><h2>成果關卡</h2><span class="chip ${g.status==='completed'?'green':''}">${g.status==='completed'?'目標已完成':'依成果推進'}</span></div>${checkpointList(g,true)}<p class="field-help" style="margin-top:23px">完成條件由你確認，不代表第三方驗證。專注結束不會自動勾選成果。</p></section><section class="card"><div class="between card-title"><h3>這一章的行動紀錄</h3><span class="small muted">${sessions.length} 次 · ${minutes(total)} 分鐘</span></div>${sessionList(sessions.slice().reverse(),sc)}</section></div><aside class="stack"><section class="card"><div class="eyebrow">NEXT ACTION</div><h3 style="margin:16px 0">${esc(g.nextAction)}</h3>${g.status==='active'?button(I('sword')+'開始專注戰鬥','focus-new',`data-goal="${g.id}"`,'primary full'):button(g.status==='completed'?'成果已完成':'恢復這個目標','goal-status',`data-goal="${g.id}" data-status="active" ${g.status==='completed'?'disabled':''}`,'full')}${g.status==='active'?button(I('pause')+'暫停這個目標','goal-status',`data-goal="${g.id}" data-status="paused"`,'ghost full'):''}<div class="divider"></div>${button(I('edit')+'補登實際專注時間','manual',`data-goal="${g.id}"`,'ghost full')}<p class="field-help">忘記開計時器，也可以保留實際做過的事。休息時間請分段排除。</p></section><div class="quote-card">休息不扣分。<br>調整方向，也是一種選擇。<small>YOUR JOURNEY. YOUR PACE.</small></div></aside></div>`;}
+function chart(sc,days=range,interactive=true){const end=D.day(D.now()),dates=Array.from({length:days},(_,i)=>D.day(D.dayStart(end)-(days-1-i)*86400));const all=Object.keys(sc.days).sort();if(!all.length)return `<div class="empty">${I('growth')}<p>你的第一條軌跡，從一筆行動開始。</p><p class="small">這裡不會放入假進步；紀錄後就能回看。</p></div>`;
+const vals=dates.map(d=>all.filter(x=>x<=d).reduce((n,x)=>n+sc.days[x].awardedXP,0));const max=Math.max(...vals,10),w=640,h=176,left=35,right=12,top=14,bottom=31,x=i=>left+i*(w-left-right)/(days-1),y=v=>h-bottom-v/max*(h-top-bottom);const line=vals.map((v,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');const area=`${line} L${x(days-1)},${h-bottom} L${left},${h-bottom} Z`;const id='chart'+(++artCount);const tickDays=[0,Math.round((days-1)/3),Math.round(2*(days-1)/3),days-1];
+return `<div class="chart-wrap"><svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${days} 天累積 XP。起點 ${vals[0]}，終點 ${vals.at(-1)}；詳情可查看下方資料清單。"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8c72df" stop-opacity=".2"/><stop offset="1" stop-color="#8c72df" stop-opacity="0"/></linearGradient></defs>${[0,.5,1].map(k=>`<line x1="${left}" y1="${y(max*k)}" x2="${w-right}" y2="${y(max*k)}" stroke="#ece8f4" stroke-dasharray="3 4"/><text x="${left-8}" y="${y(max*k)+4}" text-anchor="end">${Math.round(max*k)}</text>`).join('')}<path d="${area}" fill="url(#${id})"/><path d="${line}" fill="none" stroke="#8570d6" stroke-width="2.4" stroke-linejoin="round"/>${dates.map((d,i)=>sc.days[d]?`<circle class="chart-point" cx="${x(i)}" cy="${y(vals[i])}" r="4" ${interactive?`tabindex="0" role="button" data-act="day-records" data-date="${d}" aria-label="${d}，累積 ${vals[i]} XP，查看當日紀錄"`:''}><title>${d} · ${vals[i]} XP</title></circle>`:'').join('')}${tickDays.map(i=>`<text x="${x(i)}" y="${h-7}" text-anchor="${i===0?'start':i===days-1?'end':'middle'}">${dateText(dates[i])}</text>`).join('')}</svg></div>${interactive?`<div class="chart-legend"><span><i class="dot"></i>累積已得 XP</span><span>點選資料點，查看當日來源</span></div><details class="chart-data"><summary>查看文字資料與日期清單</summary><table class="data-table"><thead><tr><th>日期</th><th>當日 XP</th><th>累積 XP</th><th>記錄分鐘</th></tr></thead><tbody>${dates.map((d,i)=>`<tr><td>${d}</td><td>${sc.days[d]?.awardedXP??'未記錄'}</td><td>${vals[i]}</td><td>${sc.days[d]?minutes(sc.days[d].focusSeconds):'—'}</td></tr>`).join('')}</tbody></table></details>`:''}`;}
+function xpForSession(sc,id){return sc.ledger.filter(e=>e.activityId.startsWith(id+':')).reduce((n,e)=>n+e.awardedXP,0);}
+function sessionList(list,sc){if(!list.length)return '<div class="empty small">尚無紀錄。完成一次專注後，這一章就會開始留下足跡。</div>';return list.slice(0,30).map(r=>`<div class="timeline-line">${I('sword')}<div class="timeline-text"><h4>${esc(r.task)}</h4><p>${D.day(r.segments[0].start)} · ${minutes(D.closedSeconds(r))} 分鐘 · 自述紀錄</p></div><span class="xp-label">+${xpForSession(sc,r.id)} XP</span>${button(I('chevron'),'record',`data-id="${r.id}" aria-label="查看 ${esc(r.task)} 的紀錄"`,'ghost icononly')}</div>`).join('');}
+function growthPage(){const sc=score(),today=D.dayStart(D.day(D.now())),start=today-(range-1)*86400,valid=state.sessions.filter(r=>!r.voidedAt);const phaseEvents=state.goals.flatMap(g=>g.checkpoints.filter(c=>c.completedAt&&Date.parse(c.completedAt)/1000>=start).map(c=>({g,c}))).sort((a,b)=>Date.parse(b.c.completedAt)-Date.parse(a.c.completedAt));const inDays=Object.values(sc.days).filter(d=>D.dayStart(d.localDate)>=start);const timed=inDays.reduce((n,d)=>n+d.focusSeconds,0);const bars=D.DOMAINS.map(d=>({d,seconds:D.activities(state).filter(a=>D.skillMeta(state,a.skillId).domainId===d.id&&D.dayStart(a.localDate)>=start).reduce((n,a)=>n+a.focusSeconds,0)}));const barMax=Math.max(...bars.map(x=>x.seconds),1);
+return `<div class="between" style="margin-bottom:22px;align-items:flex-start"><p class="small muted">投入、成果與人生價值不同。這裡呈現的是你的紀錄。</p><div class="row" style="gap:5px">${[7,30,90].map(d=>`<button class="filter ${range===d?'active':''}" data-act="range" data-range="${d}" style="padding:8px 12px;font-size:11px">${d} 天</button>`).join('')}</div></div><div class="dashboard"><div class="main-column"><section class="card"><div class="between card-title"><div><div class="eyebrow">LIFE TRAJECTORY</div><h2 style="margin:7px 0">成長，正在發生</h2><p class="small muted">最近 ${range} 天的歷程 · 累積值含更早紀錄</p></div><div style="text-align:right"><div class="chart-total">${sc.totalXP}</div><div class="small muted">累積 XP</div></div></div>${chart(sc)}</section><section class="card"><div class="between card-title"><h3>實際成果 · Boss 關卡</h3><span class="chip gold">${phaseEvents.length} 個</span></div>${phaseEvents.length?phaseEvents.map(({g,c})=>`<div class="timeline-line">${I('flag')}<div class="timeline-text"><h4>${esc(c.title)}</h4><p>${D.day(Date.parse(c.completedAt)/1000)} · ${esc(g.title)} · 使用者確認</p></div><span class="chip green">已完成</span></div>`).join(''):'<div class="empty small">尚未確認成果關卡。計時不會自動把目標標記為完成。</div>'}</section><section class="card"><div class="between card-title"><h3>行動時間軸</h3>${button(I('edit')+'補登','manual','','ghost')}</div>${sessionList(valid.filter(r=>r.segments.some(p=>p.end>start)).slice().sort((a,b)=>Date.parse(b.recordedAt)-Date.parse(a.recordedAt)),sc)}</section></div><aside class="aside-column"><section class="card"><div class="eyebrow">RECORDED EFFORT</div><h3 style="margin:9px 0 7px">最近 ${range} 天的投入</h3><p class="small muted">已記錄 ${minutes(timed)} 分鐘 · ${inDays.length} 個日期</p>${bars.filter(x=>x.seconds>0).map(({d,seconds})=>`<div class="bar-row"><span>${d.name}</span><span class="bar-track"><span style="width:${100*seconds/barMax}%"></span></span><span class="num muted">${minutes(seconds)}</span></div>`).join('')||'<div class="empty small">還沒有專注時間紀錄。</div>'}<p class="field-help">單位：分鐘。不受每日 XP 上限裁切；未記錄的日子不等於沒有努力。</p></section><section class="card"><div class="row">${I('shield')}<h3>分數不是你的價值</h3></div><p class="small muted" style="margin-top:13px">XP 是已記錄投入的遊戲回饋，不是智力、能力或健康評分。不同領域不需要平均分配。</p></section><div class="quote-card">真正值得回看的，<br>是數字背後做過的事。<small>A STORY, NOT JUST A SCORE.</small></div></aside></div>`;}
+function characterPage(){const sc=score(),p=sc.character,valid=state.sessions.filter(r=>!r.voidedAt),weekStart=D.dayStart(D.day(D.now()))-((new Date((D.now()+28800)*1000).getUTCDay()+6)%7)*86400;const weeks=new Map();for(const a of D.activities(state)){const t=D.dayStart(a.localDate),w=t-((new Date((t+28800)*1000).getUTCDay()+6)%7)*86400;if(!weeks.has(w))weeks.set(w,new Set());weeks.get(w).add(a.localDate);}const hasThreeDayWeek=[...weeks.values()].some(ds=>ds.size>=3);const achievements=[{name:'踏出第一步',sub:'第一筆有效紀錄',icon:'compass',ok:valid.length>0},{name:'三日行動',sub:'同一週三個不同紀錄日',icon:'spark',ok:hasThreeDayWeek},{name:'首個里程碑',sub:'確認一個成果關卡',icon:'trophy',ok:state.goals.some(g=>g.checkpoints.some(c=>c.completedAt))}];
+return `<section class="profile-hero"><div class="between"><div class="row" style="gap:20px"><div class="avatar">${I('compass')}</div><div><div class="eyebrow">YOUR CHARACTER</div><h2 style="margin:6px 0">${esc(state.player.name)}</h2><span class="small muted">記錄行動的冒險者 · Lv. ${p.level}</span></div></div>${button(I('edit'),'edit-name','aria-label="修改玩家名稱"','ghost icononly')}</div><div class="progress" style="margin:25px 0 10px"><span style="width:${p.progress*100}%"></span></div><div class="between small muted"><span>${p.xpIntoLevel} / ${p.nextLevelXP-p.levelStartXP} XP</span><span>累積 ${p.totalXP} XP · 距下一級 ${p.xpToNextLevel} XP</span></div></section><div class="profile-grid"><section class="card"><div class="card-title"><h3>正在練習的技能</h3>${button('探索技能樹 '+I('arrow'),'nav','data-tab="skills"','ghost')}<p class="small muted">記錄練習，不推定精通。</p></div>${Object.entries(sc.skillLevels).map(([id,p])=>`<div style="margin:20px 0"><div class="between small"><b>${esc(D.skillMeta(state,id).name)}</b><span class="muted">Lv. ${p.level} · ${p.totalXP} XP</span></div><div class="progress" style="height:5px;margin-top:10px"><span style="width:${p.progress*100}%"></span></div></div>`).join('')||'<div class="empty small">記錄第一段專注後，你的技能會出現在這裡。</div>'}<div class="divider"></div><h3 style="margin-bottom:17px">旅程徽章</h3><div class="badge-grid">${achievements.map(a=>`<div class="badge ${a.ok?'earned':''}">${I(a.icon)}<b>${a.name}</b><p>${a.ok?'已達成':a.sub}</p></div>`).join('')}</div></section><section class="card"><h3 style="margin-bottom:18px">旅程設定與資料</h3><div class="setting-row"><div><h3>戰鬥畫面</h3><p>不影響 XP，可隨時切換。</p></div><select id="scene-setting" aria-label="預設戰鬥畫面" style="width:130px;font-size:11px"><option value="dynamic" ${state.preferences.scene==='dynamic'?'selected':''}>動態戰鬥</option><option value="static" ${state.preferences.scene==='static'?'selected':''}>靜態場景</option><option value="minimal" ${state.preferences.scene==='minimal'?'selected':''}>純計時器</option></select></div><div class="setting-row"><div><h3>匯出旅程</h3><p>JSON 包含目標、紀錄與備註。</p></div>${button(I('export')+'匯出','export')}</div><div class="setting-row"><div><h3>還原旅程</h3><p>預覽後取代目前資料，不合併。</p></div>${button(I('restore')+'還原','import')}</div><div class="setting-row"><div><h3>${mode==='demo'?'返回正式旅程':'體驗示範世界'}</h3><p>示範與正式資料完全分開。</p></div>${button(I('eye')+'切換','mode')}</div><div class="setting-row"><div><h3>安裝到主畫面</h3><p>上線後可依瀏覽器支援安裝。</p></div><button class="btn" data-act="install-pwa">安裝</button></div><div class="notice" style="margin-top:18px">v0.6 Web App · 單人、本機儲存 · 台北時區。<br>沒有帳號、雲端同步或資料加密。清除瀏覽器資料可能失去紀錄，請定期匯出。${location.protocol==='file:'?'<br><b>目前直接開啟 HTML。不同檔案路徑可能有不同儲存區；長期試用請使用資料包的本機啟動器。</b>':''}</div></section></div>`;}
+function sceneButtons(){return `<div class="scene-toggle" aria-label="戰鬥畫面模式">${[['dynamic','動態'],['static','靜態'],['minimal','純計時']].map(([id,label])=>`<button data-act="scene" data-scene="${id}" class="${state.preferences.scene===id?'active':''}" aria-pressed="${state.preferences.scene===id}">${label}</button>`).join('')}</div>`;}
+const MODE_LABELS={countdown:'倒數專注',countup:'正計時 · 木樁訓練',pomodoro:'番茄鐘'};
+function timerMessage(a,v) {
+  if(a.state==='review')return a.endedByLimit?'已達單次紀錄上限，請確認並儲存':'本次專注已結束，請確認並儲存';
+  if(a.state==='paused')return v.mode==='countup'?'已暫停 · 木樁訓練與計時一起凍結':'已暫停 · 戰場與計時一起凍結';
+  if(a.state==='break')return `休息中 · 已完成 ${a.completedRounds} 回合，休息不計 XP`;
+  if(a.state==='ready')return '休息結束 · 準備好再開始下一回合';
+  if(v.mode==='countup')return '自由練習中 · 沒有血量，不需要倒數';
+  return v.mode==='pomodoro'?`第 ${a.round} 回合 · 專注結束後自動休息`:'專注中 · 角色正在替你戰鬥';
+}
+function hpCaption(a,v) {
+  if(v.progress===1)return '本回合 Boss 已擊敗 · 人生目標進度另外保留';
+  return `依本回合 ${minutes(v.target)} 分鐘扣血，不用設定 HP`;
+}
+function battlePage(){
+  const a=state.active;if(!a){tab='today';return shell(todayPage());}
+  const g=D.goal(state,a.goalId),v=D.timerView(a),hp=D.battleProgress(state,g.id),k=D.skillMeta(state,a.skillId);
+  const isRunning=a.state==='running',resting=v.resting,training=v.mode==='countup';
+  return `<main class="battle-shell immersive simple-battle ${training?'training':''} ${state.preferences.scene} ${!isRunning?'paused':''} ${resting?'resting':''}">
+    ${mode==='demo'?'<div class="battle-demo">示範世界 · 不會寫入正式旅程</div>':''}
+    <header class="battle-top">${button(I('back')+'返回','nav','data-tab="today"')}${brand()}${button(I('eye'),'fullscreen','aria-label="切換全螢幕"','ghost icononly')}</header>
+    ${recovered?'<div class="recover-note">已恢復先前回合。儲存前可確認並裁短誤記時間；休息不會算成專注。</div>':''}
+    <section class="focus-arena" aria-label="專注戰場">
+      <div class="arena-context"><span>${esc(g.title)}</span><span class="arena-skill">${I('spark')}${esc(k.name)}</span></div>
+      <div class="focus-mode-label">${v.mode==='countdown'?'COUNTDOWN':v.mode==='countup'?'COUNT UP':'POMODORO'}<span>${MODE_LABELS[v.mode]}${v.mode==='pomodoro'?' · 第 '+a.round+' 回合':''}</span></div>
+      <h1>${resting?'休息一下，補充能量。':training?'木樁訓練場':esc(g.boss)}</h1>
+      <p class="battle-task">${esc(a.task)}</p>
+      ${training?'<div class="training-tag"><span class="training-dot"></span>自由練習 · 無血量 · 隨時結束</div>':`<div class="arena-hp ${resting?'is-rest':''}"><div class="boss-hp-head"><span>${I('shield')} 本回合 BOSS</span><b class="num" id="boss-hp">${Math.ceil(hp.hp)}%</b></div>
+        <div class="boss-hp-track" id="boss-hp-track" role="progressbar" aria-label="本回合 Boss 剩餘血量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.ceil(hp.hp)}"><span id="boss-hp-fill" style="width:${100*hp.ratio}%"></span></div>
+        <p class="hp-caption" id="hp-caption">${hpCaption(a,v)}</p>
+      </div>`}
+      <div class="combat-stage"><canvas id="combat-canvas" role="img" aria-label="${training?'角色自動攻擊練習木樁；無血量與目標時間':'角色與 Boss 自動戰鬥；血量依設定時間下降'}"></canvas>${a.state==='paused'?'<div class="frozen-caption">已暫停 · 回來再繼續</div>':''}</div>
+      ${resting?`<div class="rest-scene" aria-hidden="true"><div class="rest-orbit"><span class="rest-moon"></span><i></i><i></i><i></i></div><span>REST IS PART OF THE JOURNEY</span></div>`:''}
+      <div class="timer-panel">
+        <div class="focus-timer num" id="focus-timer" aria-label="${resting?'休息剩餘':v.mode==='countup'?'已專注':'專注剩餘'}時間">${fmt(v.displaySeconds)}</div>
+        <div class="focus-state" id="focus-state">${timerMessage(a,v)}</div>
+        <div class="battle-controls">
+          ${isRunning?button(I('pause')+'暫停','pause'):a.state==='paused'?button(I('play')+'繼續','resume'):''}
+          ${resting?button(I('play')+(a.state==='break'?'略過休息，開始下一回合':'開始下一回合'),'next-round','','primary'):''}
+          ${button(a.state==='review'?I('check')+'儲存本次紀錄':I('flag')+'結束並記錄','finish','',resting?'ghost':'primary')}
+        </div>
+        ${v.mode==='pomodoro'?`<div class="pomo-summary"><span class="pomo-dots" aria-label="這一組已完成 ${a.completedRounds%a.roundsBeforeLongBreak|| (a.completedRounds? a.roundsBeforeLongBreak:0)} 回合">${Array.from({length:a.roundsBeforeLongBreak},(_,i)=>`<i class="${i<(a.completedRounds%a.roundsBeforeLongBreak||(a.completedRounds?a.roundsBeforeLongBreak:0))?'done':''}"></i>`).join('')}</span><span>累計專注 <b id="battle-elapsed">${fmt(v.total)}</b> · 休息不計入</span></div>`:`<p class="battle-footnote">${v.mode==='countup'?'從零累積。想停就停，每一分鐘都會保留。':'專注多久，就攻略多久。暫停不回血、不扣分。'}</p>`}
+      </div>
+      <div class="arena-settings">${sceneButtons()}<span class="small">${training?'單筆最多 24 小時，避免忘記停止':v.mode==='pomodoro'?`專注 ${minutes(v.target)} / 休息 ${minutes(a.shortBreakSeconds)} 分`:`專注 ${minutes(v.target)} 分鐘`}</span></div>
+    </section>
+    <footer class="battle-footer">專注交給自己，戰鬥交給角色。</footer>
+  </main>`;
+}
+function render(){
+  if(!state)return;LifeBattle.stop();
+  const pages={today:todayPage,goals:goalsPage,growth:growthPage,character:characterPage,skills:skillsPage,detail:detailPage};
+  app.innerHTML=tab==='battle'?battlePage():shell((pages[tab]||todayPage)());
+  app.classList.toggle('reduced',matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if(tab==='battle'&&state.active){const a=state.active,k=D.skillMeta(state,a.skillId);
+    LifeBattle.mount($('#combat-canvas'),{training:D.timerMode(a)==='countup',bossSvg:bossSvg(),color:k.color,domain:k.domainId,scene:state.preferences.scene,
+      paused:a.state!=='running',frozenTime:D.seconds(a),elapsed:()=>D.seconds(a,Date.now()/1000),
+      hpRatio:()=>D.battleProgress(state,a.goalId,Date.now()/1000).ratio});
+  }
+}
+
+
+function goalForm(){
+  openModal('建立人生目標',`<div class="preset-row" style="margin-bottom:18px"><button class="preset" data-act="template" data-template="app">製作 App</button><button class="preset" data-act="template" data-template="study">課業複習</button><button class="preset" data-act="template" data-template="english">英文口說</button></div>
+    <form id="goal-form" class="form-grid">
+      <label>你想完成什麼？<input name="title" required maxlength="100" placeholder="例如：完成我的第一個 App"></label>
+      <label>所屬領域<select name="domainId">${D.DOMAINS.map(d=>`<option value="${d.id}" ${d.id==='creation'?'selected':''}>${d.name}</option>`).join('')}</select></label>
+      <p class="field-help">先寫一個目標就能開始。Boss 血量會自動配合你每次設定的專注時間。</p>
+      <details class="more-settings"><summary>成果與細節 <span>選填</span></summary><div class="form-grid">
+        <label>下一步行動<input name="nextAction" maxlength="160" placeholder="未填時，沿用目標名稱"></label>
+        <div><div class="field-label">預設技能</div>${skillPicker(D.T.defaults.creation)}</div>
+        <label>成果關卡 · 每行一個<textarea name="checkpoints" maxlength="1300" placeholder="完成可操作版本&#10;完成一次實際試用"></textarea></label>
+        <p class="field-help">不填時會建立一個「完成目標」關卡，供你自行確認。</p>
+        <label>Boss 名稱<input name="boss" maxlength="60" value="星核鍛造者"></label>
+        <label>預定日期<input name="dueDate" type="date"></label>
+      </div></details>
+      <button type="submit" class="btn primary">${I('flag')}建立目標</button>
+    </form>`);
+}
+function focusForm(gid){
+  if(state.active){tab='battle';render();return;}
+  const g=D.goal(state,gid||currentGoal()?.id),pref=state.preferences.focus;
+  const subjectId=state.preferences.subjectByGoal[g.id]||g.skillId;selected=g.id;
+  openModal('開始專注',`<div class="focus-context"><span>${I('flag')}${esc(g.title)}</span><small>依照自己的節奏</small></div>
+    <form id="focus-form" class="form-grid focus-setup">
+      <input type="hidden" name="goalId" value="${g.id}"><input type="hidden" name="timerMode" value="${pref.mode}">
+      <div class="timer-modes" role="group" aria-label="選擇計時模式">${[['countdown','倒數','Boss battle'],['countup','正計時','木樁訓練'],['pomodoro','番茄鐘','Focus & rest']].map(([id,label,en])=>`<button type="button" class="timer-mode ${id===pref.mode?'selected':''}" data-act="timer-mode" data-timer-mode="${id}" aria-pressed="${id===pref.mode}"><b>${label}</b><small>${en}</small></button>`).join('')}</div>
+      <div class="focus-subject"><div class="field-label">這次專注的科目</div>${skillPicker(subjectId)}</div>
+      <div id="duration-control" class="duration-control"><label for="focus-minutes" id="duration-label">專注時間</label><div class="duration-entry"><input id="focus-minutes" type="number" inputmode="numeric" name="minutes" min="1" max="180" step="1" value="${pref.minutes}" required aria-describedby="focus-mode-help"><span>分鐘</span></div>
+        <div class="preset-row">${[15,25,50].map(n=>`<button type="button" class="preset" data-act="duration" data-minutes="${n}">${n} 分</button>`).join('')}</div>
+      </div>
+      <p class="mode-help" id="focus-mode-help"></p>
+      <div id="pomodoro-settings" class="pomo-settings"><div class="two-fields">
+          <label>短休息 · 分鐘<input name="shortBreakMinutes" type="number" min="1" max="60" step="1" value="${pref.shortBreakMinutes}" required></label>
+          <label>每 4 回合長休息 · 分鐘<input name="longBreakMinutes" type="number" min="1" max="120" step="1" value="${pref.longBreakMinutes}" required></label>
+        </div></div>
+      <details class="more-settings task-settings"><summary>備註設定 <span>本次要做什麼</span></summary><div class="form-grid">
+        <label>本次行動 · 選填<input name="task" maxlength="160" placeholder="未填時沿用目標的下一步" value="${esc(g.nextAction)}"></label>
+      </div></details>
+      <button type="submit" id="start-focus-button" class="btn primary full">${I('play')}開始專注</button>
+      ${mode==='demo'?'<button type="button" class="btn ghost quick-demo-link" data-act="quick-demo">快速體驗</button>':''}
+    </form>`);
+  updateFocusSetup();
+}
+function updateFocusSetup(){
+  const f=$('#focus-form');if(!f)return;
+  const mode=f.elements.timerMode.value,n=Number(f.elements.minutes.value)||25,training=mode==='countup';
+  f.querySelectorAll('[data-timer-mode]').forEach(b=>{const on=b.dataset.timerMode===mode;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',on);});
+  f.querySelectorAll('[data-minutes]').forEach(b=>b.classList.toggle('chosen',Number(b.dataset.minutes)===n));
+  $('#duration-control').hidden=training;f.elements.minutes.disabled=training;
+  $('#duration-label').textContent=mode==='pomodoro'?'每回合專注時間':'專注時間';
+  $('#focus-mode-help').textContent=training?'從 00:00 開始，角色自動練習打木樁。沒有血量或目標時間，完成時按結束即可。':mode==='pomodoro'?`專注 ${n} 分 → 休息 ${f.elements.shortBreakMinutes.value} 分；每 4 回合長休息 ${f.elements.longBreakMinutes.value} 分。下一回合由你按開始。`:`${n} 分鐘，一場 Boss 戰。可直接輸入 1–180 分鐘。`;
+  $('#pomodoro-settings').hidden=mode!=='pomodoro';
+  $('#pomodoro-settings').querySelectorAll('input').forEach(input=>input.disabled=mode!=='pomodoro');
+  $('#start-focus-button').innerHTML=I('play')+(training?'開始木樁訓練':'開始專注');
+  const quick=f.querySelector('[data-act="quick-demo"]');if(quick)quick.textContent=training?'體驗自由木樁訓練':'先試玩 30 秒';
+}
+function resolveSubject(s,v){
+  const name=(v.subjectName||'').trim();
+  if(!name)throw new Error('請輸入這次的科目');
+  const current=D.skillMeta(s,v.skillId);
+  if(current.name===name&&(current.groupId===v.subjectGroup||(!D.findSkill(s,v.skillId)&&s.goals.some(g=>g.skillId===v.skillId))))return v.skillId;
+  return D.ensureSubject(s,{name,groupId:v.subjectGroup}).id;
+}
+function focusOptions(v,quick=false,s=state){
+  return {goalId:v.goalId,task:v.task,skillId:resolveSubject(s,v),timerMode:v.timerMode||'countdown',
+    plannedSeconds:v.timerMode==='countup'?null:quick?30:Number(v.minutes)*60,
+    shortBreakSeconds:quick?10:Number(v.shortBreakMinutes??s.preferences.focus.shortBreakMinutes)*60,
+    longBreakSeconds:quick?15:Number(v.longBreakMinutes??s.preferences.focus.longBreakMinutes)*60,roundsBeforeLongBreak:4};
+}
+function rememberFocus(s,v){
+  s.preferences.focus={mode:v.timerMode,minutes:v.timerMode==='countup'?s.preferences.focus.minutes:Number(v.minutes),shortBreakMinutes:Number(v.shortBreakMinutes??s.preferences.focus.shortBreakMinutes),longBreakMinutes:Number(v.longBreakMinutes??s.preferences.focus.longBreakMinutes),roundsBeforeLongBreak:4};
+}
+
+
+function reviewForm(){const a=state.active;if(!a)return;const n=D.closedSeconds(a);let xp=0,flags=[];if(n>0){const copy=D.clone(state);D.save(copy,a.id,'');const after=D.score(copy);xp=after.totalXP-score().totalXP;flags=after.ledger.filter(l=>l.activityId.startsWith(a.id+':')).flatMap(l=>l.flags);}
+openModal('確認專注紀錄',`<p class="small muted">${esc(a.task)}</p><p class="field-help">${esc(D.skillMeta(state,a.skillId).name)} · ${MODE_LABELS[D.timerMode(a)]}${D.timerMode(a)==='pomodoro'?' · 已完成 '+Math.floor(n/D.targetSeconds(a))+' 個專注回合':''}。只儲存實際專注時間，不包含休息。</p><div class="review-stats"><div class="review-stat"><strong id="review-duration">${fmt(n)}</strong><span>實際記錄時間</span></div><div class="review-stat"><strong id="review-xp">+${xp} XP</strong><span>待確認儲存後取得</span></div></div>${flags.includes('daily_cap')?'<div class="notice warning" style="margin-bottom:14px">今天已接近或達到 100 XP 上限。本次原始時間仍完整保留。</div>':''}${!xp&&n>0?'<p class="field-help" style="margin-bottom:16px">未滿同日同技能的下一個 5 分鐘區間，或已達每日上限；時間仍然記錄，不會歸零。</p>':''}<form id="review-form" class="form-grid"><input type="hidden" name="sessionId" value="${a.id}"><label>留下一句成果或心得 · 選填<textarea name="note" maxlength="1000" placeholder="今天完成了什麼？也可以直接儲存。"></textarea></label><details><summary class="small muted" style="cursor:pointer;padding:8px 0;min-height:36px">忘記暫停？只保留實際專注的前段時間</summary><label style="margin-top:10px">保留秒數<input type="number" name="keepSeconds" min="1" max="${Math.max(n,1)}" step="1" value="${n}"></label><p class="field-help">只會裁短已記錄區間的尾端，不會增加時間。</p></details><div class="notice">${D.timerMode(a)==='countup'?'木樁訓練只記錄實際專注，沒有血量或擊敗判定。':'本次只保存專注時間，Boss 依時間過關。'}人生目標仍由你自行確認。${recovered?'<br><b>這是從先前回合恢復的時間，請確認實際專注區間。</b>':''}</div><div class="form-actions" style="margin-top:0">${button('捨棄本回合','discard','','danger')}<button type="submit" class="btn primary" ${n<1?'disabled':''}>${I('check')}確認並儲存</button></div></form>`);}
+function manualForm(gid){if(!state.goals.length){toast('先建立一個人生目標，再補登紀錄。');goalForm();return;}if(state.active)throw new Error('請先結算目前回合，再補登其他專注時段。');const end=D.now()-60;const local=t=>D.iso(t+28800).slice(0,16);openModal('補登實際專注時間',`<p class="small muted" style="margin-bottom:17px">時間採台北時區。只填真的做過的區間；有休息時請拆成多筆。</p><form id="manual-form" class="form-grid"><label>所屬人生目標<select name="goalId">${state.goals.filter(g=>g.status!=='archived').map(g=>`<option value="${g.id}" ${g.id===gid?'selected':''}>${esc(g.title)}</option>`).join('')}</select></label><div><div class="field-label">這次練習的技能</div>${skillPicker((state.goals.find(g=>g.id===gid)||state.goals.find(g=>g.status!=='archived')).skillId)}</div><label>實際做了什麼？<input name="task" required maxlength="160" placeholder="例如：整理第三章重點"></label><div class="two-fields"><label>開始時間<input name="start" type="datetime-local" required value="${local(end-1500)}"></label><label>結束時間<input name="end" type="datetime-local" required value="${local(end)}"></label></div><label>備註 · 選填<textarea name="note" maxlength="1000"></textarea></label><div class="notice">補登屬於自述紀錄。系統會檢查時間重疊、未來時段與跨日計分。</div><button type="submit" class="btn primary">${I('check')}保存補登紀錄</button></form>`);}
+function recordModal(id){const r=state.sessions.find(r=>r.id===id);if(!r)throw new Error('找不到這筆紀錄');const sc=score(),g=D.goal(state,r.goalId),fmtTime=t=>new Intl.DateTimeFormat('zh-TW',{dateStyle:'medium',timeStyle:'medium',timeZone:'Asia/Taipei'}).format(new Date(t*1000));openModal('行動紀錄',`<span class="chip">${esc(D.skillMeta(state,r.skillId).name)}</span><h3 style="margin:16px 0 7px">${esc(r.task)}</h3><p class="small muted">${esc(g.title)}</p><div class="review-stats"><div class="review-stat"><strong>${minutes(D.closedSeconds(r))}</strong><span>分鐘</span></div><div class="review-stat"><strong>+${xpForSession(sc,r.id)} XP</strong><span>已取得經驗值</span></div></div><div class="notice">${r.segments.map(p=>`${esc(fmtTime(p.start))}<br>→ ${esc(fmtTime(p.end))}`).join('<br><br>')}<br><br>來源：使用者自述 · 暫停時間已排除</div>${r.note?`<p class="small" style="white-space:pre-wrap;overflow-wrap:anywhere;margin-top:18px">${esc(r.note)}</p>`:''}<details class="chart-data"><summary>查看 XP 計分明細</summary>${sc.ledger.filter(l=>l.activityId.startsWith(id+':')).map(l=>`<p>${l.localDate} · 原可得 ${l.rawXP} / 實得 ${l.awardedXP} XP${l.flags.includes('daily_cap')?' · 每日上限':''}${l.flags.includes('below_full_block')?' · 尚未累積下一個完整五分鐘':''}</p>`).join('')}</details><div class="divider"></div>${button('撤銷這筆誤登紀錄','void-confirm',`data-id="${id}"`,'danger full')}<p class="field-help">會保留更正軌跡，重新計算 XP 與圖表；不視為戰敗。</p>`);}
+function milestoneForm(gid,cid){const g=D.goal(state,gid),c=g.checkpoints.find(c=>c.id===cid);if(!c)throw new Error('找不到成果');openModal(c.completedAt?'更正成果狀態':'確認一個真實成果',`<span class="chip">${esc(g.boss)}</span><h3 style="margin:18px 0">${esc(c.title)}</h3><form id="checkpoint-form" class="form-grid"><input type="hidden" name="goalId" value="${gid}"><input type="hidden" name="checkpointId" value="${cid}"><input type="hidden" name="done" value="${!c.completedAt}">${!c.completedAt?'<label>成果說明 · 選填<textarea name="note" maxlength="1000" placeholder="完成了什麼？這份成果之後可以怎樣回看？"></textarea></label>':''}<div class="notice">${c.completedAt?'更正後這個關卡會恢復未完成；既有專注時間與 XP 不受影響。':'確認代表你已完成上方條件。這不是第三方驗證，也不重複發放 XP。'}</div><button type="submit" class="btn ${c.completedAt?'danger':'primary'}">${I(c.completedAt?'restore':'flag')}${c.completedAt?'更正為尚未完成':'我已完成這個成果'}</button></form>`);}
+async function mutate(fn,doRender=true){if(busy)throw new Error('上一個操作正在儲存，請勿重複提交。');busy=true;const buttons=[...modal.querySelectorAll('button[type="submit"]')];buttons.forEach(b=>b.disabled=true);try{const res=await store.update(key(),s=>{const result=fn(s);D.validate(s);return result;},factory);state=res.state;channel?.postMessage({mode,revision:state.revision});if(doRender)render();return res.result;}catch(e){try{const latest=await store.read(key());if(latest){state=latest;if(doRender)render();}}catch{}throw e;}finally{busy=false;buttons.forEach(b=>b.disabled=false);}}
+async function switchMode(){if(state?.active)throw new Error('切換資料集前，請先結算或捨棄目前回合。');mode=mode==='demo'?'real':'demo';location.hash=mode;state=await store.read(mode);if(!state){state=(await store.update(mode,()=>{},factory)).state;}D.validate(state);tab='today';selected=null;recovered=!!state.active;closeModal();render();}
+async function exportData(){if(state.active)throw new Error('請先結算目前回合，再匯出完整旅程。');const latest=await store.read(mode);D.validate(latest);const value={format:'LifeRPG-export',exportedAt:D.iso(D.now()),data:latest};const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`LifeRPG-${mode}-${D.day(D.now())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);toast('已產生匯出檔。請確認檔案已存妥且能還原。');}
+async function importData(){if(state.active)throw new Error('請先結算目前回合，再還原資料。');const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=async()=>{try{const file=input.files[0];if(!file)return;if(file.size>5*1024*1024)throw new Error('原型最多接受 5 MB 的匯入檔');const content=JSON.parse(await file.text());if(content.format!=='LifeRPG-export')throw new Error('不是可辨識的 LifeRPG 匯出檔');const incoming=D.migrate(content.data);if(incoming.demo!==state.demo)throw new Error('示範與正式旅程不能互相匯入。請先切換到相符的資料集。');if(incoming.active)throw new Error('匯出檔含未結束回合；請先於原資料集結算。');const expected=state.revision;const total=D.score(incoming).totalXP;openModal('預覽並還原旅程',`<div class="notice warning">此操作會取代目前${mode==='demo'?'示範':'正式'}資料，不會合併。確認前請先匯出現有資料。</div><div class="review-stats"><div class="review-stat"><strong>${incoming.goals.length}</strong><span>人生目標</span></div><div class="review-stat"><strong>${incoming.sessions.length}</strong><span>專注紀錄（含更正）</span></div></div><p class="small">匯入玩家：${esc(incoming.player.name)} · 累積 ${total} XP</p><div class="form-actions">${button('先匯出目前資料','export')}<button class="btn primary" id="confirm-import">確認取代並還原</button></div>`);$('#confirm-import').onclick=async()=>{const b=$('#confirm-import');b.disabled=true;try{state=await store.replace(mode,incoming,expected);channel?.postMessage({mode,revision:state.revision});selected=null;tab='today';closeModal();render();toast('資料已還原，XP 已依來源紀錄重新計算。');}catch(e){error(e);b.disabled=false;}};}catch(e){error(e);}};input.click();}
+
+function skillPicker(id){
+  const known=D.findSkill(state,id),k=known||D.skillMeta(state,id),fallback=D.T.byId[D.T.defaults[k.domainId]||D.T.defaults.learning];
+  const groupId=k.groupId||fallback.groupId;
+  const recent=[...new Set([id,...state.sessions.slice().reverse().map(r=>r.skillId),...state.preferences.pinnedSkills])].slice(0,5).map(id=>D.skillMeta(state,id));
+  return `<div class="skill-picker subject-picker" data-current="${esc(id)}">
+    <input type="hidden" name="skillId" value="${esc(id)}">
+    <label class="sr-only" for="subject-name">科目名稱</label><input id="subject-name" name="subjectName" type="text" list="subject-suggestions" required maxlength="40" autocomplete="off" placeholder="輸入或選擇科目，例如：普化、心理統計" value="${esc(k.name)}">
+    <datalist id="subject-suggestions">${D.allSkills(state).map(k=>`<option value="${esc(k.name)}">${esc(k.domainName)} › ${esc(k.groupName)}</option>`).join('')}</datalist>
+    <div class="subject-chips" aria-label="常用科目">${recent.map(r=>`<button type="button" class="subject-chip" data-act="select-subject" data-skill="${esc(r.id)}">${esc(r.name)}</button>`).join('')}</div>
+    <details class="subject-classification"><summary>科目分類 <span class="subject-path">${esc(k.domainName||fallback.domainName)} › ${esc(k.groupName||fallback.groupName)}</span></summary>
+      <label>歸到哪個分類？<select name="subjectGroup" aria-label="科目分類">${D.T.domains.map(d=>`<optgroup label="${d.name}">${d.groups.map(g=>`<option value="${g.id}" ${g.id===groupId?'selected':''}>${d.name} › ${g.name}</option>`).join('')}</optgroup>`).join('')}</select></label>
+    </details><p class="subject-hint field-help">可以直接輸入新科目，開始後會自動保存。</p>
+  </div>`;
+}
+function setPicker(root,id){root.outerHTML=skillPicker(id);}
+function updateSubjectPicker(picker,matchName=true){
+  const input=picker.querySelector('[name="subjectName"]'),group=picker.querySelector('[name="subjectGroup"]'),hidden=picker.querySelector('[name="skillId"]');
+  const name=input.value.normalize('NFKC').trim().toLocaleLowerCase('zh-TW');
+  const matches=D.allSkills(state).filter(k=>k.name.normalize('NFKC').toLocaleLowerCase('zh-TW')===name);
+  const same=matches.find(k=>k.groupId===group.value),k=same||(matchName?matches[0]:null);
+  if(k){hidden.value=k.id;group.value=k.groupId;}
+  else if(D.skillMeta(state,hidden.value).name!==input.value.trim())hidden.value='';
+  const d=D.T.domains.find(d=>d.groups.some(g=>g.id===group.value)),g=d.groups.find(g=>g.id===group.value);
+  picker.querySelector('.subject-path').textContent=d.name+' › '+g.name;
+  picker.querySelector('.subject-hint').textContent=k?'會記錄到「'+k.name+'」，不更動其他科目的歷史。':name?'開始後新增科目「'+input.value.trim()+'」。':'輸入一個科目，就能開始。';
+}
+function newSubjectForm(){openModal('新增自己的科目',`<form id="subject-form" class="form-grid"><p class="field-help">名稱由你決定，放進適合的分類即可。</p>${skillPicker(D.T.defaults.learning)}<button type="submit" class="btn primary">保存科目</button></form>`);const p=$('.subject-picker');p.querySelector('[name="subjectName"]').value='';p.querySelector('[name="skillId"]').value='';updateSubjectPicker(p);}
+function skillsPage(){const sc=score();let xpByDomain={};for(const [id,xp] of Object.entries(sc.skillXP)) {const k=D.skillMeta(state,id);xpByDomain[k.domainId]=(xpByDomain[k.domainId]||0)+xp;}return `<section class="skill-intro"><div><div class="eyebrow">YOUR PRACTICE, YOUR PATH</div><h2>把每一段練習，<br>放回自己的技能樹。</h2><p>大類 → 子類 → 細技能。等級記錄投入，不代表精通。</p></div><div class="taxonomy-counts"><b>07<span>人生領域</span></b><b>21<span>練習子類</span></b><b>${D.allSkills(state).length}<span>科目與技能</span></b></div></section><div class="skill-toolbar">${button(I('plus')+'新增科目','subject-new','','primary')}<div class="filter-bar"><button class="filter ${skillFilter==='pinned'?'active':''}" data-act="skill-filter" data-filter="pinned">已釘選</button><button class="filter ${skillFilter==='all'?'active':''}" data-act="skill-filter" data-filter="all">全部技能</button><button class="filter ${skillFilter==='practiced'?'active':''}" data-act="skill-filter" data-filter="practiced">已練習</button></div><input id="skill-search" type="search" aria-label="搜尋技能" placeholder="搜尋技能，例如：英文、設計" value="${esc(skillQuery)}"></div><div id="skill-results">${skillResults(sc,xpByDomain)}</div><p class="field-help">父分類只彙總一次，不額外增加 XP。未啟用或未記錄的技能，不代表你沒有這項能力。</p>`;}
+function skillResults(sc=score(),xpByDomain=null){if(!xpByDomain){xpByDomain={};for(const [id,xp] of Object.entries(sc.skillXP)){const k=D.skillMeta(state,id);xpByDomain[k.domainId]=(xpByDomain[k.domainId]||0)+xp;}}let hits=0;const markup=D.skillTree(state).map(d=>{const groups=d.groups.map(g=>{const skills=g.skills.filter(k=>{const active=skillFilter==='all'||(skillFilter==='pinned'?state.preferences.pinnedSkills.includes(k.id):state.sessions.some(r=>!r.voidedAt&&r.skillId===k.id));return active&&(!skillQuery||[k.name,k.en,d.name,g.name].join(' ').toLowerCase().includes(skillQuery.toLowerCase()));});hits+=skills.length;if(!skills.length)return '';return `<div class="skill-subgroup"><h4>${g.name}<span>${skills.length} 項</span></h4><div class="skill-cards">${skills.map(k=>{const p=sc.skillLevels[k.id]||{level:1,totalXP:0,progress:0},pin=state.preferences.pinnedSkills.includes(k.id),seconds=state.sessions.filter(r=>!r.voidedAt&&r.skillId===k.id).reduce((n,r)=>n+D.closedSeconds(r),0);return `<article class="leaf-skill"><div class="between"><button class="skill-detail-button" data-act="skill-detail" data-skill="${k.id}"><span class="skill-orb">${I(d.icon)}</span><span><strong>${esc(k.name)}</strong><small>${esc(k.en)}</small></span></button><button class="pin-button ${pin?'pinned':''}" data-act="pin-skill" data-skill="${k.id}" aria-label="${pin?'取消釘選':'釘選'}${esc(k.name)}" aria-pressed="${pin}">${pin?'★':'☆'}</button></div><div class="skill-level-row"><span>Lv. ${p.level}<small>練習等級</small></span><b>${p.totalXP} XP</b></div><div class="progress"><span style="width:${p.progress*100}%"></span></div><p class="small muted">已記錄 ${minutes(seconds)} 分鐘</p></article>`;}).join('')}</div></div>`;}).join('');return groups?`<section class="skill-domain card" style="--domain-color:${d.color}"><header class="skill-domain-head"><div class="row">${I(d.icon)}<div><h3>${d.name}</h3><p>${d.en}</p></div></div><span class="chip">${xpByDomain[d.id]||0} XP · 彙總</span></header>${groups}</section>`:'';}).join('');const legacy=Object.entries(sc.skillLevels).filter(([id])=>!D.findSkill(state,id));return (hits?markup:'<div class="card empty">這個篩選目前沒有技能。可以切換「全部技能」，再釘選想開始練習的項目。</div>')+(legacy.length?`<section class="card"><h3>保留的舊版技能</h3><p class="field-help">歷史歸屬與 XP 原樣保留，不自動搬移到新分類。</p>${legacy.map(([id,p])=>`<p>${esc(D.skillMeta(state,id).name)} · Lv. ${p.level} · ${p.totalXP} XP</p>`).join('')}</section>`:'');}
+function skillDetail(id){const k=D.findSkill(state,id);if(!k)throw new Error('找不到技能');const sc=score(),p=sc.skillLevels[id]||{level:1,totalXP:0},rows=state.sessions.filter(r=>!r.voidedAt&&r.skillId===id);openModal(k.name,`<span class="chip">${esc(k.domainName)} › ${esc(k.groupName)}</span><div class="review-stats"><div class="review-stat"><strong>Lv. ${p.level}</strong><span>練習等級</span></div><div class="review-stat"><strong>${p.totalXP} XP</strong><span>已記錄投入</span></div></div><p class="field-help">${rows.length} 次紀錄 · ${minutes(rows.reduce((n,r)=>n+D.closedSeconds(r),0))} 分鐘。成果與能力仍需用真實測量判斷。</p>${sessionList(rows.slice().reverse(),sc)}`);}
+function editGoalForm(id){const g=D.goal(state,id);
+  openModal('調整人生目標',`<form class="form-grid" id="edit-goal-form"><input type="hidden" name="goalId" value="${g.id}">
+    <label>目標名稱<input name="title" maxlength="100" required value="${esc(g.title)}"></label>
+    <label>下一步行動<input name="nextAction" maxlength="160" required value="${esc(g.nextAction)}"></label>
+    <div><div class="field-label">下次預設科目</div>${skillPicker(state.preferences.subjectByGoal[g.id]||g.skillId)}</div><details class="more-settings"><summary>更多設定 <span>名稱、日期</span></summary><div class="form-grid">
+      <label>Boss 名稱<input name="boss" maxlength="60" required value="${esc(g.boss)}"></label>
+      <label>預定日期<input name="dueDate" type="date" value="${esc(g.dueDate)}"></label>
+    </div></details>
+    <p class="field-help">Boss 血量依每回合時間自動調整，不需要設定總預算。</p>
+    <button class="btn primary" type="submit">保存調整</button></form>`);
+}
+
+
+document.addEventListener('invalid',e=>{const detail=e.target.closest?.('details');if(detail)detail.open=true;},true);
+const templates={app:{title:'完成我的第一個 App',domainId:'creation',skillId:D.T.defaults.creation,boss:'星核鍛造者',nextAction:'完成首頁的基本操作',checkpoints:'完成可以操作的版本\n完成一次實際試用\n根據回饋發布修正版'},study:{title:'完成本次課程複習',domainId:'learning',skillId:'learning.subjects.physiological_psych',boss:'知識石像',nextAction:'整理第一個章節的重點',checkpoints:'完成各章重點整理\n完成一回自我練習\n釐清練習中的問題'},english:{title:'完成一分鐘英文自我介紹',domainId:'language',skillId:D.T.skills.find(k=>k.name==='英文口說').id,boss:'語音龍',nextAction:'練習開場的三句話',checkpoints:'完成一分鐘講稿\n完成一次錄音與回聽\n完成最終展示'}};
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const action=b.dataset.act;try{switch(action){
+case 'nav':tab=b.dataset.tab;render();window.scrollTo(0,0);break;
+case 'goal-new':goalForm();break;
+case 'goal-edit':editGoalForm(b.dataset.goal);break;
+case 'skill-filter':skillFilter=b.dataset.filter;render();break;
+case 'pin-skill':await mutate(s=>D.pinSkill(s,b.dataset.skill));break;
+case 'skill-detail':skillDetail(b.dataset.skill);break;
+case 'fullscreen':if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else toast('此瀏覽器未提供全螢幕模式。');break;
+case 'goal-detail':selected=b.dataset.goal;tab='detail';render();window.scrollTo(0,0);break;
+case 'filter':filter=b.dataset.filter;render();break;
+case 'range':range=Number(b.dataset.range);render();break;
+case 'mode':await switchMode();break;
+case 'close-modal':closeModal();break;
+case 'template':{const f=$('#goal-form');Object.entries(templates[b.dataset.template]).forEach(([k,v])=>{if(k==='skillId')setPicker(f.querySelector('.skill-picker'),v);else if(f.elements[k])f.elements[k].value=v;});break;}
+case 'focus-new':focusForm(b.dataset.goal);break;
+case 'subject-new':newSubjectForm();break;
+case 'select-subject':{setPicker(b.closest('.subject-picker'),b.dataset.skill);break;}
+case 'duration':$('#focus-form').elements.minutes.value=b.dataset.minutes;updateFocusSetup();break;
+case 'timer-mode':$('#focus-form').elements.timerMode.value=b.dataset.timerMode;updateFocusSetup();break;
+case 'next-round':{const id=state.active.id;await mutate(s=>D.nextRound(s,id));break;}
+case 'quick-demo':{const f=$('#focus-form');if(!f.reportValidity())break;const v=Object.fromEntries(new FormData(f));await mutate(s=>D.start(s,focusOptions(v,true,s)));closeModal();tab='battle';recovered=false;render();break;}
+case 'battle':tab='battle';render();window.scrollTo(0,0);break;
+case 'pause':{const id=state.active.id;await mutate(s=>D.pause(s,id));break;}
+case 'resume':{const id=state.active.id;await mutate(s=>D.resume(s,id));break;}
+case 'finish':{const id=state.active.id;await mutate(s=>D.pause(s,id,D.now(),true));reviewForm();break;}
+case 'discard':{const id=state.active.id;openModal('捨棄未儲存的回合？',`<p class="small muted">只捨棄這次尚未保存的時間，不會刪除過去紀錄，也不扣既有 XP。</p><div class="form-actions">${button('返回結算','review-again')}${button('確認捨棄','discard-confirm',`data-id="${id}"`,'danger')}</div>`);break;}
+case 'discard-confirm':await mutate(s=>D.discard(s,b.dataset.id));closeModal();tab='today';recovered=false;render();toast('本次回合已捨棄，既有紀錄保留。');break;
+case 'review-again':reviewForm();break;
+case 'scene':await mutate(s=>{s.preferences.scene=b.dataset.scene;});break;
+case 'manual':manualForm(b.dataset.goal);break;
+case 'checkpoint':milestoneForm(b.dataset.goal,b.dataset.checkpoint);break;
+case 'record':recordModal(b.dataset.id);break;
+case 'void-confirm':openModal('撤銷這筆紀錄？',`<p class="small muted">原始紀錄會保留更正軌跡，但不再計入有效時間、XP 或成長圖。等級可能因更正而調整。</p><div class="form-actions">${button('返回','record',`data-id="${b.dataset.id}"`)}${button('確認撤銷','void',`data-id="${b.dataset.id}"`,'danger')}</div>`);break;
+case 'void':await mutate(s=>D.voidSession(s,b.dataset.id));closeModal();render();toast('紀錄已更正；XP、等級與成長圖已重新計算。');break;
+case 'goal-status':{const gid=b.dataset.goal,status=b.dataset.status;openModal(status==='archived'?'封存這個人生目標？':status==='paused'?'暫停這個人生目標？':'恢復這個人生目標？',`<p class="small muted">既有時間、成果與 XP 都會保留。改變目標方向不是失敗。</p><div class="form-actions">${button('取消','close-modal')}${button('確認','status-confirm',`data-goal="${gid}" data-status="${status}"`,'primary')}</div>`);break;}
+case 'status-confirm':await mutate(s=>D.setGoalStatus(s,b.dataset.goal,b.dataset.status));closeModal();render();toast('目標狀態已更新。');break;
+case 'day-records':{const d=b.dataset.date,sc=score(),rows=state.sessions.filter(r=>!r.voidedAt&&D.splitDays(r.segments).some(([date])=>date===d));openModal(d+' 的來源紀錄',`<p class="small muted">當日 ${minutes(sc.days[d]?.focusSeconds||0)} 分鐘 · +${sc.days[d]?.awardedXP||0} XP</p>${sessionList(rows,sc)}<p class="field-help">跨日回合在清單中顯示整筆時段；此處的當日總值只計當天部分。</p>`);break;}
+case 'edit-name':openModal('修改玩家名稱',`<form id="name-form" class="form-grid"><label>名稱<input name="name" value="${esc(state.player.name)}" maxlength="40" required></label><button type="submit" class="btn primary">儲存名稱</button></form>`);break;
+case 'export':await exportData();break;
+case 'import':await importData();break;
+}}catch(err){error(err);}});
+document.addEventListener('submit',async e=>{if(!e.target.closest('#modal'))return;e.preventDefault();if(busy)return;const form=e.target,v=Object.fromEntries(new FormData(form)),old=score().totalXP;try{if(form.id==='goal-form'){const g=await mutate(s=>D.createGoal(s,{...v,skillId:resolveSubject(s,v),nextAction:v.nextAction.trim()||v.title,checkpoints:v.checkpoints.trim()?v.checkpoints.split('\n'):['完成「'+v.title+'」']}));selected=g.id;tab='detail';closeModal();render();toast('人生章節已建立。現在就能開始第一場專注戰鬥。');}
+else if(form.id==='focus-form'){await mutate(s=>{rememberFocus(s,v);return D.start(s,focusOptions(v,false,s));});closeModal();tab='battle';recovered=false;render();window.scrollTo(0,0);}
+else if(form.id==='review-form'){const id=v.sessionId;await mutate(s=>{if(s.sessions.some(r=>r.id===id))return;D.reviewTrim(s,id,Number(v.keepSeconds));return D.save(s,id,v.note);});const gained=score().totalXP-old;closeModal();recovered=false;tab='today';render();openModal('這一步，已寫進你的旅程',`<div style="text-align:center;padding:10px 0"><div class="avatar" style="width:65px;height:65px;margin:0 auto 15px">${I('spark','big')}</div><h2>+${gained} XP</h2><p class="small muted" style="margin:12px 0">本次投入已儲存。成果關卡仍由你確認，<br>不會因為計時結束就自動完成。</p></div><div class="form-actions">${button('返回大廳','close-modal')}${button('查看成長軌跡 '+I('arrow'),'saved-growth','','primary')}</div>`);}
+else if(form.id==='manual-form'){const start=Date.parse(v.start+':00+08:00')/1000,end=Date.parse(v.end+':00+08:00')/1000;await mutate(s=>D.manual(s,{...v,skillId:resolveSubject(s,v),start,end}));closeModal();render();toast(`補登已儲存 · +${score().totalXP-old} XP。`);}
+else if(form.id==='checkpoint-form'){await mutate(s=>D.checkpoint(s,v.goalId,v.checkpointId,v.done==='true',v.note||''));closeModal();render();toast(v.done==='true'?'成果已確認，Boss 關卡已更新。':'成果狀態已更正，專注紀錄保留。');}
+else if(form.id==='edit-goal-form'){await mutate(s=>{D.updateGoal(s,v.goalId,v);s.preferences.subjectByGoal[v.goalId]=resolveSubject(s,v);});closeModal();render();toast('目標已更新，原始紀錄與 XP 保留。');}
+else if(form.id==='subject-form'){await mutate(s=>{const id=resolveSubject(s,v);if(!s.preferences.pinnedSkills.includes(id))s.preferences.pinnedSkills.push(id);});closeModal();skillFilter='pinned';tab='skills';render();toast('科目已保存，下次專注可以直接選用。');}
+else if(form.id==='name-form'){await mutate(s=>{s.player.name=v.name.trim();});closeModal();render();toast('玩家名稱已更新。');}
+}catch(err){error(err);}});
+document.addEventListener('click',e=>{if(e.target.closest('[data-act="saved-growth"]')){closeModal();tab='growth';render();window.scrollTo(0,0);}});
+document.addEventListener('input',e=>{if(e.target.matches('#review-form input[name="keepSeconds"]')){try{const a=state.active,copy=D.clone(state),n=Number(e.target.value);D.reviewTrim(copy,a.id,n);D.save(copy,a.id,'');$('#review-duration').textContent=fmt(n);$('#review-xp').textContent='+'+(D.score(copy).totalXP-score().totalXP)+' XP';}catch{if($('#review-xp'))$('#review-xp').textContent='待確認';}}});
+document.addEventListener('change',async e=>{try{if(e.target.id==='scene-setting')await mutate(s=>s.preferences.scene=e.target.value);
+if(e.target.matches('#goal-form select[name="domainId"]')){const d=D.DOMAINS.find(d=>d.id===e.target.value),f=$('#goal-form');setPicker(f.querySelector('.skill-picker'),D.T.defaults[d.id]);f.elements.boss.value=d.boss;}
+if(e.target.matches('#manual-form select[name="goalId"]'))setPicker($('#manual-form .skill-picker'),D.goal(state,e.target.value).skillId);
+const picker=e.target.closest('.subject-picker');if(picker&&e.target.name==='subjectGroup')updateSubjectPicker(picker,false);
+}catch(err){error(err);}});
+document.addEventListener('input',e=>{if(e.target.name==='subjectName')updateSubjectPicker(e.target.closest('.subject-picker'));if(e.target.closest('#focus-form'))updateFocusSetup();if(e.target.id==='skill-search'){skillQuery=e.target.value;$('#skill-results').innerHTML=skillResults();}});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('circle[data-act]')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
+modal.addEventListener('click',e=>{if(e.target===modal){const r=modal.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeModal();}});
+async function tick(){
+  if(!state?.active)return;
+  const a=state.active;
+  if(D.needsAdvance(a)&&!busy){
+    try{await mutate(s=>{if(s.active?.id===a.id)D.advance(s,a.id);});
+      if(state.active?.state==='review')toast('本次專注結束，請確認並儲存。');
+      else if(state.active?.state==='break')toast('這回合已完成。休息一下，休息不計入專注。');
+      else if(state.active?.state==='ready')toast('休息結束，準備好再開始下一回合。');
+    }catch(err){error(err);}return;
+  }
+  const v=D.timerView(a),hp=D.battleProgress(state,a.goalId);
+  if($('#focus-timer'))$('#focus-timer').textContent=fmt(v.displaySeconds);
+  if($('#focus-state'))$('#focus-state').textContent=timerMessage(a,v);
+  if($('#battle-elapsed'))$('#battle-elapsed').textContent=fmt(v.total);
+  if($('#boss-hp'))$('#boss-hp').textContent=Math.ceil(hp.hp)+'%';
+  if($('#boss-hp-fill'))$('#boss-hp-fill').style.width=100*hp.ratio+'%';
+  if($('#boss-hp-track'))$('#boss-hp-track').setAttribute('aria-valuenow',Math.ceil(hp.hp));
+  if($('#hp-caption'))$('#hp-caption').textContent=hpCaption(a,v);
+  document.querySelectorAll('[data-active-elapsed]').forEach(x=>x.textContent=fmt(v.total));
+}
+
+
+if(channel)channel.onmessage=async e=>{if(e.data.mode!==mode||busy)return;try{const incoming=await store.read(mode);if(incoming&&incoming.revision>state.revision){state=incoming;if(!modal.open)render();else toast('資料在另一個分頁已更新；提交時會再次檢查。');}}catch(e){error(e);}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});
+try{await store.open();state=await store.read(mode);if(!state)state=(await store.update(mode,()=>{},factory)).state;D.validate(state);recovered=!!state.active;render();setInterval(tick,1000);}catch(e){app.innerHTML=`<main class="fatal card"><h1>暫時無法開啟本機旅程</h1><p>${esc(e.message)}</p><p class="small muted">請確認使用一般瀏覽模式並允許網站儲存資料。也可以使用資料包的本機啟動器；不要直接清除現有資料庫。</p><button class="btn primary" onclick="location.reload()">重試</button></main>`;console.error(e);}
+// Read-only diagnostic hook for reproducible automated tests; no network access.
+window.LifeRPGDebug={snapshot:()=>state?D.clone(state):null,project:()=>D.score(state),view:()=>({tab,mode})};
+})();
+</script>
+<script>/* Installation and app-shell caching only. No personal data leaves this browser. */
+(function(){
+'use strict';let deferred=null,reloadRequested=false;
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferred=event;});
+document.addEventListener('click',async event=>{if(!event.target.closest('[data-act="install-pwa"]'))return;
+ if(deferred){await deferred.prompt();await deferred.userChoice;deferred=null;}
+ else{const message=location.protocol==='file:'?'安裝功能需要公開 HTTPS 網址或本機伺服器。直接開啟 HTML 可先試玩。':'請使用瀏覽器選單中的「安裝應用程式」或「加入主畫面」。各瀏覽器支援情況不同。';const el=document.getElementById('toasts');el.innerHTML='';const div=document.createElement('div');div.className='toast';div.textContent=message;el.append(div);setTimeout(()=>div.remove(),6500);}
+});
+if('serviceWorker' in navigator&&['https:','http:'].includes(location.protocol)){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(reg=>{
+  const offer=()=>{if(!reg.waiting)return;const box=document.createElement('div');box.className='pwa-update';box.textContent='有新版可用。先結算正在進行的回合，再更新。';const btn=document.createElement('button');btn.className='btn primary';btn.textContent='更新應用程式';btn.onclick=()=>{if(window.LifeRPGDebug?.snapshot()?.active){btn.textContent='請先結算回合';return;}reloadRequested=true;reg.waiting.postMessage({type:'ACTIVATE_UPDATE'});};box.append(btn);document.body.append(box);};
+  if(reg.waiting)offer();reg.addEventListener('updatefound',()=>{const worker=reg.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)offer();});});
+  let refreshing=false;navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloadRequested&&!refreshing&&navigator.serviceWorker.controller){refreshing=true;if(!window.LifeRPGDebug?.snapshot()?.active)location.reload();}});
+ }).catch(error=>console.warn('Offline cache unavailable:',error.message)));
+}
+})();
+</script>
+<noscript><p>本原型需要啟用 JavaScript。資料只儲存在目前瀏覽器。</p></noscript>
+</body></html>
