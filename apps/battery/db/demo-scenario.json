@@ -1,0 +1,167 @@
+{
+  "persona": {
+    "name": "林小葉",
+    "note": "研究所二年級，白天要跑實驗室、晚上常被拉去聚會。典型的『撐得住但會突然斷電』型。",
+    "anonymousSessionId": "demo-session",
+    "userId": "demo-user"
+  },
+  "profile": {
+    "baseBatteryCapacity": 58,
+    "summary": "你的社交電池中等，撐得住日常互動但禁不起連續高強度——和少數幾個對的人相處反而能幫你充電。",
+    "rechargeStyle": "specific_people"
+  },
+  "activities": [
+    {
+      "dayOffset": -5,
+      "time": "19:00",
+      "type": "party",
+      "headcount": 20,
+      "familiarity": 2,
+      "durationMinutes": 180,
+      "predictedDrain": 48,
+      "actualDrain": 68,
+      "note": "回顧用：系統低估了 20 個百分點——派對是小葉最容易被低估的類型"
+    },
+    {
+      "dayOffset": -4,
+      "time": "12:30",
+      "type": "meal",
+      "headcount": 3,
+      "familiarity": 5,
+      "durationMinutes": 90,
+      "predictedDrain": 9,
+      "actualDrain": 6,
+      "note": "回顧用：跟最熟的人吃飯其實更輕鬆，系統高估了"
+    },
+    {
+      "dayOffset": -3,
+      "time": "10:00",
+      "type": "meeting",
+      "headcount": 7,
+      "familiarity": 3,
+      "durationMinutes": 60,
+      "predictedDrain": 18,
+      "actualDrain": 24,
+      "note": "回顧用：會議也略被低估"
+    },
+    {
+      "dayOffset": -2,
+      "time": "14:00",
+      "type": "class",
+      "headcount": 35,
+      "familiarity": 2,
+      "durationMinutes": 120,
+      "predictedDrain": 20,
+      "actualDrain": 18,
+      "note": "回顧用：上課的預測相當準"
+    },
+    {
+      "dayOffset": -1,
+      "time": "18:30",
+      "type": "meal",
+      "headcount": 5,
+      "familiarity": 3,
+      "durationMinutes": 90,
+      "predictedDrain": 15,
+      "actualDrain": 15,
+      "note": "回顧用：完全命中"
+    },
+    {
+      "dayOffset": 0,
+      "time": "08:30",
+      "type": "meeting",
+      "headcount": 6,
+      "familiarity": 3,
+      "durationMinutes": 60,
+      "predictedDrain": 16,
+      "actualDrain": null,
+      "note": "今天早上的 meeting，已結束但還沒回報 -> 首頁會跳出回報卡片"
+    },
+    {
+      "dayOffset": 2,
+      "time": "10:00",
+      "type": "meeting",
+      "headcount": 8,
+      "familiarity": 3,
+      "durationMinutes": 90,
+      "predictedDrain": 24,
+      "actualDrain": null,
+      "note": "低電量日 1：上午進度報告"
+    },
+    {
+      "dayOffset": 2,
+      "time": "19:00",
+      "type": "party",
+      "headcount": 25,
+      "familiarity": 2,
+      "durationMinutes": 180,
+      "predictedDrain": 52,
+      "actualDrain": null,
+      "note": "低電量日 1：晚上系上迎新，人多又不熟，是整週最重的一場"
+    },
+    {
+      "dayOffset": 3,
+      "time": "14:00",
+      "type": "class",
+      "headcount": 30,
+      "familiarity": 2,
+      "durationMinutes": 120,
+      "predictedDrain": 18,
+      "actualDrain": null,
+      "note": "被動參與為主，消耗中等——但因為前一天燒到 0%，這天起床只有 46%，會被連帶拖下去"
+    },
+    {
+      "dayOffset": 4,
+      "time": "09:00",
+      "type": "meeting",
+      "headcount": 5,
+      "familiarity": 3,
+      "durationMinutes": 60,
+      "predictedDrain": 14,
+      "actualDrain": null,
+      "note": "低電量日 2：三場連續"
+    },
+    {
+      "dayOffset": 4,
+      "time": "12:30",
+      "type": "meal",
+      "headcount": 6,
+      "familiarity": 2,
+      "durationMinutes": 90,
+      "predictedDrain": 22,
+      "actualDrain": null,
+      "note": "低電量日 2：跟不熟的組員吃飯"
+    },
+    {
+      "dayOffset": 4,
+      "time": "19:30",
+      "type": "date",
+      "headcount": 2,
+      "familiarity": 5,
+      "durationMinutes": 120,
+      "predictedDrain": 12,
+      "actualDrain": null,
+      "note": "低電量日 2：對象最親密，消耗低，但當天已經沒電了"
+    },
+    {
+      "dayOffset": 6,
+      "time": "11:00",
+      "type": "meal",
+      "headcount": 2,
+      "familiarity": 5,
+      "durationMinutes": 120,
+      "predictedDrain": 8,
+      "actualDrain": null,
+      "note": "週末和最好的朋友吃早午餐，幾乎不掉電"
+    }
+  ],
+  "expected": {
+    "lowBatteryDayOffsets": [
+      2,
+      3,
+      4
+    ],
+    "explanation": "容量 58，睡一覺回充 80%（見 lib/battery.ts）。D+2 迎新共消耗 76 -> 剩 0%；D+3 起床只剩 46%，就算只有一堂課也掉到 28%；D+4 三場連續 -> 剩 10%。三天連續低於 30% 門檻，且 D+3 的低電量純粹是前一天累積來的——這正是要在 demo 講的故事。 另外附了 5 筆過去 5 天的已回報紀錄（dayOffset 為負），讓 /review 回顧頁在 demo 當天就有內容：派對被低估 20 個百分點是最明顯的發現。",
+    "pastReportedCount": 5
+  }
+}

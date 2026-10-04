@@ -1,0 +1,29 @@
+name = "social-battery-meter"
+compatibility_date = "2024-11-11"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".vercel/output/static"
+
+# D1 binding。database_id 要換成 `wrangler d1 create social-battery-db` 產生的真實 id。
+[[d1_databases]]
+binding = "DB"
+database_name = "social-battery-db"
+database_id = "76ff6dd3-8347-47b9-9ea3-f48e386f1db8"
+migrations_dir = "db/migrations"
+
+# Workers AI binding —— 主要的 AI 供應商。
+# 跟 D1 同一個 Cloudflare 帳號，不需要申請任何 API Key。
+[ai]
+binding = "AI"
+
+# 備援／選配的 API Key 一律不寫在這裡，用下列指令設成 secret：
+#   wrangler pages secret put AZURE_OPENAI_ENDPOINT    # 主要 AI：Azure OpenAI（Microsoft Foundry）
+#   wrangler pages secret put AZURE_OPENAI_API_KEY
+#   wrangler pages secret put AZURE_OPENAI_DEPLOYMENT
+#   wrangler pages secret put LIFERPG_ORIGINS          # LifeRPG 正式網域，CORS 白名單
+#   wrangler pages secret put GROQ_API_KEY         # 備援，免費且極快
+#   wrangler pages secret put OPENAI_API_KEY       # 選配，現場有發 credits 再設
+#   wrangler pages secret put ELEVENLABS_API_KEY   # Track D 語音輸入，選配
+# 本機開發放在 .dev.vars（已被 .gitignore 忽略）。
+[vars]
+# 想省 Neurons 可改成 "@cf/meta/llama-3.1-8b-instruct"（快但中文較弱）
+WORKERS_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
