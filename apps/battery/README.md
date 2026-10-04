@@ -19,8 +19,9 @@
 | 線上展示 | https://social-battery-meter.pages.dev/week?demo=1 |
 | 一般入口 | https://social-battery-meter.pages.dev |
 | 技術棧 | Next.js 14 · Cloudflare Pages + D1 · Azure OpenAI（Microsoft Foundry）+ Workers AI 備援 · 全部 edge runtime |
-| AI 供應商 | Azure OpenAI → GitHub Models（GPT-4o mini）→ Workers AI（Meta Llama）→ 規則式估算，依序自動切換 |
-| Microsoft 整合 | GitHub Models 生成式 AI、Outlook 行事曆訂閱（.ics）、LifeRPG 可安裝為 Edge PWA |
+| AI 供應商 | Workers AI（Meta Llama 3.3）＋規則式估算；預留 Azure OpenAI、Groq、OpenAI 介面，設定金鑰即依序啟用 |
+| Microsoft 整合 | Outlook 行事曆一鍵訂閱與匯入（.ics）、兩個 app 皆可安裝為 Edge／Windows PWA |
+| 活動範圍 | 社交（人數、熟悉度）＋生活活動：課業考試、工作打工、運動、通勤、家務（強度 1–5） |
 
 ---
 
@@ -121,7 +122,6 @@
 | 順序 | 供應商 | 需要什麼 | 說明 |
 |---|---|---|---|
 | 0 | **Azure OpenAI（Microsoft Foundry）** | `AZURE_OPENAI_ENDPOINT`、`AZURE_OPENAI_API_KEY`、`AZURE_OPENAI_DEPLOYMENT` | 主要供應商。走 v1 API `${endpoint}/openai/v1/chat/completions`，`model` 填部署名稱，用 `api-key` 標頭驗證。失敗自動退到 Workers AI。回應的 `provider` 欄位會標示 `azure-openai` |
-| 0.5 | **GitHub Models（Microsoft）** | `GITHUB_MODELS_TOKEN` | fine-grained token，權限只需 Models: read。預設 `openai/gpt-4o-mini`，回應的 `provider` 標示 `github-models` |
 | 1 | **Cloudflare Workers AI** | **不需要 API Key** | 走 `wrangler.toml` 的 `[ai]` binding，跟 D1／Pages 同一個帳號。預設模型 `@cf/meta/llama-3.3-70b-instruct-fp8-fast`（中文品質好）。免費額度每天 10,000 Neurons |
 | 2 | Groq | `GROQ_API_KEY` | 免費、推論極快、OpenAI 相容介面 |
 | 3 | OpenAI | `OPENAI_API_KEY` | 現場若有發 credits，設了就自動接上，不用改程式碼 |

@@ -8,7 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { VoiceInputButton } from "@/components/VoiceInputButton";
 import { Slider } from "@/components/ui/slider";
-import { ACTIVITY_META, ACTIVITY_TYPES, FAMILIARITY_LABELS, formatDuration } from "@/lib/activity-meta";
+import {
+  ACTIVITY_META,
+  ACTIVITY_TYPES,
+  FAMILIARITY_LABELS,
+  formatDuration,
+  INTENSITY_LABELS,
+  isLifeType,
+} from "@/lib/activity-meta";
 import { createActivity, parseVoiceActivity, type CreateActivityResponse } from "@/lib/client-api";
 import type { Activity, ActivityType } from "@/lib/types";
 
@@ -40,6 +47,7 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
   const [type, setType] = React.useState<ActivityType>("meal");
   const [headcount, setHeadcount] = React.useState(4);
   const [familiarity, setFamiliarity] = React.useState<Familiarity>(3);
+  const [intensity, setIntensity] = React.useState(3);
   const [durationMinutes, setDurationMinutes] = React.useState(90);
   const [scheduledAt, setScheduledAt] = React.useState(defaultScheduledAt);
   const [submitting, setSubmitting] = React.useState(false);
@@ -69,6 +77,7 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
       setType(a.type);
       setHeadcount(a.headcount);
       setFamiliarity(Math.max(1, Math.min(5, a.familiarity)) as Familiarity);
+      if (a.intensity) setIntensity(Math.max(1, Math.min(5, a.intensity)));
       setDurationMinutes(a.durationMinutes);
       setScheduledAt(a.scheduledAt);
       setUncertain(a.uncertainFields);
@@ -85,6 +94,7 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
     type: "活動類型",
     headcount: "人數",
     familiarity: "熟悉度",
+    intensity: "強度",
     durationMinutes: "時長",
     scheduledAt: "日期時間",
   };
@@ -94,7 +104,15 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
     setSubmitting(true);
     setError(null);
     try {
-      const result = await createActivity({ type, headcount, familiarity, durationMinutes, scheduledAt });
+      const life = isLifeType(type);
+      const result = await createActivity({
+        type,
+        headcount: life ? 1 : headcount,
+        familiarity: life ? 3 : familiarity,
+        intensity: life ? intensity : null,
+        durationMinutes,
+        scheduledAt,
+      });
       onCreated?.(result);
       setOpen(false);
     } catch (err) {
@@ -115,7 +133,7 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
       <SheetContent>
         <SheetHeader>
           <SheetTitle>這場活動長什麼樣子？</SheetTitle>
-          <SheetDescription>填完之後，AI 會估算它會耗掉你多少電量。</SheetDescription>
+          <SheetDescription>社交、讀書、工作、運動都可以記。填完之後，AI 會估算它會耗掉你多少電量。</SheetDescription>
         </SheetHeader>
 
         {/* Track D：語音輸入。這個環境沒開啟語音時整塊收掉，只留下面的手動表單 */}
@@ -157,6 +175,20 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
             </Select>
           </div>
 
+          {isLifeType(type) ? (
+          <div className="space-y-3">
+            <div className="flex items-baseline justify-between">
+              <Label>強度</Label>
+              <span className="text-sm font-semibold text-mint-600">{INTENSITY_LABELS[intensity]}</span>
+            </div>
+            <Slider min={1} max={5} step={1} value={[intensity]} onValueChange={([v]) => setIntensity(v)} />
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>很輕鬆</span>
+              <span>非常吃力</span>
+            </div>
+          </div>
+          ) : (
+          <>
           <div className="space-y-3">
             <div className="flex items-baseline justify-between">
               <Label>人數</Label>
@@ -176,6 +208,8 @@ export function ActivitySheet({ onCreated, triggerLabel = "新增活動" }: Acti
               <span>最親密</span>
             </div>
           </div>
+          </>
+          )}
 
           <div className="space-y-3">
             <div className="flex items-baseline justify-between">

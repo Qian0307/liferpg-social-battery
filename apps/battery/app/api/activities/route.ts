@@ -2,6 +2,7 @@ import { fail, ok, parseBody } from "@/lib/api";
 import { runInBackground } from "@/lib/background";
 import { hasAnyProvider } from "@/lib/ai";
 import { getCurrentUser } from "@/lib/current-user";
+import { isLifeType } from "@/lib/activity-meta";
 import { ruleBasedDrain } from "@/lib/drain-rules";
 import { predictDrain } from "@/lib/predict";
 import { insertActivity, refinePredictedDrain } from "@/lib/repo";
@@ -27,7 +28,15 @@ export async function POST(req: Request) {
   const parsed = await parseBody(req, createActivitySchema);
   if ("response" in parsed) return parsed.response;
 
-  const { scheduledAt, ...activityInput } = parsed.data;
+  const { scheduledAt, ...input } = parsed.data;
+  // 生活活動不看人數與熟悉度，存成中性值；社交活動不看強度
+  const life = isLifeType(input.type);
+  const activityInput = {
+    ...input,
+    headcount: life ? 1 : input.headcount,
+    familiarity: life ? (3 as const) : input.familiarity,
+    intensity: life ? (input.intensity ?? 3) : null,
+  };
   const predictionInput = { activity: activityInput, profile: user.profile };
 
   // 1. 規則式估算：純計算，沒有 I/O，可以立刻回應
@@ -39,6 +48,7 @@ export async function POST(req: Request) {
     type: activityInput.type,
     headcount: activityInput.headcount,
     familiarity: activityInput.familiarity,
+    intensity: activityInput.intensity,
     durationMinutes: activityInput.durationMinutes,
     scheduledAt: normalizeIso(scheduledAt),
     predictedDrain: quick.predictedDrain,

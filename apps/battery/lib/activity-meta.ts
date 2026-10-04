@@ -1,4 +1,4 @@
-import type { ActivityType, SocialActivityType } from "@/lib/types";
+import type { ActivityType, LifeActivityType, UserActivityType } from "@/lib/types";
 
 /** 前端顯示用的活動類型資訊（client-safe，不含任何 server 依賴）。 */
 export const ACTIVITY_META: Record<ActivityType, { label: string; emoji: string }> = {
@@ -7,14 +7,43 @@ export const ACTIVITY_META: Record<ActivityType, { label: string; emoji: string 
   date: { label: "約會", emoji: "💐" },
   class: { label: "上課", emoji: "📚" },
   party: { label: "派對", emoji: "🎉" },
-  other: { label: "其他", emoji: "✨" },
+  other: { label: "其他社交", emoji: "✨" },
+  study: { label: "課業／考試", emoji: "📖" },
+  work: { label: "工作／打工", emoji: "💻" },
+  exercise: { label: "運動", emoji: "🏃" },
+  commute: { label: "通勤", emoji: "🚌" },
+  chores: { label: "家務雜事", emoji: "🧺" },
   recovery: { label: "恢復時間", emoji: "🌿" },
 };
 
+export const LIFE_TYPES: readonly LifeActivityType[] = ["study", "work", "exercise", "commute", "chores"];
+
 /** 新增活動選單用：不含 recovery（恢復只能由 LifeRPG 寫入）。 */
 export const ACTIVITY_TYPES = (Object.keys(ACTIVITY_META) as ActivityType[]).filter(
-  (t): t is SocialActivityType => t !== "recovery"
+  (t): t is UserActivityType => t !== "recovery"
 );
+
+/** 生活活動（課業、工作、運動、通勤、家務）不看人數與熟悉度，改看強度。 */
+export function isLifeType(type: ActivityType): type is LifeActivityType {
+  return (LIFE_TYPES as readonly string[]).includes(type);
+}
+
+export const INTENSITY_LABELS = ["", "很輕鬆", "輕鬆", "普通", "吃力", "非常吃力"];
+
+/** 一行描述活動的負荷：社交活動寫人數與熟悉度，生活活動寫強度。 */
+export function describeLoad(a: {
+  type: ActivityType;
+  headcount: number;
+  familiarity: number;
+  intensity?: number | null;
+}): string {
+  if (a.type === "recovery") return "恢復行動";
+  if (isLifeType(a.type)) {
+    const level = a.intensity ?? 3;
+    return `強度 ${level}/5（${INTENSITY_LABELS[level] ?? ""}）`;
+  }
+  return `${a.headcount} 人・熟悉度 ${a.familiarity}/5`;
+}
 
 /** 耗電顯示成「-20%」，恢復（負值）顯示成「+15%」。 */
 export function formatDrain(drain: number): string {

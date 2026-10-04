@@ -153,6 +153,30 @@
       "predictedDrain": 8,
       "actualDrain": null,
       "note": "週末和最好的朋友吃早午餐，幾乎不掉電"
+    },
+    {
+      "dayOffset": 1,
+      "time": "20:00",
+      "type": "study",
+      "headcount": 1,
+      "familiarity": 3,
+      "intensity": 2,
+      "durationMinutes": 90,
+      "predictedDrain": 16,
+      "actualDrain": null,
+      "note": "生活活動：晚上複習期中考範圍，強度不高，電量還撐得住"
+    },
+    {
+      "dayOffset": 5,
+      "time": "17:30",
+      "type": "exercise",
+      "headcount": 1,
+      "familiarity": 3,
+      "intensity": 2,
+      "durationMinutes": 60,
+      "predictedDrain": 9,
+      "actualDrain": null,
+      "note": "生活活動：傍晚慢跑，輕度消耗，隔天就補滿"
     }
   ],
   "expected": {
@@ -161,7 +185,7 @@
       3,
       4
     ],
-    "explanation": "容量 58，睡一覺回充 80%（見 lib/battery.ts）。D+2 迎新共消耗 76 -> 剩 0%；D+3 起床只剩 46%，就算只有一堂課也掉到 28%；D+4 三場連續 -> 剩 10%。三天連續低於 30% 門檻，且 D+3 的低電量純粹是前一天累積來的——這正是要在 demo 講的故事。 另外附了 5 筆過去 5 天的已回報紀錄（dayOffset 為負），讓 /review 回顧頁在 demo 當天就有內容：派對被低估 20 個百分點是最明顯的發現。",
+    "explanation": "容量 58，睡一覺回充 80%（見 lib/battery.ts）。D+2 迎新共消耗 76 -> 剩 0%；D+3 起床只剩 46%，就算只有一堂課也掉到 28%；D+4 三場連續 -> 剩 10%。三天連續低於 30% 門檻，且 D+3 的低電量純粹是前一天累積來的——這正是要在 demo 講的故事。 另外附了 5 筆過去 5 天的已回報紀錄（dayOffset 為負），讓 /review 回顧頁在 demo 當天就有內容：派對被低估 20 個百分點是最明顯的發現。 另外加了兩筆生活活動（D+1 讀書、D+5 運動），示範社交以外的行程也會計入電量，但不改變低電量日。",
     "pastReportedCount": 5
   }
 }

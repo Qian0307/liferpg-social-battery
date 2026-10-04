@@ -1,7 +1,7 @@
 import "server-only";
 
 import { chatJson } from "@/lib/ai";
-import { ACTIVITY_META } from "@/lib/activity-meta";
+import { ACTIVITY_META, describeLoad } from "@/lib/activity-meta";
 import {
   buildWeeklyReviewUserPrompt,
   WEEKLY_REVIEW_SYSTEM_PROMPT,
@@ -91,8 +91,7 @@ export async function buildReviewSummary(
   const input: ReviewActivityInput[] = activities.map((a) => ({
     date: localDate(a.scheduledAt),
     typeLabel: ACTIVITY_META[a.type].label,
-    headcount: a.headcount,
-    familiarity: a.familiarity,
+    load: describeLoad(a),
     durationMinutes: a.durationMinutes,
     predictedDrain: a.predictedDrain,
     actualDrain: a.actualDrain,
@@ -119,7 +118,7 @@ function ruleBasedReview(
 ): Omit<ReviewSummary, "source"> {
   if (activities.length === 0) {
     return {
-      headline: "這週沒有社交活動紀錄",
+      headline: "這週還沒有行程紀錄",
       observations: [],
       suggestion: "下次安排活動時加進來，一週後就會有第一份回顧。",
     };

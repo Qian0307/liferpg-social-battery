@@ -1,5 +1,6 @@
 import "server-only";
 
+import { isLifeType } from "@/lib/activity-meta";
 import { chatJsonWithProvider, type AiProvider } from "@/lib/ai";
 import { buildParseVoiceUserPrompt, PARSE_VOICE_SYSTEM_PROMPT } from "@/lib/prompts/parse-voice-activity";
 import { parsedActivitySchema } from "@/lib/schemas";
@@ -36,7 +37,11 @@ export async function parseVoiceActivity(transcript: string): Promise<ParseVoice
 
   const parsed = result === null ? null : parsedActivitySchema.safeParse(result.data);
   if (parsed?.success) {
-    return { status: "ok", activity: parsed.data, source: "ai", provider: result!.provider };
+    // LLM 換算「禮拜六」這類相對日期常常算錯；句子裡有明確的日期詞時，日期改用規則換算，時段仍採用 AI 的結果
+    const activity = EXPLICIT_DAY.test(transcript)
+      ? { ...parsed.data, scheduledAt: matchWhen(transcript, now).scheduledAt.slice(0, 10) + parsed.data.scheduledAt.slice(10) }
+      : parsed.data;
+    return { status: "ok", activity, source: "ai", provider: result!.provider };
   }
 
   console.warn("[voice-parse] AI 解析失敗，改用關鍵字規則");
@@ -60,8 +65,10 @@ function ruleBasedParse(transcript: string, now: Date): ParsedActivity {
     uncertain.push("durationMinutes");
   }
 
-  const headcount = matchHeadcount(textWithoutDuration, type, uncertain);
-  const familiarity = matchFamiliarity(transcript) ?? (uncertain.push("familiarity"), 3);
+  const life = isLifeType(type);
+  const headcount = life ? 1 : matchHeadcount(textWithoutDuration, type, uncertain);
+  const familiarity = life ? 3 : matchFamiliarity(transcript) ?? (uncertain.push("familiarity"), 3);
+  const intensity = life ? matchIntensity(transcript) ?? (uncertain.push("intensity"), 3) : null;
 
   const { scheduledAt, guessed } = matchWhen(transcript, now);
   if (guessed) uncertain.push("scheduledAt");
@@ -70,21 +77,45 @@ function ruleBasedParse(transcript: string, now: Date): ParsedActivity {
     type,
     headcount: Math.max(1, Math.min(500, headcount)),
     familiarity: Math.max(1, Math.min(5, familiarity)),
+    intensity,
     durationMinutes: Math.max(5, Math.min(1440, durationMinutes)),
     scheduledAt,
     uncertainFields: uncertain,
   };
 }
 
-const DEFAULT_HEADCOUNT = { meal: 4, meeting: 6, date: 2, class: 30, party: 15, other: 4 } as const;
-const DEFAULT_DURATION = { meal: 90, meeting: 60, date: 120, class: 120, party: 180, other: 90 } as const;
+export const DEFAULT_HEADCOUNT: Record<ParsedActivity["type"], number> = {
+  meal: 4, meeting: 6, date: 2, class: 30, party: 15, other: 4,
+  study: 1, work: 1, exercise: 1, commute: 1, chores: 1,
+};
+const DEFAULT_DURATION: Record<ParsedActivity["type"], number> = {
+  meal: 90, meeting: 60, date: 120, class: 120, party: 180, other: 90,
+  study: 120, work: 240, exercise: 60, commute: 40, chores: 60,
+};
 
-function matchType(t: string): ParsedActivity["type"] | null {
+/**
+ * 依關鍵字判斷活動類型。語音 fallback 與 Outlook 匯入共用。
+ * 社交場合優先（「跟同學一起讀書」偏向社交），再判斷生活活動。
+ */
+export function matchType(t: string): ParsedActivity["type"] | null {
   if (/派對|聚會|慶生|迎新|party|夜唱|續攤|尾牙/.test(t)) return "party";
   if (/約會|男友|女友|男朋友|女朋友|date/.test(t)) return "date";
+  if (/讀書|念書|唸書|考試|期中|期末|複習|寫作業|作業|自習|小考|study|exam/.test(t)) return "study";
+  if (/打工|上班|值班|實習|加班|輪班|work|shift/.test(t)) return "work";
+  if (/運動|健身|跑步|慢跑|游泳|打球|籃球|羽球|排球|瑜伽|重訓|騎腳踏車|gym|run/.test(t)) return "exercise";
+  if (/通勤|搭車|坐車|開車|騎車|捷運|公車|高鐵|火車|commute/.test(t)) return "commute";
+  if (/家務|打掃|洗衣|煮飯|採買|買菜|整理房間|倒垃圾|chores/.test(t)) return "chores";
   if (/開會|會議|討論|meeting|報告|面試/.test(t)) return "meeting";
   if (/上課|課程|講座|研討|class|工作坊/.test(t)) return "class";
   if (/吃飯|聚餐|午餐|晚餐|早餐|喝|咖啡|火鍋|brunch|宵夜/.test(t)) return "meal";
+  return null;
+}
+
+/** 生活活動的強度：抓不到就回 null，由呼叫端給預設 3。 */
+export function matchIntensity(t: string): number | null {
+  if (/爆肝|通宵|超級累|極限/.test(t)) return 5;
+  if (/很累|很操|吃力|衝刺|期末|大考|高強度|重訓|趕/.test(t)) return 4;
+  if (/散步|輕鬆|簡單|隨便|一下下|伸展/.test(t)) return 2;
   return null;
 }
 
@@ -167,6 +198,9 @@ function parseNumber(raw: string): number | null {
   if (ones === null) return null;
   return tens * 10 + ones;
 }
+
+/** 句子裡有明確日期詞（今天、明天、後天、禮拜幾）時，日期以規則換算為準。 */
+const EXPLICIT_DAY = /(?:禮拜|星期|週)[日天一二三四五六]|明天|明日|後天|今天|今晚/;
 
 const WEEKDAY_CHARS: Record<string, number> = { 日: 0, 天: 0, 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6 };
 

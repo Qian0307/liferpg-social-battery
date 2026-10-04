@@ -89,6 +89,7 @@ function demoActivities(startDate: string): Activity[] {
       type: a.type as Activity["type"],
       headcount: a.headcount,
       familiarity: a.familiarity as Activity["familiarity"],
+      intensity: ("intensity" in a ? a.intensity : null) as Activity["intensity"],
       durationMinutes: a.durationMinutes,
       scheduledAt: new Date(`${addDays(startDate, a.dayOffset)}T${a.time}:00+08:00`).toISOString(),
       predictedDrain: a.predictedDrain,

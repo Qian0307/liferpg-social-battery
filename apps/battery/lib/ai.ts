@@ -3,15 +3,12 @@ import "server-only";
 import { readEnv } from "@/lib/env";
 
 /**
- * AI 呼叫封裝：依序嘗試五個供應商，第一個成功的就採用。
+ * AI 呼叫封裝：依序嘗試四個供應商，第一個成功的就採用。
  *
  * 0. Azure OpenAI（Microsoft Foundry，主要）
  *    設了 AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY / AZURE_OPENAI_DEPLOYMENT 就會優先使用。
  *    走 v1 API：${endpoint}/openai/v1/chat/completions，model 填部署名稱，驗證用 api-key 標頭。
  *    失敗（逾時、配額、部署名稱錯）會自動退到下一個供應商，demo 不會中斷。
- * 0.5 GitHub Models（Microsoft）
- *    設了 GITHUB_MODELS_TOKEN（GitHub fine-grained token，權限只需 Models: read）就會啟用。
- *    OpenAI 相容介面：https://models.github.ai/inference/chat/completions，Bearer 驗證，預設 openai/gpt-4o-mini。
  * 1. Cloudflare Workers AI（備援）
  *    走 wrangler.toml 的 [ai] binding，跟 D1／Pages 同一個帳號，不需要另外申請 API Key。
  *    免費額度每天 10,000 Neurons——以 demo 的用量遠遠用不完，但不是無上限。
@@ -29,14 +26,12 @@ import { readEnv } from "@/lib/env";
 const DEFAULT_WORKERS_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const DEFAULT_GROQ_MODEL = "llama-3.3-70b-versatile";
 const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
-const DEFAULT_GITHUB_MODELS_MODEL = "openai/gpt-4o-mini";
-const GITHUB_MODELS_BASE_URL = "https://models.github.ai/inference";
 
 
 const GROQ_BASE_URL = "https://api.groq.com/openai/v1";
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
-export type AiProvider = "azure-openai" | "github-models" | "workers-ai" | "groq" | "openai";
+export type AiProvider = "azure-openai" | "workers-ai" | "groq" | "openai";
 
 /** chatJsonWithProvider() 的回傳：解析好的 JSON + 實際回答的供應商（給回應的 provider 欄位用）。 */
 export interface ChatJsonResult {
@@ -89,7 +84,6 @@ async function getAzureConfig(): Promise<AzureConfig | null> {
 export async function availableProviders(): Promise<AiProvider[]> {
   const providers: AiProvider[] = [];
   if (await getAzureConfig()) providers.push("azure-openai");
-  if (await readEnv("GITHUB_MODELS_TOKEN")) providers.push("github-models");
   if (await getAiBinding()) providers.push("workers-ai");
   if (await readEnv("GROQ_API_KEY")) providers.push("groq");
   if (await readEnv("OPENAI_API_KEY")) providers.push("openai");
@@ -134,16 +128,6 @@ async function tryProviders(opts: ChatJsonOptions): Promise<ChatJsonResult | nul
     const parsed = text === null ? null : safeParseJson(text);
     if (parsed !== null) return { data: parsed, provider: "azure-openai" };
     console.warn("[ai] Azure OpenAI 沒有回傳可解析的 JSON，改試下一個供應商");
-  }
-
-  // 0.5 GitHub Models（Microsoft）
-  const githubToken = (await readEnv("GITHUB_MODELS_TOKEN"))?.trim();
-  if (githubToken) {
-    const model = (await readEnv("GITHUB_MODELS_MODEL")) ?? DEFAULT_GITHUB_MODELS_MODEL;
-    const text = await callOpenAiCompatible("github-models", GITHUB_MODELS_BASE_URL, githubToken, model, opts, timeoutMs);
-    const parsed = text === null ? null : safeParseJson(text);
-    if (parsed !== null) return { data: parsed, provider: "github-models" };
-    console.warn("[ai] GitHub Models 沒有回傳可解析的 JSON，改試 Workers AI");
   }
 
   // 1. Cloudflare Workers AI

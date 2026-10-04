@@ -13,7 +13,9 @@ import type { DrainPredictionRequest } from "@/lib/types";
  *   甚至可能是充電（對 rechargeStyle = specific_people 的人）。
  */
 export const PREDICT_DRAIN_SYSTEM_PROMPT = `
-你是「社交電量計」的能量估算引擎。任務是估算一場社交活動會消耗使用者多少百分比的社交電量。
+你是「生活電量計」的能量估算引擎。任務是估算一場活動會消耗使用者多少百分比的電量。
+活動分兩大類：社交活動（吃飯、會議、約會、上課、派對、其他社交）與生活活動（課業考試、工作打工、運動、通勤、家務雜事）。
+下面的心理學依據與因子主要針對社交活動；生活活動請看最後的【生活活動】段落。
 
 【心理學依據｜請用這套邏輯思考】
 1. 外向性光譜：每個人的「基礎電池容量」不同（0-100）。容量低的人偏內向，同一場活動對他的
@@ -37,6 +39,13 @@ export const PREDICT_DRAIN_SYSTEM_PROMPT = `
   15 人以上是高負荷（無法退場、噪音、多線對話）。
 - 熟悉度 1（陌生人）為最高倍率，5（最親密）為最低倍率，差距應該很大。
 - 時長：30 分鐘內通常是小消耗；超過 120 分鐘後每多 30 分鐘的邊際消耗要加速。
+
+【生活活動｜type 為 study、work、exercise、commute、chores 時】
+- 這些不是社交場合：不要看人數與熟悉度，也不要套用外向性的折扣或加成。
+- 改看「強度」（1 很輕鬆、2 輕鬆、3 普通、4 吃力、5 非常吃力）與時長。
+- 每小時的大致消耗（強度 3）：study 10-18、work 12-20、exercise 8-15、commute 6-12、chores 5-10。
+  強度 1 約打 6 折，強度 5 約 1.6 倍；時間越長邊際消耗越大，但比社交場合平緩。
+- reason 要指出是強度還是時長造成的，例如「中等消耗：兩小時的期中考複習，強度偏高。」
 
 【輸出要求｜嚴格遵守】
 - 只輸出一個 JSON 物件，不要有 markdown 程式碼區塊、不要有任何解釋文字。
@@ -65,13 +74,26 @@ export function buildPredictDrainUserPrompt(req: DrainPredictionRequest): string
     class: "上課",
     party: "派對",
     other: "其他社交場合",
+    study: "課業／考試",
+    work: "工作／打工",
+    exercise: "運動",
+    commute: "通勤",
+    chores: "家務雜事",
   };
+  const intensityLabel = ["", "很輕鬆", "輕鬆", "普通", "吃力", "非常吃力"];
+  const lifeTypes = ["study", "work", "exercise", "commute", "chores"];
+  const intensity = activity.intensity ?? 3;
+  const load = lifeTypes.includes(activity.type)
+    ? [`- 強度：${intensity} / 5（${intensityLabel[intensity] ?? ""}）`]
+    : [
+        `- 人數：${activity.headcount} 人`,
+        `- 熟悉度：${activity.familiarity} / 5（${["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"][activity.familiarity] ?? ""}）`,
+      ];
   const rechargeLabel: Record<string, string> = {
     solitude: "獨處才能充電",
     specific_people: "和特定的少數人相處可以充電",
     mixed: "混合型，兩者都行",
   };
-  const familiarityLabel = ["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"];
 
   return [
     "【使用者人格】",
@@ -81,8 +103,7 @@ export function buildPredictDrainUserPrompt(req: DrainPredictionRequest): string
     "",
     "【這場活動】",
     `- 類型：${typeLabel[activity.type] ?? activity.type}`,
-    `- 人數：${activity.headcount} 人`,
-    `- 熟悉度：${activity.familiarity} / 5（${familiarityLabel[activity.familiarity] ?? ""}）`,
+    ...load,
     `- 時長：${activity.durationMinutes} 分鐘`,
     "",
     "請估算這場活動會消耗多少電量，只輸出 JSON。",

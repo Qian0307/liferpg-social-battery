@@ -6,7 +6,7 @@
 目標是把兩個既有作品整合成一個「會累的 RPG 角色」，兩者現在放在同一個 monorepo：
 
 - `apps/liferpg/`：LifeRPG，遊戲化成長系統。功能包含專注 Boss 戰、七大領域技能樹、人生目標章節。
-- `apps/battery/`：社交電量計，社交能量預測工具。電量會跨日結轉，並提供 AI 預測、風險預警與排程建議。
+- `apps/battery/`：生活電量計（原「社交電量計」），預測社交與課業、工作、運動、通勤、家務的耗電。電量會跨日結轉，並提供 AI 預測、風險預警、排程建議、Outlook 行事曆訂閱與匯入，可安裝為 PWA。
   子目錄另有自己的 `CLAUDE.md`（早期開發規格）。
 
 ## 時程
@@ -24,15 +24,16 @@
 
 - 純靜態 PWA，整個應用程式寫在一個約 200KB 的 `index.html` 裡，沒有 build step。
 - 資料存在瀏覽器的 IndexedDB，只放本機。另外有 `sw.js`（Service Worker）和 `manifest.webmanifest`。
-- 部署在 Vercel（Root Directory 為 `apps/liferpg`）與 Azure Static Web Apps。CSP 的 `connect-src` 已開放社交電量計網域，`vercel.json` 與 `staticwebapp.config.json` 兩邊要保持一致。
+- 正式站部署在 Cloudflare Pages：https://liferpg-1h4.pages.dev（安全標頭在 `_headers`）。另保留 Vercel（`vercel.json`）與 Azure Static Web Apps（`staticwebapp.config.json`）的設定。CSP 的 `connect-src` 已開放社交電量計網域，`vercel.json` 與 `staticwebapp.config.json` 兩邊要保持一致。
 - 七大領域之一「健康與身體」底下的「恢復與休息」（`health.recovery`）分類：放鬆練習、離屏休息、休息安排。完成這類專注或補登會回報社交電量計。
 - 修改 `index.html` 時，請沿用現有的程式風格和資料驗證寫法。檔案裡有大量格式檢查，例如「格式不正確」這類錯誤訊息，新增的資料欄位也要照同樣方式驗證。如果需要遷移資料，絕對不能改變歷史 XP。
 
-### 社交電量計（`apps/battery/`）
+### 生活電量計（`apps/battery/`）
 
 - Next.js 14（App Router）加 TypeScript，所有 route 都跑在 edge runtime，部署在 Cloudflare Pages，資料庫用 D1 搭配 Drizzle。
 - `node_modules` 在 WSL（Linux）安裝，所有 npm 指令請在 WSL 裡執行。
-- `lib/ai.ts` 是所有 AI 呼叫的唯一入口，依序嘗試 Azure OpenAI → Workers AI → Groq → OpenAI，全部失敗時退回規則式估算（`lib/drain-rules.ts`）。回應的 `provider` 欄位標示實際回答的供應商。
+- `lib/ai.ts` 是所有 AI 呼叫的唯一入口。目前實際運作的是 Workers AI（Meta Llama 3.3），Azure OpenAI 程式已預留在第一順位但未設定金鑰（已決定移到「下一階段」，GitHub Models 已於 2026/7/30 停止服務，不可使用）。全部失敗時退回規則式估算（`lib/drain-rules.ts`）。回應的 `provider` 欄位標示實際回答的供應商。
+- 活動分兩類：社交活動（人數、熟悉度）與生活活動 `study`／`work`／`exercise`／`commute`／`chores`（`intensity` 1–5，migration 0002）。
 - `lib/battery.ts` 的 `simulateWeek()` 是電量模型：每天起床電量 = min(基礎容量, 前一天剩餘 + 基礎容量 × 0.8)，當天結束時低於 30% 就判定為風險日。恢復活動（`type: recovery`）的耗電量為負值。
 - 使用者用匿名 session 識別，cookie 名稱是 `sbm_session`。demo 資料綁在 `demo-session`，網址 `/week?demo=1` 會自動載入。
 - LifeRPG 串接用的 API：`GET /api/public/battery`、`POST /api/public/recovery`、`POST /api/guide/today`，用連結碼認人、不依賴跨站 cookie，CORS 白名單由 `LIFERPG_ORIGINS` 設定。

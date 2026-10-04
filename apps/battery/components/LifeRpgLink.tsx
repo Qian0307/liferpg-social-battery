@@ -51,7 +51,7 @@ export function LifeRpgLink() {
         {!code ? (
           <>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              把連結碼貼到 LifeRPG 的「電量連結碼」，角色就會顯示你的社交電量。LifeRPG 只能讀取電量，不能改你的行程。
+              把連結碼貼到 LifeRPG 的「電量連結碼」，角色就會顯示你的生活電量。LifeRPG 只能讀取電量，不能改你的行程。
             </p>
             <Button variant="outline" className="w-full" disabled={loading} onClick={reveal}>
               {loading ? "讀取中…" : "顯示連結碼"}

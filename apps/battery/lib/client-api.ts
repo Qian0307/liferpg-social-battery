@@ -24,6 +24,8 @@ export interface CreateActivityInput {
   type: Activity["type"];
   headcount: number;
   familiarity: Activity["familiarity"];
+  /** 生活活動的強度 1-5；社交活動給 null */
+  intensity?: number | null;
   durationMinutes: number;
   /** datetime-local 的 "YYYY-MM-DDTHH:mm"，由後端補上台北時區 */
   scheduledAt: string;
@@ -96,6 +98,7 @@ export interface ParsedVoiceActivity {
   type: Activity["type"];
   headcount: number;
   familiarity: number;
+  intensity?: number | null;
   durationMinutes: number;
   /** "YYYY-MM-DDTHH:mm"，可直接餵給 datetime-local */
   scheduledAt: string;
@@ -198,6 +201,25 @@ export interface CalendarSubscription {
   token: string;
   url: string;
   webcalUrl: string;
+}
+
+export interface OutlookImportResult {
+  found: number;
+  imported: number;
+  skipped: number;
+  items: { date: string; time: string; label: string; predictedDrain: number; duplicate: boolean }[];
+}
+
+/** 匯入 Outlook 行事曆：給發佈的 ICS 連結，或匯出的 .ics 檔案內容。 */
+export async function importOutlookCalendar(input: { url: string } | { ics: string }): Promise<OutlookImportResult> {
+  const res = await fetch("/api/calendar/import", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  if (res.status === 401) throw new UnauthorizedError();
+  if (!res.ok) throw new Error(await errorMessage(res, "匯入失敗"));
+  return (await res.json()) as OutlookImportResult;
 }
 
 export async function fetchCalendarSubscription(): Promise<CalendarSubscription> {

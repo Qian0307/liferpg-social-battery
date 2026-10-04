@@ -12,6 +12,11 @@ import { fetchCalendarSubscription, type CalendarSubscription } from "@/lib/clie
  * 訂閱是「拉」的模式：行事曆用戶端會定時來抓 .ics，且不會帶 cookie，
  * 所以網址裡含一段隨機 token 當憑證。
  */
+/** Outlook 網頁版「從網路訂閱」的深層連結。 */
+function outlookAddUrl(origin: string, icsUrl: string): string {
+  return `${origin}/calendar/0/addfromweb?url=${encodeURIComponent(icsUrl)}&name=${encodeURIComponent("生活電量計")}`;
+}
+
 export function CalendarSubscribe() {
   const [sub, setSub] = React.useState<CalendarSubscription | null>(null);
   const [loading, setLoading] = React.useState(false);
@@ -55,7 +60,7 @@ export function CalendarSubscribe() {
         {!sub ? (
           <>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              把社交活動與電量預警訂閱到 Outlook 或 iPhone / Mac 的行事曆，行程和電量就在同一個地方看。
+              把行程與電量預警訂閱到 Outlook 或 iPhone / Mac 的行事曆，行程和電量就在同一個地方看。
             </p>
             <Button variant="outline" className="w-full" disabled={loading} onClick={enable}>
               {loading ? "產生中…" : "產生訂閱網址"}
@@ -63,6 +68,25 @@ export function CalendarSubscribe() {
           </>
         ) : (
           <div className="space-y-3">
+            {/* Outlook 網頁版的「從網路訂閱」深層連結：按下去直接帶入訂閱網址 */}
+            <div className="grid grid-cols-2 gap-2">
+              <a
+                href={outlookAddUrl("https://outlook.live.com", sub.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center rounded-2xl bg-[#0F6CBD] px-2 text-center text-xs font-medium text-white transition hover:brightness-110"
+              >
+                加入 Outlook（個人帳號）
+              </a>
+              <a
+                href={outlookAddUrl("https://outlook.office.com", sub.url)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center rounded-2xl border border-[#0F6CBD] px-2 text-center text-xs font-medium text-[#0F6CBD] transition hover:bg-[#0F6CBD]/5"
+              >
+                加入 Outlook（學校／公司）
+              </a>
+            </div>
             <a
               href={sub.webcalUrl}
               className="flex h-11 w-full items-center justify-center rounded-2xl bg-gradient-to-r from-mint-500 to-sky-400 text-sm font-medium text-white transition hover:brightness-105"

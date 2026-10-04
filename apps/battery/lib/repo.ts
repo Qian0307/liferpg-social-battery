@@ -23,6 +23,7 @@ export function rowToActivity(row: ActivityRow): Activity {
     type: row.type as ActivityType,
     headcount: row.headcount,
     familiarity: row.familiarity as Activity["familiarity"],
+    intensity: (row.intensity ?? null) as Activity["intensity"],
     durationMinutes: row.durationMinutes,
     scheduledAt: row.scheduledAt,
     predictedDrain: row.predictedDrain,

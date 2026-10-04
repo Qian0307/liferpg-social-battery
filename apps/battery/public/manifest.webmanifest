@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "生活電量計",
+  "short_name": "生活電量計",
+  "description": "像管理電池一樣管理你的生活能量：預測社交、課業、工作、運動的消耗，看見會過載的日子。",
+  "lang": "zh-TW",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f0fdf7",
+  "theme_color": "#22c98a",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "看一週電量", "url": "/week" },
+    { "name": "排行程", "url": "/plan" }
+  ]
+}

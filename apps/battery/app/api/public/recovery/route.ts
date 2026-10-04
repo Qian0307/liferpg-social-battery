@@ -78,6 +78,7 @@ export async function POST(req: Request) {
       type: "recovery",
       headcount: 1,
       familiarity: 5,
+      intensity: null,
       durationMinutes: minutes,
       scheduledAt: startedAt.toISOString(),
       predictedDrain: -recovered,

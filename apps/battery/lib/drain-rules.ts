@@ -1,3 +1,4 @@
+import { ACTIVITY_META, INTENSITY_LABELS, isLifeType } from "@/lib/activity-meta";
 import type { DrainPredictionRequest, DrainPredictionResponse } from "@/lib/types";
 
 /**
@@ -61,7 +62,41 @@ function softCap(raw: number): number {
   return SOFT_CAP_START + (raw - SOFT_CAP_START) * SOFT_CAP_SLOPE;
 }
 
+/**
+ * 生活活動（非社交）：不看人數、熟悉度與外向性，改用「每小時基礎消耗 × 強度 × 時長」。
+ * 時長一樣是非線性（資源保存理論），但斜率比社交場合平緩。
+ */
+const LIFE_RATE_PER_HOUR: Record<string, number> = {
+  study: 14,
+  work: 16,
+  exercise: 12,
+  commute: 9,
+  chores: 8,
+};
+/** 強度 1（很輕鬆）到 5（非常吃力）。index 0 不使用。 */
+const INTENSITY_FACTOR = [0, 0.55, 0.75, 1, 1.3, 1.65];
+
+function lifeDrain(req: DrainPredictionRequest): DrainPredictionResponse {
+  const { activity } = req;
+  const intensity = Math.max(1, Math.min(5, Math.round(activity.intensity ?? 3)));
+  const hours = Math.max(activity.durationMinutes, 10) / 60;
+  const raw = (LIFE_RATE_PER_HOUR[activity.type] ?? 12) * Math.pow(hours, 1.05) * INTENSITY_FACTOR[intensity];
+  const predictedDrain = Math.max(2, Math.min(90, Math.round(softCap(raw))));
+
+  const label = ACTIVITY_META[activity.type].label;
+  const shownHours = Math.round(hours * 10) / 10;
+  const level = INTENSITY_LABELS[intensity];
+  const reason =
+    predictedDrain >= 40
+      ? `消耗偏高：${shownHours} 小時、${level}的${label}會持續燒掉電量。`
+      : predictedDrain >= 15
+        ? `中等消耗：${shownHours} 小時的${label}，強度${level}。`
+        : `消耗不大：${label}的強度${level}，時間也不長。`;
+  return { predictedDrain, reason };
+}
+
 export function ruleBasedDrain(req: DrainPredictionRequest): DrainPredictionResponse {
+  if (isLifeType(req.activity.type)) return lifeDrain(req);
   const { activity, profile } = req;
   const base = TYPE_BASE[activity.type] ?? TYPE_BASE.other;
 

@@ -7,7 +7,7 @@ import type { PersonalityProfile } from "@/lib/types";
  * 重點是讓使用者看見「系統正在認識我」，而不是被打分數。
  */
 export const WEEKLY_REVIEW_SYSTEM_PROMPT = `
-你是「社交電量計」的週回顧夥伴。使用者會給你過去 7 天的社交活動，
+你是「生活電量計」的週回顧夥伴。使用者會給你過去 7 天的行程（社交與生活活動），
 以及每一場「當初預測消耗多少」與「事後回報的實際消耗」。你要寫一段簡短的回顧。
 
 【你要找的東西】
@@ -42,8 +42,8 @@ ${SAFETY_CLAUSE}
 export interface ReviewActivityInput {
   date: string;
   typeLabel: string;
-  headcount: number;
-  familiarity: number;
+  /** 負荷描述：社交活動是人數與熟悉度，生活活動是強度 */
+  load: string;
   durationMinutes: number;
   predictedDrain: number;
   actualDrain: number | null;
@@ -76,7 +76,7 @@ export function buildWeeklyReviewUserPrompt(
       const diff =
         a.actualDrain === null ? "" : `｜差距 ${a.actualDrain - a.predictedDrain > 0 ? "+" : ""}${a.actualDrain - a.predictedDrain}`;
       lines.push(
-        `- ${a.date} ${a.typeLabel}｜${a.headcount} 人｜熟悉度 ${a.familiarity}/5｜${a.durationMinutes} 分鐘` +
+        `- ${a.date} ${a.typeLabel}｜${a.load}｜${a.durationMinutes} 分鐘` +
           `｜預測 ${a.predictedDrain}%｜實際 ${actual}${diff}`
       );
     }

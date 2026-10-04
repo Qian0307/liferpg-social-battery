@@ -40,6 +40,8 @@ export const activities = sqliteTable(
     headcount: integer("headcount").notNull(),
     familiarity: integer("familiarity").notNull(), // 1-5
     durationMinutes: integer("duration_minutes").notNull(),
+    /** 生活活動（課業、工作、運動、通勤、家務）的強度 1-5；社交活動為 NULL */
+    intensity: integer("intensity"),
     scheduledAt: text("scheduled_at").notNull(), // ISO 8601
     predictedDrain: integer("predicted_drain").notNull(), // 0-100
     actualDrain: integer("actual_drain"), // nullable

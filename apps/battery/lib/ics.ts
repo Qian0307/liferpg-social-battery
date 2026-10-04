@@ -1,4 +1,4 @@
-import { ACTIVITY_META, formatDuration } from "@/lib/activity-meta";
+import { ACTIVITY_META, describeLoad, formatDuration } from "@/lib/activity-meta";
 import { LOW_BATTERY_THRESHOLD } from "@/lib/battery";
 import type { DaySummary } from "@/lib/week";
 import type { Activity, PersonalityProfile } from "@/lib/types";
@@ -7,7 +7,7 @@ import type { Activity, PersonalityProfile } from "@/lib/types";
  * 產生 iCalendar (RFC 5545) 內容，供 Apple 行事曆 / Google 日曆訂閱。
  *
  * 兩種事件：
- * 1. 每一場社交活動 -> VEVENT，標題帶預估消耗，描述含電量細節
+ * 1. 每一個行程 -> VEVENT，標題帶預估消耗，描述含電量細節
  * 2. 每一個低電量日 -> 一則全天事件，把 AI 的風險預警帶進行事曆
  */
 
@@ -68,7 +68,7 @@ export interface BuildIcsOptions {
   now?: Date;
 }
 
-export function buildIcs({ days, profile, calendarName = "社交電量計", now = new Date() }: BuildIcsOptions): string {
+export function buildIcs({ days, profile, calendarName = "生活電量計", now = new Date() }: BuildIcsOptions): string {
   const stamp = toIcsUtc(now);
   const lines: string[] = [
     "BEGIN:VCALENDAR",
@@ -105,7 +105,7 @@ function buildActivityEvent(activity: Activity, day: DaySummary, stamp: string):
 
   const description = [
     `${drainLabel}消耗 ${drain}% 電量`,
-    `${activity.headcount} 人・熟悉度 ${activity.familiarity}/5・${formatDuration(activity.durationMinutes)}`,
+    `${describeLoad(activity)}・${formatDuration(activity.durationMinutes)}`,
     `這天結束後預計剩下 ${day.remainingBattery}%`,
   ].join("\n");
 

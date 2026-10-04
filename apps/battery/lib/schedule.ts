@@ -1,7 +1,7 @@
 import "server-only";
 
 import { chatJson } from "@/lib/ai";
-import { ACTIVITY_META, FAMILIARITY_LABELS } from "@/lib/activity-meta";
+import { ACTIVITY_META, describeLoad, FAMILIARITY_LABELS, isLifeType } from "@/lib/activity-meta";
 import { simulateWeek } from "@/lib/battery";
 import { ruleBasedDrain } from "@/lib/drain-rules";
 import {
@@ -17,13 +17,15 @@ import type { z } from "zod";
 
 export type ScheduleSuggestion = z.infer<typeof scheduleSuggestionsSchema>["suggestions"][number];
 
-export type ActivityShape = Pick<Activity, "type" | "headcount" | "familiarity" | "durationMinutes">;
+export type ActivityShape = Pick<Activity, "type" | "headcount" | "familiarity" | "durationMinutes"> & {
+  intensity?: number | null;
+};
 
 export function describeActivity(a: ActivityShape): string {
-  return (
-    `${ACTIVITY_META[a.type].label}｜${a.headcount} 人｜` +
-    `熟悉度 ${a.familiarity}/5（${FAMILIARITY_LABELS[a.familiarity] ?? ""}）｜${a.durationMinutes} 分鐘`
-  );
+  const load = isLifeType(a.type)
+    ? describeLoad(a)
+    : `${a.headcount} 人｜熟悉度 ${a.familiarity}/5（${FAMILIARITY_LABELS[a.familiarity] ?? ""}）`;
+  return `${ACTIVITY_META[a.type].label}｜${load}｜${a.durationMinutes} 分鐘`;
 }
 
 function weekdayOf(date: string): string {

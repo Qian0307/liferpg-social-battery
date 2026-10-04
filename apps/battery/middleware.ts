@@ -24,6 +24,7 @@ const LIMITS: { prefix: string; limit: number }[] = [
   { prefix: "/api/schedule-suggest", limit: 12 },
   { prefix: "/api/review/week", limit: 20 },
   { prefix: "/api/calendar/subscribe", limit: 10 },
+  { prefix: "/api/calendar/import", limit: 6 },
   // LifeRPG 跨站呼叫：電量快照只讀不打 AI；AI 嚮導與恢復寫入抓緊一點
   { prefix: "/api/public/battery", limit: 60 },
   { prefix: "/api/public/recovery", limit: 10 },
@@ -66,8 +67,12 @@ export function middleware(req: NextRequest) {
     return res;
   }
   // 日曆 feed 由 Apple/Google 行事曆定時輪詢，且不帶 cookie，不套用限流。
-  // 但取得訂閱網址的 /api/calendar/subscribe 仍然要限流。
-  if (pathname.startsWith("/api/calendar/") && pathname !== "/api/calendar/subscribe") {
+  // 但取得訂閱網址的 /api/calendar/subscribe 與 Outlook 匯入 /api/calendar/import 仍然要限流。
+  if (
+    pathname.startsWith("/api/calendar/") &&
+    pathname !== "/api/calendar/subscribe" &&
+    pathname !== "/api/calendar/import"
+  ) {
     return NextResponse.next();
   }
   const limit = limitFor(pathname);
@@ -103,5 +108,8 @@ export function middleware(req: NextRequest) {
 export const config = {
   // /api/* 走限流；頁面路徑則是為了處理 ?demo=1。
   // 排除 _next 靜態資源與 favicon，避免無謂的 middleware 執行。
-  matcher: ["/api/:path*", "/((?!_next/static|_next/image|favicon.ico|icon.svg).*)"],
+  matcher: [
+    "/api/:path*",
+    "/((?!_next/static|_next/image|favicon.ico|icon.svg|icon-192.png|icon-512.png|sw.js|manifest.webmanifest|offline.html).*)",
+  ],
 };

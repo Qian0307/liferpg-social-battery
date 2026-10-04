@@ -1,3 +1,4 @@
+import { describeLoad, isLifeType } from "@/lib/activity-meta";
 import { chatJson } from "@/lib/ai";
 import { isLowBattery, simulateWeek } from "@/lib/battery";
 import { buildWeeklyRiskUserPrompt, WEEKLY_RISK_SYSTEM_PROMPT, type WeeklyDayInput } from "@/lib/prompts/weekly-risk-warning";
@@ -80,6 +81,7 @@ export async function attachWarnings(days: DaySummary[], profile: PersonalityPro
       type: a.type,
       headcount: a.headcount,
       familiarity: a.familiarity,
+      intensity: a.intensity,
       durationMinutes: a.durationMinutes,
       scheduledAt: a.scheduledAt,
       predictedDrain: a.predictedDrain,
@@ -121,11 +123,12 @@ function ruleBasedWarning(day: DaySummary, profile: PersonalityProfile): string 
   if (count >= 2) {
     const first = localTime(social[0].scheduledAt);
     const last = localTime(social[count - 1].scheduledAt);
-    return `${prefix}這天從 ${first} 到 ${last} 有 ${count} 場社交，電量會剩下 ${day.remainingBattery}%。要不要在中間留 30 分鐘一個人透透氣？`;
+    return `${prefix}這天從 ${first} 到 ${last} 有 ${count} 個行程，電量會剩下 ${day.remainingBattery}%。要不要在中間留 30 分鐘一個人透透氣？`;
   }
   if (count === 1) {
     const a = social[0];
-    const scale = `${a.headcount} 人、${Math.round((a.durationMinutes / 60) * 10) / 10} 小時`;
+    const hours = `${Math.round((a.durationMinutes / 60) * 10) / 10} 小時`;
+    const scale = isLifeType(a.type) ? `${describeLoad(a)}、${hours}` : `${a.headcount} 人、${hours}`;
     return carriedOver
       ? `${prefix}就算這天只有一場活動（${scale}），結束後也只會剩 ${day.remainingBattery}%。也許可以把它往後挪一天。`
       : `這天只有一場活動但份量很重（${scale}），電量會剩 ${day.remainingBattery}%。也許可以把當天其他安排清空。`;

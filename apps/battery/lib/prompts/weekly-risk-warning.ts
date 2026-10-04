@@ -1,3 +1,4 @@
+import { describeLoad } from "@/lib/activity-meta";
 import { SAFETY_CLAUSE } from "@/lib/safety";
 import { localTime } from "@/lib/time";
 import type { Activity, PersonalityProfile } from "@/lib/types";
@@ -7,7 +8,7 @@ import type { Activity, PersonalityProfile } from "@/lib/types";
  * 輸入一週 7 天的活動與剩餘電量，輸出「只針對低電量日」的具體、可執行的建議。
  */
 export const WEEKLY_RISK_SYSTEM_PROMPT = `
-你是「社交電量計」的一週行程顧問。使用者會給你未來 7 天的社交活動與每天的電量，
+你是「生活電量計」的一週行程顧問。使用者會給你未來 7 天的行程（社交與生活活動）與每天的電量，
 你要挑出結束時電量偏低（低於 30%）的日子，給出具體、可以馬上執行的調整建議。
 
 【電量會跨日累積｜這是判讀資料的關鍵】
@@ -58,7 +59,7 @@ export interface WeeklyDayInput {
   date: string; // YYYY-MM-DD
   startBattery: number; // 0-100，當天起床時的電量
   remainingBattery: number; // 0-100，當天結束時的電量
-  activities: Pick<Activity, "type" | "headcount" | "familiarity" | "durationMinutes" | "scheduledAt" | "predictedDrain">[];
+  activities: Pick<Activity, "type" | "headcount" | "familiarity" | "intensity" | "durationMinutes" | "scheduledAt" | "predictedDrain">[];
 }
 
 export function buildWeeklyRiskUserPrompt(profile: PersonalityProfile, days: WeeklyDayInput[]): string {
@@ -68,7 +69,12 @@ export function buildWeeklyRiskUserPrompt(profile: PersonalityProfile, days: Wee
     date: "約會",
     class: "上課",
     party: "派對",
-    other: "其他",
+    other: "其他社交",
+    study: "課業／考試",
+    work: "工作／打工",
+    exercise: "運動",
+    commute: "通勤",
+    chores: "家務雜事",
   };
   const rechargeLabel: Record<string, string> = {
     solitude: "獨處才能充電",
@@ -89,13 +95,13 @@ export function buildWeeklyRiskUserPrompt(profile: PersonalityProfile, days: Wee
     const carried = day.startBattery < profile.baseBatteryCapacity ? "  ← 起床就沒滿電，赤字是前一天帶來的" : "";
     lines.push(`${day.date}（起床 ${day.startBattery}% -> 結束 ${day.remainingBattery}%）${carried}`);
     if (day.activities.length === 0) {
-      lines.push("  - 沒有安排社交活動");
+      lines.push("  - 沒有安排行程");
       continue;
     }
     for (const a of day.activities) {
       const time = localTime(a.scheduledAt);
       lines.push(
-        `  - ${time} ${typeLabel[a.type] ?? a.type}｜${a.headcount} 人｜熟悉度 ${a.familiarity}/5｜` +
+        `  - ${time} ${typeLabel[a.type] ?? a.type}｜${describeLoad(a)}｜` +
           `${a.durationMinutes} 分鐘｜預估消耗 ${a.predictedDrain}%`
       );
     }

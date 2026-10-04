@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { ONBOARDING_QUESTION_COUNT } from "@/lib/onboarding";
 
-export const activityTypeSchema = z.enum(["meal", "meeting", "date", "class", "party", "other"]);
+export const activityTypeSchema = z.enum([
+  "meal", "meeting", "date", "class", "party", "other",
+  "study", "work", "exercise", "commute", "chores",
+]);
+
+/** 生活活動的強度：1=很輕鬆 … 5=非常吃力 */
+export const intensitySchema = z.number().int().min(1).max(5);
 
 export const personalityProfileSchema = z.object({
   baseBatteryCapacity: z.number().int().min(0).max(100),
@@ -14,6 +20,8 @@ export const activityInputSchema = z.object({
   headcount: z.number().int().min(1).max(500),
   familiarity: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]),
   durationMinutes: z.number().int().min(5).max(1440),
+  /** 生活活動才需要；社交活動省略或給 null */
+  intensity: intensitySchema.nullable().optional(),
 });
 
 /** POST /api/predict-drain 的輸入，對應 DrainPredictionRequest */
@@ -79,6 +87,7 @@ export const parsedActivitySchema = z.object({
   headcount: z.number().int().min(1).max(500),
   familiarity: z.number().int().min(1).max(5),
   durationMinutes: z.number().int().min(5).max(1440),
+  intensity: intensitySchema.nullable().optional(),
   scheduledAt: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "需為 YYYY-MM-DDTHH:mm"),
   /** AI 對哪些欄位沒把握，前端可以提示使用者確認 */
   uncertainFields: z.array(z.string()).default([]),

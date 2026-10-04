@@ -58,9 +58,9 @@ export default function OnboardingPage() {
           使用者會直接被丟進 6 題問卷，完全不知道自己在填什麼 */}
       {step === 0 && !profile && !submitting && (
         <div className="rounded-3xl bg-white/60 p-5 text-center backdrop-blur">
-          <p className="text-sm font-semibold text-foreground">社交電量計</p>
+          <p className="text-sm font-semibold text-foreground">生活電量計</p>
           <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">
-            像手機電池一樣管理你的社交能量。先用 6 題算出你的基礎電量，
+            像手機電池一樣管理你的生活能量。先用 6 題社交情境快篩算出你的基礎電量，
             之後每場聚會、會議、約會會消耗多少，都幫你先算好。
           </p>
         </div>
@@ -91,7 +91,7 @@ export default function OnboardingPage() {
             <BatteryGauge value={profile.baseBatteryCapacity} size="lg" />
             <Card className="w-full">
               <CardContent className="space-y-3 p-6 text-center">
-                <p className="text-sm font-medium text-mint-600">你的社交電池</p>
+                <p className="text-sm font-medium text-mint-600">你的基礎電量</p>
                 <p className="text-base leading-relaxed text-foreground">{profile.summary}</p>
               </CardContent>
             </Card>

@@ -67,13 +67,14 @@ activities.forEach((a: any, i: number) => {
   const scheduledAt = new Date(`${date}T${a.time}:00${TZ_OFFSET}`).toISOString();
   lines.push(
     `-- D+${a.dayOffset} ${a.time}｜${a.note ?? ""}`,
-    "INSERT INTO activities (id, user_id, type, headcount, familiarity, duration_minutes, scheduled_at, predicted_drain, actual_drain, created_at) VALUES (" +
+    "INSERT INTO activities (id, user_id, type, headcount, familiarity, intensity, duration_minutes, scheduled_at, predicted_drain, actual_drain, created_at) VALUES (" +
       [
         q(`demo-activity-${String(i + 1).padStart(2, "0")}`),
         q(persona.userId),
         q(a.type),
         a.headcount,
         a.familiarity,
+        a.intensity ?? "NULL",
         a.durationMinutes,
         q(scheduledAt),
         a.predictedDrain,

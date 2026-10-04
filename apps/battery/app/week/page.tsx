@@ -7,8 +7,9 @@ import { AlertTriangle } from "lucide-react";
 import { BatteryGauge } from "@/components/BatteryGauge";
 import { CalendarSubscribe } from "@/components/CalendarSubscribe";
 import { LifeRpgLink } from "@/components/LifeRpgLink";
+import { OutlookImport } from "@/components/OutlookImport";
 import { Card, CardContent } from "@/components/ui/card";
-import { ACTIVITY_META, formatDrain, formatMonthDay, formatTime, formatWeekday } from "@/lib/activity-meta";
+import { ACTIVITY_META, describeLoad, formatDrain, formatMonthDay, formatTime, formatWeekday } from "@/lib/activity-meta";
 import { OVERNIGHT_RECOVERY_RATE } from "@/lib/battery";
 import { fetchWeek, todayInTaipei, UnauthorizedError, type DaySummaryDTO, type WeekResponse } from "@/lib/client-api";
 
@@ -19,6 +20,8 @@ export default function WeekPage() {
   const [error, setError] = React.useState<string | null>(null);
   const [selected, setSelected] = React.useState<string | null>(null);
   const [loadingWarnings, setLoadingWarnings] = React.useState(false);
+  /** Outlook 匯入完成後遞增，觸發重新載入一週資料 */
+  const [reloadKey, setReloadKey] = React.useState(0);
 
   /**
    * 兩段式載入：先秒開電池與行程（?warnings=0，不打 AI），
@@ -61,7 +64,7 @@ export default function WeekPage() {
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [router, reloadKey]);
 
   if (loading) return <p className="py-24 text-center text-muted-foreground">載入中…</p>;
   if (error) return <p className="py-24 text-center text-sm text-destructive">{error}</p>;
@@ -163,7 +166,8 @@ export default function WeekPage() {
         />
       )}
 
-      {/* Apple 日曆訂閱 */}
+      {/* Outlook 匯入與行事曆訂閱 */}
+      <OutlookImport onImported={(r) => r.imported > 0 && setReloadKey((k) => k + 1)} />
       <CalendarSubscribe />
 
       {/* LifeRPG 電量連結碼 */}
@@ -241,7 +245,7 @@ function DayDetail({
       )}
       {day.activities.length === 0 ? (
         <Card>
-          <CardContent className="p-6 text-center text-sm text-muted-foreground">這天沒有安排社交活動，是完整的恢復日。</CardContent>
+          <CardContent className="p-6 text-center text-sm text-muted-foreground">這天沒有安排行程，是完整的恢復日。</CardContent>
         </Card>
       ) : (
         <ul className="space-y-2">
@@ -257,7 +261,7 @@ function DayDetail({
                       {formatTime(a.scheduledAt)} · {ACTIVITY_META[a.type].label}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {a.type === "recovery" ? "來自 LifeRPG 的恢復行動" : `${a.headcount} 人 · 熟悉度 ${a.familiarity}/5`}
+                      {a.type === "recovery" ? "來自 LifeRPG 的恢復行動" : describeLoad(a)}
                     </p>
                   </div>
                   <span className={`text-lg font-semibold ${a.predictedDrain >= 40 ? "text-coral-500" : "text-mint-600"}`}>

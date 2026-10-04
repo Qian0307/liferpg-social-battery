@@ -1,7 +1,7 @@
 # LifeRPG 社交電量冒險
 
-一個「會累的 RPG 角色」：把人生目標變成 Boss 戰的 **LifeRPG**，接上預測社交能量的 **社交電量計**。
-社交行程讓角色的電量下降，完成「恢復與休息」讓電量回升、技能成長，AI 嚮導依電量建議今天該挑戰哪個 Boss。
+一個「會累的 RPG 角色」：把人生目標變成 Boss 戰的 **LifeRPG**，接上預測生活能量的 **生活電量計**。
+社交、課業、工作、運動等行程讓角色的電量下降，完成「恢復與休息」讓電量回升、技能成長，AI 嚮導依電量建議今天該挑戰哪個 Boss。
 
 > 自我照顧工具，不是醫療診斷。
 
@@ -9,8 +9,8 @@
 
 ```
 apps/
-├── battery/   社交電量計：Next.js 14 + TypeScript，edge runtime，Cloudflare Pages + D1
-│              AI 供應商鏈：Azure OpenAI → Workers AI → Groq → OpenAI → 規則式
+├── battery/   生活電量計：Next.js 14 + TypeScript，edge runtime，Cloudflare Pages + D1，PWA
+│              AI：Workers AI（Meta Llama 3.3）＋規則式備援；Outlook 行事曆訂閱與匯入
 └── liferpg/   LifeRPG：純靜態 PWA（單一 index.html），沒有 build step，資料存在 IndexedDB
 ```
 
@@ -22,7 +22,9 @@ apps/
 | `POST /api/public/recovery` | LifeRPG 完成「恢復與休息」後回報恢復行動，電量回升 |
 | `POST /api/guide/today` | AI 嚮導：依電量與目標名稱給今日建議（Azure OpenAI 優先） |
 
-詳細說明見 [`apps/battery/README.md`](apps/battery/README.md)。
+詳細說明見 [`apps/battery/README.md`](apps/battery/README.md)，系統概述見 [`docs/系統概述.md`](docs/系統概述.md)。
+
+正式網址：LifeRPG https://liferpg-1h4.pages.dev ・ 生活電量計 https://social-battery-meter.pages.dev
 
 ## 本機開發
 

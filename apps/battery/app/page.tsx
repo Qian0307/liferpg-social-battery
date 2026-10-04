@@ -8,7 +8,7 @@ import { ActivitySheet } from "@/components/ActivitySheet";
 import { BatteryGauge } from "@/components/BatteryGauge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ACTIVITY_META, formatDrain, formatDuration, formatTime } from "@/lib/activity-meta";
+import { ACTIVITY_META, describeLoad, formatDrain, formatDuration, formatTime, isLifeType } from "@/lib/activity-meta";
 import {
   fetchWeek,
   reportActualDrain,
@@ -110,8 +110,8 @@ export default function TodayPage() {
         <BatteryGauge value={remaining} size="lg" />
         <p className="text-center text-sm text-muted-foreground">
           {activities.length === 0
-            ? "今天還沒有安排社交活動，電量是滿的。"
-            : `今天有 ${activities.length} 場活動，預計會用掉 ${todaySummary?.totalDrain ?? 0}% 電量。`}
+            ? "今天還沒有安排行程，電量是滿的。"
+            : `今天有 ${activities.length} 個行程，預計會用掉 ${todaySummary?.totalDrain ?? 0}% 電量。`}
         </p>
         {data?.profile.summary && (
           <p className="max-w-xs text-center text-xs leading-relaxed text-muted-foreground/80">{data.profile.summary}</p>
@@ -178,7 +178,7 @@ export default function TodayPage() {
                         {formatTime(a.scheduledAt)} · {ACTIVITY_META[a.type].label}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {a.type === "recovery" ? "來自 LifeRPG" : `${a.headcount} 人`} · {formatDuration(a.durationMinutes)}
+                        {a.type === "recovery" ? "來自 LifeRPG" : isLifeType(a.type) ? describeLoad(a) : `${a.headcount} 人`} · {formatDuration(a.durationMinutes)}
                       </p>
                     </div>
                     <div className="text-right">
