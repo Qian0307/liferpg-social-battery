@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fail, parseBody } from "@/lib/api";
-import { computeProfile, ONBOARDING_QUESTIONS } from "@/lib/onboarding";
+import { computeProfileDetail, DOMAIN_LABELS, ONBOARDING_QUESTIONS } from "@/lib/onboarding";
 import { findUserBySession, upsertUser } from "@/lib/repo";
 import { onboardingRequestSchema } from "@/lib/schemas";
 import { getSessionIdFromRequest, newSessionId, withSessionCookie } from "@/lib/session";
@@ -13,16 +13,21 @@ export const runtime = "edge";
  */
 export async function GET() {
   return NextResponse.json({
-    questions: ONBOARDING_QUESTIONS.map((q) => ({ id: q.id, question: q.question, options: q.options.map((o) => o.label) })),
+    questions: ONBOARDING_QUESTIONS.map((q) => ({
+      id: q.id,
+      domain: DOMAIN_LABELS[q.domain],
+      question: q.question,
+      options: q.options.map((o) => o.label),
+    })),
   });
 }
 
-/** POST /api/onboarding — 送出 6 題快篩答案，回傳 PersonalityProfile。 */
+/** POST /api/onboarding — 送出 10 題生活電量快篩答案，回傳 PersonalityProfile 與各面向分數。 */
 export async function POST(req: Request) {
   const parsed = await parseBody(req, onboardingRequestSchema);
   if ("response" in parsed) return parsed.response;
 
-  const profile = computeProfile(parsed.data.answers);
+  const { profile, domains } = computeProfileDetail(parsed.data.answers);
 
   // 示範帳號是大家共用的，做快篩時一律另開新的匿名帳號，避免覆寫示範人格
   const current = getSessionIdFromRequest(req);
@@ -41,7 +46,7 @@ export async function POST(req: Request) {
       createdAt: existing?.createdAt ?? now,
     });
 
-    return withSessionCookie(NextResponse.json({ profile, userId: user.id }), sessionId);
+    return withSessionCookie(NextResponse.json({ profile, domains, userId: user.id }), sessionId);
   } catch (err) {
     console.error("[onboarding] 寫入失敗:", err);
     return fail("儲存人格檔案失敗，請稍後再試", 500);

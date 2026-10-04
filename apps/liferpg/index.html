@@ -1190,13 +1190,21 @@ async function quizForm(){
     if(!quizQuestions){const res=await fetch('/api/onboarding',{credentials:'same-origin'});const body=await res.json();
       if(!res.ok||!Array.isArray(body?.questions)||!body.questions.every(q=>typeof q.question==='string'&&Array.isArray(q.options)))throw new Error('快篩題目讀取失敗');
       quizQuestions=body.questions;}
-    openModal('先認識你的生活電量',`<p class="small muted" style="margin-bottom:18px">6 題社交情境快篩，算出你的基礎電量與恢復方式。完成後，冒險大廳會顯示生活電量，AI 嚮導也會依電量給建議。這是自我了解工具，不是心理測驗。</p><form id="quiz-form">${quizQuestions.map((q,i)=>`<div class="quiz-q"><h4>${i+1}. ${esc(q.question)}</h4>${q.options.map((o,k)=>`<label class="quiz-opt"><input type="radio" name="q${i}" value="${k}" required>${esc(o)}</label>`).join('')}</div>`).join('')}<div class="form-actions">${button('稍後再說','quiz-later','','ghost')}${button('先用示範電量','battery-demo')}<button type="submit" class="btn primary">完成快篩</button></div></form>`);
+    openModal('先認識你的生活電量',`<p class="small muted" style="margin-bottom:18px">10 題生活快篩，涵蓋社交、學習、工作、滑手機、休息，算出你的基礎電量、恢復方式與最容易漏電的地方。完成後，冒險大廳會顯示生活電量，AI 嚮導也會依電量給建議。這是自我了解工具，不是心理測驗。</p><form id="quiz-form">${quizQuestions.map((q,i)=>`${typeof q.domain==='string'&&q.domain!==quizQuestions[i-1]?.domain?`<div class="eyebrow" style="margin:18px 0 10px">${esc(q.domain)}</div>`:''}<div class="quiz-q"><h4>${i+1}. ${esc(q.question)}</h4>${q.options.map((o,k)=>`<label class="quiz-opt"><input type="radio" name="q${i}" value="${k}" required>${esc(o)}</label>`).join('')}</div>`).join('')}<div class="form-actions">${button('稍後再說','quiz-later','','ghost')}${button('先用示範電量','battery-demo')}<button type="submit" class="btn primary">完成快篩</button></div></form>`);
   }catch(e){toast(e.message||'快篩暫時無法開啟',true);}
+}
+/* 快篩結果：基礎電量、恢復方式與五個面向的分數 */
+function quizResult(body){
+  const p=body.profile||{},d=body.domains&&typeof body.domains==='object'?body.domains:{};
+  const names={social:'社交',study:'學習',work:'工作',screen:'滑手機',rest:'休息'};
+  const style={solitude:'獨處充電型',specific_people:'少數好友充電型',mixed:'混合充電型'}[p.rechargeStyle]||'';
+  const bars=Object.keys(names).filter(k=>k in d).map(k=>{const v=pct(d[k]);return `<div style="margin:10px 0"><div class="between small"><b>${names[k]}</b><span class="muted">${v}%</span></div><div class="progress battery ${v<40?'low':''}" style="height:6px;margin-top:6px"><span style="width:${v}%"></span></div></div>`;}).join('');
+  openModal('你的生活電量',`<div style="text-align:center;margin-bottom:14px"><div class="energy-ring ${pct(p.baseBatteryCapacity)<40?'low':''}" style="--v:${pct(p.baseBatteryCapacity)};margin:0 auto 10px"><span>${pct(p.baseBatteryCapacity)}%</span></div><b>基礎電量</b>${style?` · <span class="chip">${style}</span>`:''}</div><p class="small" style="line-height:1.8;margin-bottom:10px">${esc(typeof p.summary==='string'?p.summary:'')}</p><div class="guide-section-title" style="margin-top:6px">各面向的電量韌性（越高越不容易被耗乾）</div>${bars}<div class="form-actions" style="margin-top:16px">${button('開始冒險','close-modal','','primary')}</div>`);
 }
 function updateBatteryViews(){document.querySelectorAll('[data-battery-slot]').forEach(el=>el.innerHTML=batteryInner());document.querySelectorAll('[data-guide-slot]').forEach(el=>el.innerHTML=guideInner());}
 function batteryBar(){return `<div class="battery-slot" data-battery-slot>${batteryInner()}</div>`;}
 function batteryInner(){
-  if(!battery.code)return SAME_SITE?`<button class="battery-link" data-act="quiz-open">${I('plus')}做 6 題快篩，啟用生活電量</button>`:`<button class="battery-link" data-act="battery-link">${I('plus')}連結生活電量</button>`;
+  if(!battery.code)return SAME_SITE?`<button class="battery-link" data-act="quiz-open">${I('plus')}做 10 題快篩，啟用生活電量</button>`:`<button class="battery-link" data-act="battery-link">${I('plus')}連結生活電量</button>`;
   if(battery.status==='offline'&&!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="chip neutral">離線</span></div><p class="field-help" style="margin-top:6px">暫時連不上電量計，冒險照常進行。</p>`;
   if(!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="small muted">讀取中…</span></div><div class="progress battery"><span style="width:0"></span></div>`;
   const t=battery.data.today,v=pct(t.remainingBattery),low=t.isLow===true;
@@ -1241,7 +1249,7 @@ async function loadWeek(force=false){
 
 function energyPage(){
   if(energy.status==='idle')setTimeout(()=>loadWeek(),0);
-  if(energy.status==='noaccount')return `<section class="card"><div class="eyebrow">LIFE BATTERY</div><h2 style="margin:8px 0 10px">先認識你的生活電量</h2><p class="small muted" style="margin-bottom:16px">做 6 題社交情境快篩，算出你的基礎電量與恢復方式。之後社交、課業、工作、運動的行程都會在這裡估算耗電，AI 嚮導也會依電量給建議。</p><div class="row">${button('開始快篩 '+I('arrow'),'quiz-open','','primary')}${button('先用示範電量','battery-demo','','ghost')}</div></section>`;
+  if(energy.status==='noaccount')return `<section class="card"><div class="eyebrow">LIFE BATTERY</div><h2 style="margin:8px 0 10px">先認識你的生活電量</h2><p class="small muted" style="margin-bottom:16px">做 10 題生活快篩（社交、學習、工作、滑手機、休息），算出你的基礎電量與恢復方式。之後社交、課業、工作、運動的行程都會在這裡估算耗電，AI 嚮導也會依電量給建議。</p><div class="row">${button('開始快篩 '+I('arrow'),'quiz-open','','primary')}${button('先用示範電量','battery-demo','','ghost')}</div></section>`;
   if(energy.status==='error'&&!energy.week)return `<section class="card"><h2 style="margin-bottom:10px">生活電量</h2><p class="small muted">${esc(energy.error)}</p>${button('重新讀取','energy-reload','','ghost')}</section>`;
   if(!energy.week)return `<section class="card"><p class="small muted">正在讀取你的生活電量…</p></section>`;
   const w=energy.week,today=w.days[0],day=w.days.find(d=>d.date===energy.day)||today,profile=w.profile||{};
@@ -1331,7 +1339,7 @@ function guideSource(g){if(g.source==='ai')return g.provider==='azure-openai'?'�
 function guideInner(){
   const head=`<div class="between card-title"><div><div class="eyebrow">AI GUIDE</div><h2 style="margin:7px 0 0">AI 嚮導</h2></div>${battery.guideStatus==='ok'||battery.guideStatus==='error'?button(I('spark'),'guide-refresh','aria-label="重新產生今日建議"','ghost icononly'):''}</div>`;
   if(!battery.code)return SAME_SITE
-    ?head+`<p class="small muted" style="margin-bottom:14px">先做 6 題快篩算出你的基礎電量，嚮導就會看今天的電量，建議要挑戰哪個 Boss、什麼時候安排恢復。</p><div class="row">${button('開始快篩 '+I('arrow'),'quiz-open','','primary')}${button('使用示範電量','battery-demo','','ghost')}</div>`
+    ?head+`<p class="small muted" style="margin-bottom:14px">先做 10 題生活快篩算出你的基礎電量，嚮導就會看今天的電量，建議要挑戰哪個 Boss、什麼時候安排恢復。</p><div class="row">${button('開始快篩 '+I('arrow'),'quiz-open','','primary')}${button('使用示範電量','battery-demo','','ghost')}</div>`
     :head+`<p class="small muted" style="margin-bottom:14px">連結生活電量後，嚮導會看今天的電量，建議要挑戰哪個 Boss、什麼時候安排恢復。</p>${button('連結生活電量 '+I('arrow'),'battery-link','','ghost')}`;
   if(!battery.data)return head+`<p class="small muted">${battery.status==='offline'?'電量計暫時離線，嚮導先休息一下。專注戰鬥與紀錄不受影響。':'正在讀取今天的電量…'}</p>`;
   const t=battery.data.today,risks=battery.data.riskDays.filter(r=>isDate(r.date)).slice(0,3);
@@ -1639,7 +1647,7 @@ else if(form.id==='quiz-form'){const answers=(quizQuestions||[]).map((_,i)=>Numb
   if(!answers.length||answers.some(n=>!Number.isInteger(n)))throw new Error('請回答全部題目');
   const res=await fetch('/api/onboarding',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers})});
   const body=await res.json().catch(()=>null);if(!res.ok||!body?.profile)throw new Error(typeof body?.error==='string'?body.error:'快篩儲存失敗，請稍後再試');
-  setAutoLink(true);resetEnergy();try{await mutate(s=>{D.setBatteryLink(s,'');});}catch{}closeModal();toast(`你的基礎電量是 ${pct(body.profile.baseBatteryCapacity)}%。${typeof body.profile.summary==='string'?body.profile.summary:''}`);
+  setAutoLink(true);resetEnergy();try{await mutate(s=>{D.setBatteryLink(s,'');});}catch{}closeModal();quizResult(body);
   battery.inflight=false;await refreshBattery();}
 else if(form.id==='battery-form'){await mutate(s=>{D.setBatteryLink(s,v.code);});closeModal();render();toast(v.code.trim()?'電量連結碼已儲存。':'已取消生活電量連結。');await refreshBattery();}
 else if(form.id==='name-form'){await mutate(s=>{s.player.name=v.name.trim();});closeModal();render();toast('玩家名稱已更新。');}

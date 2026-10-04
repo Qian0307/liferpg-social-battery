@@ -22,7 +22,7 @@
 
 - 網址（唯一入口）：https://liferpg-adventure.pages.dev（Cloudflare Pages 專案 `liferpg-adventure`），示範情境 `/?demo=1#demo`。
 - `apps/liferpg/`：**整個 App 的介面**，純靜態 PWA，全部寫在一個 `index.html`，沒有 build step，遊戲資料存在 IndexedDB。
-  分頁：冒險大廳（電量條、AI 嚮導、七天統計）、生活電量（新增行程、語音輸入＋AI 辨識、七天行程、AI 排程建議、AI 週回顧、Outlook 訂閱與匯入）、人生目標、成長軌跡、技能樹、角色檔案。第一次進入會跳出 6 題快篩。
+  分頁：冒險大廳（電量條、AI 嚮導、七天統計）、生活電量（新增行程、語音輸入＋AI 辨識、七天行程、AI 排程建議、AI 週回顧、Outlook 訂閱與匯入）、人生目標、成長軌跡、技能樹、角色檔案。第一次進入會跳出 10 題生活快篩（社交、學習、工作、滑手機、休息各 2 題，`lib/onboarding.ts`）。
   修改時沿用現有的程式風格和資料驗證寫法（「格式不正確」這類檢查），新增資料欄位要照同樣方式驗證；資料遷移絕對不能改變歷史 XP。
 - `apps/battery/`：**只有 API**（Next.js 14 Route Handlers、edge runtime、D1＋Drizzle）。建置時 `scripts/copy-liferpg.mjs` 把 LifeRPG 複製到 `public/`（不進 git）；middleware 把 `/` 改送 `index.html` 並加上安全標頭，舊頁面 `/week` 等一律轉回 `/`。`node_modules` 在 WSL 安裝，npm 指令都在 WSL 執行。
 - `lib/ai.ts` 是所有 AI 呼叫的唯一入口。目前實際運作的是 Workers AI（Meta Llama 3.3）；Azure OpenAI 程式已預留但未設定（移到「下一階段」；GitHub Models 已於 2026/7/30 停止服務，不可使用）。全部失敗時退回規則式估算。
