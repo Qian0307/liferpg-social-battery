@@ -1,6 +1,6 @@
 import "server-only";
 
-import { chatJson } from "@/lib/ai";
+import { chatJsonWithProvider, type AiProvider } from "@/lib/ai";
 import { buildParseVoiceUserPrompt, PARSE_VOICE_SYSTEM_PROMPT } from "@/lib/prompts/parse-voice-activity";
 import { parsedActivitySchema } from "@/lib/schemas";
 import { CRISIS_RESPONSE, detectCrisis } from "@/lib/safety";
@@ -10,7 +10,7 @@ import type { z } from "zod";
 export type ParsedActivity = z.infer<typeof parsedActivitySchema>;
 
 export type ParseVoiceResult =
-  | { status: "ok"; activity: ParsedActivity; source: "ai" | "rule" }
+  | { status: "ok"; activity: ParsedActivity; source: "ai" | "rule"; provider?: AiProvider }
   | { status: "crisis"; message: string };
 
 /**
@@ -27,16 +27,16 @@ export async function parseVoiceActivity(transcript: string): Promise<ParseVoice
   const nowLocal = `${localDate(now)} ${localTime(now)}`;
   const weekday = new Intl.DateTimeFormat("zh-TW", { timeZone: TIME_ZONE, weekday: "long" }).format(now);
 
-  const raw = await chatJson({
+  const result = await chatJsonWithProvider({
     systemPrompt: PARSE_VOICE_SYSTEM_PROMPT,
     userPrompt: buildParseVoiceUserPrompt(transcript, nowLocal, weekday),
     temperature: 0.2,
     maxTokens: 300,
   });
 
-  const parsed = raw === null ? null : parsedActivitySchema.safeParse(raw);
+  const parsed = result === null ? null : parsedActivitySchema.safeParse(result.data);
   if (parsed?.success) {
-    return { status: "ok", activity: parsed.data, source: "ai" };
+    return { status: "ok", activity: parsed.data, source: "ai", provider: result!.provider };
   }
 
   console.warn("[voice-parse] AI 解析失敗，改用關鍵字規則");

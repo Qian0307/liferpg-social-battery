@@ -24,7 +24,10 @@ export async function GET(req: Request) {
     const startIso = new Date(`${startDate}T00:00:00+08:00`).toISOString();
     const endIso = new Date(`${endDate}T00:00:00+08:00`).toISOString();
 
-    const activities = await listActivitiesBetween(user.row.id, startIso, endIso);
+    // 回顧只看社交活動的預測準確度；LifeRPG 寫入的恢復活動沒有「實際消耗」可比
+    const activities = (await listActivitiesBetween(user.row.id, startIso, endIso)).filter(
+      (a) => a.type !== "recovery"
+    );
     const accuracy = computeAccuracy(activities);
     const breakdown = computeTypeBreakdown(activities);
     const summary = skipSummary

@@ -75,7 +75,8 @@ export async function attachWarnings(days: DaySummary[], profile: PersonalityPro
     date: d.date,
     startBattery: d.startBattery,
     remainingBattery: d.remainingBattery,
-    activities: d.activities.map((a) => ({
+    // 恢復活動不是社交場合，不送給 AI 判讀（但已經算進電量）
+    activities: d.activities.filter((a) => a.type !== "recovery").map((a) => ({
       type: a.type,
       headcount: a.headcount,
       familiarity: a.familiarity,
@@ -111,18 +112,19 @@ export function attachRuleWarnings(days: DaySummary[], profile: PersonalityProfi
 
 /** AI 不可用時的預警文字（仍要具體，不能只寫「記得休息」）。 */
 function ruleBasedWarning(day: DaySummary, profile: PersonalityProfile): string {
-  const count = day.activities.length;
+  const social = day.activities.filter((a) => a.type !== "recovery");
+  const count = social.length;
   // 起床就沒滿電，代表低電量主因是前一天的赤字，而不是當天排太多
   const carriedOver = day.startBattery < profile.baseBatteryCapacity;
   const prefix = carriedOver ? `前一天的疲勞還沒退，這天起床只有 ${day.startBattery}%。` : "";
 
   if (count >= 2) {
-    const first = localTime(day.activities[0].scheduledAt);
-    const last = localTime(day.activities[count - 1].scheduledAt);
+    const first = localTime(social[0].scheduledAt);
+    const last = localTime(social[count - 1].scheduledAt);
     return `${prefix}這天從 ${first} 到 ${last} 有 ${count} 場社交，電量會剩下 ${day.remainingBattery}%。要不要在中間留 30 分鐘一個人透透氣？`;
   }
   if (count === 1) {
-    const a = day.activities[0];
+    const a = social[0];
     const scale = `${a.headcount} 人、${Math.round((a.durationMinutes / 60) * 10) / 10} 小時`;
     return carriedOver
       ? `${prefix}就算這天只有一場活動（${scale}），結束後也只會剩 ${day.remainingBattery}%。也許可以把它往後挪一天。`

@@ -1,4 +1,4 @@
-import { chatJson } from "@/lib/ai";
+import { chatJsonWithProvider, type AiProvider } from "@/lib/ai";
 import { ruleBasedDrain } from "@/lib/drain-rules";
 import { buildPredictDrainUserPrompt, PREDICT_DRAIN_SYSTEM_PROMPT } from "@/lib/prompts/predict-drain";
 import { drainPredictionResponseSchema } from "@/lib/schemas";
@@ -8,6 +8,8 @@ import type { DrainPredictionRequest, DrainPredictionResponse } from "@/lib/type
 export interface PredictResult extends DrainPredictionResponse {
   /** ai = 由模型產生；rule = fallback 規則；crisis = 命中安全規範 */
   source: "ai" | "rule" | "crisis";
+  /** source 為 ai 時，實際回答的供應商（例如 azure-openai） */
+  provider?: AiProvider;
 }
 
 /**
@@ -23,16 +25,16 @@ export async function predictDrain(req: DrainPredictionRequest): Promise<Predict
     return { predictedDrain: fallback.predictedDrain, reason: CRISIS_RESPONSE, source: "crisis" };
   }
 
-  const raw = await chatJson({
+  const result = await chatJsonWithProvider({
     systemPrompt: PREDICT_DRAIN_SYSTEM_PROMPT,
     userPrompt: buildPredictDrainUserPrompt(req),
     temperature: 0.3,
     maxTokens: 200,
   });
 
-  if (raw === null) return { ...fallback, source: "rule" };
+  if (result === null) return { ...fallback, source: "rule" };
 
-  const parsed = drainPredictionResponseSchema.safeParse(raw);
+  const parsed = drainPredictionResponseSchema.safeParse(result.data);
   if (!parsed.success) {
     console.warn("[predict] AI 輸出格式不符，改用規則式 fallback");
     return { ...fallback, source: "rule" };
@@ -40,5 +42,5 @@ export async function predictDrain(req: DrainPredictionRequest): Promise<Predict
 
   // 模型偶爾會回小數或超界，這裡再收斂一次。
   const predictedDrain = Math.max(0, Math.min(100, Math.round(parsed.data.predictedDrain)));
-  return { predictedDrain, reason: parsed.data.reason.trim(), source: "ai" };
+  return { predictedDrain, reason: parsed.data.reason.trim(), source: "ai", provider: result.provider };
 }

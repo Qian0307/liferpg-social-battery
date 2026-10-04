@@ -1,4 +1,4 @@
-import type { ActivityType } from "@/lib/types";
+import type { ActivityType, SocialActivityType } from "@/lib/types";
 
 /** 前端顯示用的活動類型資訊（client-safe，不含任何 server 依賴）。 */
 export const ACTIVITY_META: Record<ActivityType, { label: string; emoji: string }> = {
@@ -8,9 +8,18 @@ export const ACTIVITY_META: Record<ActivityType, { label: string; emoji: string 
   class: { label: "上課", emoji: "📚" },
   party: { label: "派對", emoji: "🎉" },
   other: { label: "其他", emoji: "✨" },
+  recovery: { label: "恢復時間", emoji: "🌿" },
 };
 
-export const ACTIVITY_TYPES = Object.keys(ACTIVITY_META) as ActivityType[];
+/** 新增活動選單用：不含 recovery（恢復只能由 LifeRPG 寫入）。 */
+export const ACTIVITY_TYPES = (Object.keys(ACTIVITY_META) as ActivityType[]).filter(
+  (t): t is SocialActivityType => t !== "recovery"
+);
+
+/** 耗電顯示成「-20%」，恢復（負值）顯示成「+15%」。 */
+export function formatDrain(drain: number): string {
+  return drain < 0 ? `+${-drain}%` : `-${drain}%`;
+}
 
 export const FAMILIARITY_LABELS = ["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"];
 

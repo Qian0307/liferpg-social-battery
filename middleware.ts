@@ -24,6 +24,11 @@ const LIMITS: { prefix: string; limit: number }[] = [
   { prefix: "/api/schedule-suggest", limit: 12 },
   { prefix: "/api/review/week", limit: 20 },
   { prefix: "/api/calendar/subscribe", limit: 10 },
+  // LifeRPG 跨站呼叫：電量快照只讀不打 AI；AI 嚮導與恢復寫入抓緊一點
+  { prefix: "/api/public/battery", limit: 60 },
+  { prefix: "/api/public/recovery", limit: 10 },
+  { prefix: "/api/guide/today", limit: 12 },
+  { prefix: "/api/link-code", limit: 20 },
 ];
 
 type Bucket = { count: number; resetAt: number };

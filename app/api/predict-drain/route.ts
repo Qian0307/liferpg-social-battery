@@ -11,10 +11,12 @@ export async function POST(req: Request) {
   if ("response" in parsed) return parsed.response;
 
   const result = await predictDrain(parsed.data);
-  const body: DrainPredictionResponse & { source: string } = {
+  const body: DrainPredictionResponse & { source: string; provider: string | null } = {
     predictedDrain: result.predictedDrain,
     reason: result.reason,
     source: result.source,
+    // 驗收用：看得出這次是哪個供應商回答的（azure-openai / workers-ai / …；規則式為 null）
+    provider: result.provider ?? null,
   };
   return ok(body);
 }

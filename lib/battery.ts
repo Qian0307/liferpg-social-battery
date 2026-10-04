@@ -31,6 +31,8 @@ export function clampBattery(n: number): number {
  *
  * 已知簡化：當天消耗超過起床電量時一律截在 0，不記「透支」的部分。
  * 也就是消耗 200 與消耗 80 對隔天的影響相同。
+ *
+ * dailyDrains 可以含負值（LifeRPG 寫入的恢復活動），電量回升但不會超過基礎容量。
  */
 export function simulateWeek(dailyDrains: number[], baseCapacity: number): DayBattery[] {
   const capacity = clampBattery(baseCapacity);
@@ -43,7 +45,7 @@ export function simulateWeek(dailyDrains: number[], baseCapacity: number): DayBa
         ? capacity // 第一天視為已經睡飽
         : Math.min(capacity, previousRemaining + capacity * OVERNIGHT_RECOVERY_RATE);
 
-    const remainingBattery = clampBattery(startBattery - drain);
+    const remainingBattery = clampBattery(Math.min(capacity, startBattery - drain));
     result.push({ startBattery: clampBattery(startBattery), remainingBattery });
     previousRemaining = remainingBattery;
   }

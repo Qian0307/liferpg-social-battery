@@ -16,6 +16,10 @@ migrations_dir = "db/migrations"
 binding = "AI"
 
 # 備援／選配的 API Key 一律不寫在這裡，用下列指令設成 secret：
+#   wrangler pages secret put AZURE_OPENAI_ENDPOINT    # 主要 AI：Azure OpenAI（Microsoft Foundry）
+#   wrangler pages secret put AZURE_OPENAI_API_KEY
+#   wrangler pages secret put AZURE_OPENAI_DEPLOYMENT
+#   wrangler pages secret put LIFERPG_ORIGINS          # LifeRPG 正式網域，CORS 白名單
 #   wrangler pages secret put GROQ_API_KEY         # 備援，免費且極快
 #   wrangler pages secret put OPENAI_API_KEY       # 選配，現場有發 credits 再設
 #   wrangler pages secret put ELEVENLABS_API_KEY   # Track D 語音輸入，選配

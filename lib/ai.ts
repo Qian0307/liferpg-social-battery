@@ -3,9 +3,13 @@ import "server-only";
 import { readEnv } from "@/lib/env";
 
 /**
- * AI 呼叫封裝：依序嘗試三個供應商，第一個成功的就採用。
+ * AI 呼叫封裝：依序嘗試四個供應商，第一個成功的就採用。
  *
- * 1. Cloudflare Workers AI（主要）
+ * 0. Azure OpenAI（Microsoft Foundry，主要）
+ *    設了 AZURE_OPENAI_ENDPOINT / AZURE_OPENAI_API_KEY / AZURE_OPENAI_DEPLOYMENT 就會優先使用。
+ *    走 v1 API：${endpoint}/openai/v1/chat/completions，model 填部署名稱，驗證用 api-key 標頭。
+ *    失敗（逾時、配額、部署名稱錯）會自動退到 Workers AI，demo 不會中斷。
+ * 1. Cloudflare Workers AI（第一備援）
  *    走 wrangler.toml 的 [ai] binding，跟 D1／Pages 同一個帳號，不需要另外申請 API Key。
  *    免費額度每天 10,000 Neurons——以 demo 的用量遠遠用不完，但不是無上限。
  * 2. Groq（備援）
@@ -26,7 +30,19 @@ const DEFAULT_OPENAI_MODEL = "gpt-4o-mini";
 const GROQ_BASE_URL = "https://api.groq.com/openai/v1";
 const OPENAI_BASE_URL = "https://api.openai.com/v1";
 
-export type AiProvider = "workers-ai" | "groq" | "openai";
+export type AiProvider = "azure-openai" | "workers-ai" | "groq" | "openai";
+
+/** chatJsonWithProvider() 的回傳：解析好的 JSON + 實際回答的供應商（給回應的 provider 欄位用）。 */
+export interface ChatJsonResult {
+  data: unknown;
+  provider: AiProvider;
+}
+
+interface AzureConfig {
+  endpoint: string;
+  apiKey: string;
+  deployment: string;
+}
 
 export interface ChatJsonOptions {
   systemPrompt: string;
@@ -51,9 +67,22 @@ async function getAiBinding(): Promise<AiBinding | null> {
   }
 }
 
+/** 三個 Azure 變數缺一不可；少任何一個就當作沒設定，直接跳過 Azure。 */
+async function getAzureConfig(): Promise<AzureConfig | null> {
+  const endpoint = (await readEnv("AZURE_OPENAI_ENDPOINT"))?.trim()
+    .replace(/\/+$/, "")
+    // 有人會把 Portal 上整段 ".../openai/v1" 貼進來，這裡統一切回資源根網址
+    .replace(/\/openai(\/v1)?$/i, "");
+  const apiKey = (await readEnv("AZURE_OPENAI_API_KEY"))?.trim();
+  const deployment = (await readEnv("AZURE_OPENAI_DEPLOYMENT"))?.trim();
+  if (!endpoint || !apiKey || !deployment) return null;
+  return { endpoint, apiKey, deployment };
+}
+
 /** 目前有哪些供應商可用——首頁／README 之外，也給部署檢查用。 */
 export async function availableProviders(): Promise<AiProvider[]> {
   const providers: AiProvider[] = [];
+  if (await getAzureConfig()) providers.push("azure-openai");
   if (await getAiBinding()) providers.push("workers-ai");
   if (await readEnv("GROQ_API_KEY")) providers.push("groq");
   if (await readEnv("OPENAI_API_KEY")) providers.push("openai");
@@ -72,6 +101,11 @@ export async function hasAnyProvider(): Promise<boolean> {
  * 換取跨供應商的一致行為。
  */
 export async function chatJson(opts: ChatJsonOptions): Promise<unknown | null> {
+  return (await chatJsonWithProvider(opts))?.data ?? null;
+}
+
+/** 同 chatJson()，但多回傳是哪個供應商回答的，讓 API 回應可以標示 provider。 */
+export async function chatJsonWithProvider(opts: ChatJsonOptions): Promise<ChatJsonResult | null> {
   try {
     return await tryProviders(opts);
   } catch (err) {
@@ -82,8 +116,18 @@ export async function chatJson(opts: ChatJsonOptions): Promise<unknown | null> {
   }
 }
 
-async function tryProviders(opts: ChatJsonOptions): Promise<unknown | null> {
+async function tryProviders(opts: ChatJsonOptions): Promise<ChatJsonResult | null> {
   const timeoutMs = opts.timeoutMs ?? 12_000;
+
+  // 0. Azure OpenAI（Microsoft Foundry）
+  const azure = await getAzureConfig();
+  if (azure) {
+    const baseUrl = `${azure.endpoint}/openai/v1`;
+    const text = await callOpenAiCompatible("azure-openai", baseUrl, azure.apiKey, azure.deployment, opts, timeoutMs);
+    const parsed = text === null ? null : safeParseJson(text);
+    if (parsed !== null) return { data: parsed, provider: "azure-openai" };
+    console.warn("[ai] Azure OpenAI 沒有回傳可解析的 JSON，改試 Workers AI");
+  }
 
   // 1. Cloudflare Workers AI
   const binding = await getAiBinding();
@@ -91,7 +135,7 @@ async function tryProviders(opts: ChatJsonOptions): Promise<unknown | null> {
     const model = (await readEnv("WORKERS_AI_MODEL")) ?? DEFAULT_WORKERS_AI_MODEL;
     const text = await callWorkersAi(binding, model, opts, timeoutMs);
     const parsed = text === null ? null : safeParseJson(text);
-    if (parsed !== null) return parsed;
+    if (parsed !== null) return { data: parsed, provider: "workers-ai" };
     console.warn("[ai] Workers AI 沒有回傳可解析的 JSON，改試下一個供應商");
   }
 
@@ -102,7 +146,7 @@ async function tryProviders(opts: ChatJsonOptions): Promise<unknown | null> {
     const baseUrl = ((await readEnv("GROQ_BASE_URL")) ?? GROQ_BASE_URL).replace(/\/$/, "");
     const text = await callOpenAiCompatible("groq", baseUrl, groqKey, model, opts, timeoutMs);
     const parsed = text === null ? null : safeParseJson(text);
-    if (parsed !== null) return parsed;
+    if (parsed !== null) return { data: parsed, provider: "groq" };
   }
 
   // 3. OpenAI
@@ -112,7 +156,7 @@ async function tryProviders(opts: ChatJsonOptions): Promise<unknown | null> {
     const baseUrl = ((await readEnv("OPENAI_BASE_URL")) ?? OPENAI_BASE_URL).replace(/\/$/, "");
     const text = await callOpenAiCompatible("openai", baseUrl, openaiKey, model, opts, timeoutMs);
     const parsed = text === null ? null : safeParseJson(text);
-    if (parsed !== null) return parsed;
+    if (parsed !== null) return { data: parsed, provider: "openai" };
   }
 
   return null;
@@ -145,7 +189,7 @@ async function callWorkersAi(
 }
 
 async function callOpenAiCompatible(
-  label: string,
+  label: AiProvider,
   baseUrl: string,
   apiKey: string,
   model: string,
@@ -155,13 +199,21 @@ async function callOpenAiCompatible(
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
+    // Azure 驗證用 api-key 標頭；其他 OpenAI 相容服務用 Bearer token。
+    const authHeader: Record<string, string> =
+      label === "azure-openai" ? { "api-key": apiKey } : { Authorization: `Bearer ${apiKey}` };
+    // Azure v1 API 的新模型只接受 max_completion_tokens（gpt-4o / 4.1 系列兩種都接受）。
+    const tokenLimit =
+      label === "azure-openai"
+        ? { max_completion_tokens: opts.maxTokens ?? 400 }
+        : { max_tokens: opts.maxTokens ?? 400 };
     const res = await fetch(`${baseUrl}/chat/completions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+      headers: { "Content-Type": "application/json", ...authHeader },
       body: JSON.stringify({
         model,
         temperature: opts.temperature ?? 0.4,
-        max_tokens: opts.maxTokens ?? 400,
+        ...tokenLimit,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: opts.systemPrompt },

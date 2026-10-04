@@ -8,7 +8,7 @@ import { ActivitySheet } from "@/components/ActivitySheet";
 import { BatteryGauge } from "@/components/BatteryGauge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ACTIVITY_META, formatDuration, formatTime } from "@/lib/activity-meta";
+import { ACTIVITY_META, formatDrain, formatDuration, formatTime } from "@/lib/activity-meta";
 import {
   fetchWeek,
   reportActualDrain,
@@ -60,7 +60,7 @@ export default function TodayPage() {
   const remaining = todaySummary?.remainingBattery ?? data?.profile.baseBatteryCapacity ?? 100;
 
   // 已過時間但還沒回報的活動
-  const pending = activities.filter((a) => a.actualDrain === null && new Date(a.scheduledAt).getTime() + a.durationMinutes * 60_000 < Date.now());
+  const pending = activities.filter((a) => a.type !== "recovery" && a.actualDrain === null && new Date(a.scheduledAt).getTime() + a.durationMinutes * 60_000 < Date.now());
 
   /**
    * 新增活動不等 AI：後端先用規則式估算存檔並回應，AI 在背景重算。
@@ -178,12 +178,12 @@ export default function TodayPage() {
                         {formatTime(a.scheduledAt)} · {ACTIVITY_META[a.type].label}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {a.headcount} 人 · {formatDuration(a.durationMinutes)}
+                        {a.type === "recovery" ? "來自 LifeRPG" : `${a.headcount} 人`} · {formatDuration(a.durationMinutes)}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className={`text-lg font-semibold ${a.predictedDrain >= 40 ? "text-coral-500" : "text-mint-600"}`}>
-                        -{a.actualDrain ?? a.predictedDrain}%
+                        {formatDrain(a.actualDrain ?? a.predictedDrain)}
                       </p>
                       <p className="text-[10px] text-muted-foreground">
                         {refiningIds.includes(a.id) ? (

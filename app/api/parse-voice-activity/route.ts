@@ -22,5 +22,5 @@ export async function POST(req: Request) {
     return ok({ crisis: true, message: result.message });
   }
 
-  return ok({ activity: result.activity, source: result.source });
+  return ok({ activity: result.activity, source: result.source, provider: result.provider ?? null });
 }

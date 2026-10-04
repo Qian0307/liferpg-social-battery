@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
 import { BatteryGauge } from "@/components/BatteryGauge";
 import { CalendarSubscribe } from "@/components/CalendarSubscribe";
+import { LifeRpgLink } from "@/components/LifeRpgLink";
 import { Card, CardContent } from "@/components/ui/card";
-import { ACTIVITY_META, formatMonthDay, formatTime, formatWeekday } from "@/lib/activity-meta";
+import { ACTIVITY_META, formatDrain, formatMonthDay, formatTime, formatWeekday } from "@/lib/activity-meta";
 import { OVERNIGHT_RECOVERY_RATE } from "@/lib/battery";
 import { fetchWeek, todayInTaipei, UnauthorizedError, type DaySummaryDTO, type WeekResponse } from "@/lib/client-api";
 
@@ -164,6 +165,9 @@ export default function WeekPage() {
 
       {/* Apple 日曆訂閱 */}
       <CalendarSubscribe />
+
+      {/* LifeRPG 電量連結碼 */}
+      <LifeRpgLink />
     </div>
   );
 }
@@ -253,11 +257,11 @@ function DayDetail({
                       {formatTime(a.scheduledAt)} · {ACTIVITY_META[a.type].label}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {a.headcount} 人 · 熟悉度 {a.familiarity}/5
+                      {a.type === "recovery" ? "來自 LifeRPG 的恢復行動" : `${a.headcount} 人 · 熟悉度 ${a.familiarity}/5`}
                     </p>
                   </div>
                   <span className={`text-lg font-semibold ${a.predictedDrain >= 40 ? "text-coral-500" : "text-mint-600"}`}>
-                    -{a.actualDrain ?? a.predictedDrain}%
+                    {formatDrain(a.actualDrain ?? a.predictedDrain)}
                   </span>
                 </CardContent>
               </Card>

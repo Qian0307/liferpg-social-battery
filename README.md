@@ -113,12 +113,13 @@
 先回規則值再背景修正，使用者永遠是即時的；而且 AI 掛掉時功能不會消失，
 只是停留在規則式估算（回應中的 `source` 欄位會標示 `rule`）。
 
-### AI 供應商：三層 fallback
+### AI 供應商：四層 fallback
 
 `lib/ai.ts` 的 `chatJson()` 是所有 AI 呼叫的唯一入口，依序嘗試：
 
 | 順序 | 供應商 | 需要什麼 | 說明 |
 |---|---|---|---|
+| 0 | **Azure OpenAI（Microsoft Foundry）** | `AZURE_OPENAI_ENDPOINT`、`AZURE_OPENAI_API_KEY`、`AZURE_OPENAI_DEPLOYMENT` | 主要供應商。走 v1 API `${endpoint}/openai/v1/chat/completions`，`model` 填部署名稱，用 `api-key` 標頭驗證。失敗自動退到 Workers AI。回應的 `provider` 欄位會標示 `azure-openai` |
 | 1 | **Cloudflare Workers AI** | **不需要 API Key** | 走 `wrangler.toml` 的 `[ai]` binding，跟 D1／Pages 同一個帳號。預設模型 `@cf/meta/llama-3.3-70b-instruct-fp8-fast`（中文品質好）。免費額度每天 10,000 Neurons |
 | 2 | Groq | `GROQ_API_KEY` | 免費、推論極快、OpenAI 相容介面 |
 | 3 | OpenAI | `OPENAI_API_KEY` | 現場若有發 credits，設了就自動接上，不用改程式碼 |
@@ -127,6 +128,20 @@
 刻意**不使用**各家的 structured output 參數——支援度不一，不支援時整個呼叫會失敗。
 改用「prompt 明確要求 JSON + 容錯解析 + Zod 驗證 + 規則式 fallback」換取跨供應商的一致行為。
 Workers AI 依模型回傳 `{response}` 或 OpenAI 格式的 `{choices[].message.content}`，兩種都有處理。
+
+### 與 LifeRPG 的串接
+
+| API | 方法 | 說明 |
+|---|---|---|
+| `/api/public/battery?session=<連結碼>` | GET | 唯讀電量快照：今天、七天、風險日、人格摘要。不呼叫 AI、不回傳活動細節 |
+| `/api/public/recovery` | POST | LifeRPG 完成「恢復與休息」後寫入一筆恢復活動（`type: recovery`、負的耗電量），每分鐘回充 0.5%，單筆 2–30%。以 LifeRPG 紀錄 ID 去重 |
+| `/api/guide/today` | POST | AI 嚮導：只收進行中的目標名稱，回傳今日 Boss 與恢復時段。走 `chatJson()`，失敗退回規則式 |
+| `/api/link-code` | GET | 同源取得自己的連結碼（`/week` 頁面的「連結 LifeRPG」卡片） |
+
+- 三支 `public` / `guide` API 都用參數裡的連結碼認人，不依賴跨站 cookie。
+- CORS 只開放 `LIFERPG_ORIGINS` 列出的網域與 `localhost`；其他來源寫入一律 403。
+- 恢復活動不需要 DB migration：`type` 是自由文字欄位、`predicted_drain` 沒有 CHECK 限制。
+  `simulateWeek()` 允許負的耗電量，回升後不會超過基礎容量。
 
 ### 電量模型
 
@@ -233,6 +248,10 @@ Workers AI 走 `wrangler.toml` 的 `[ai]` binding，跟 D1 同一個帳號，
 
 ```bash
 npx wrangler pages secret put ELEVENLABS_API_KEY   # Track D 語音輸入
+npx wrangler pages secret put AZURE_OPENAI_ENDPOINT    # https://<資源>.openai.azure.com
+npx wrangler pages secret put AZURE_OPENAI_API_KEY
+npx wrangler pages secret put AZURE_OPENAI_DEPLOYMENT  # Foundry 上的部署名稱
+npx wrangler pages secret put LIFERPG_ORIGINS          # LifeRPG 正式網域，逗號分隔
 npx wrangler pages secret put GROQ_API_KEY         # AI 備援
 npx wrangler pages secret put OPENAI_API_KEY       # 現場有發 credits 再設
 ```
@@ -245,10 +264,14 @@ npx wrangler pages secret put OPENAI_API_KEY       # 現場有發 credits 再設
 ```bash
 URL=https://social-battery-meter.pages.dev
 
-# AI 是否活著——要看到 "source":"ai"，看到 "rule" 代表 Workers AI 沒接上
+# AI 是否活著——要看到 "source":"ai" 和 "provider":"azure-openai"
+# provider 是 workers-ai 代表 Azure 沒接上、已自動退回；source 是 rule 代表所有 AI 都沒接上
 curl -s -X POST $URL/api/predict-drain -H 'Content-Type: application/json' \
   -d '{"activity":{"type":"party","headcount":25,"familiarity":2,"durationMinutes":180},
        "profile":{"baseBatteryCapacity":38,"summary":"偏內向","rechargeStyle":"solitude"}}'
+
+# LifeRPG 讀取用的唯讀電量快照
+curl -s "$URL/api/public/battery?session=demo-session"
 
 # 語音服務有沒有開啟
 curl -s $URL/api/voice-to-text -H "Cookie: sbm_session=demo-session"
