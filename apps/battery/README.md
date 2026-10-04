@@ -18,8 +18,9 @@
 |---|---|
 | 線上展示 | https://social-battery-meter.pages.dev/week?demo=1 |
 | 一般入口 | https://social-battery-meter.pages.dev |
-| 技術棧 | Next.js 14 · Cloudflare Pages + D1 + Workers AI · 全部 edge runtime |
-| AI 成本 | **0 元**——Workers AI 免費額度，沒有使用任何付費 LLM |
+| 技術棧 | Next.js 14 · Cloudflare Pages + D1 · Azure OpenAI（Microsoft Foundry）+ Workers AI 備援 · 全部 edge runtime |
+| AI 供應商 | Azure OpenAI → GitHub Models（GPT-4o mini）→ Workers AI（Meta Llama）→ 規則式估算，依序自動切換 |
+| Microsoft 整合 | GitHub Models 生成式 AI、Outlook 行事曆訂閱（.ics）、LifeRPG 可安裝為 Edge PWA |
 
 ---
 
@@ -82,9 +83,9 @@
            │                                   │
    ┌───────▼──────────────────┐      ┌─────────▼──────────┐
    │  lib/ai.ts 供應商鏈       │      │  Cloudflare D1     │
-   │  1. Workers AI (binding) │      │  (SQLite)          │
-   │  2. Groq      (備援)      │      │  Drizzle ORM       │
-   │  3. OpenAI    (選配)      │      │  users, activities │
+   │  0. Azure OpenAI (主要)   │      │  (SQLite)          │
+   │  1. Workers AI (備援)     │      │  Drizzle ORM       │
+   │  2. Groq / 3. OpenAI     │      │  users, activities │
    │  全失敗 → 規則式 fallback  │      └────────────────────┘
    │                          │
    │  ElevenLabs STT（語音）   │
@@ -103,7 +104,7 @@
         │
         ├─ 1. lib/drain-rules.ts 規則式估算（純計算，零 I/O）
         ├─ 2. 立刻寫入 D1 並回應 201  ← 使用者不用等 AI
-        └─ 3. ctx.waitUntil() 背景呼叫 AI（Workers AI → Groq → OpenAI）
+        └─ 3. ctx.waitUntil() 背景呼叫 AI（Azure OpenAI → Workers AI → Groq → OpenAI）
                └─ Zod 驗證通過 → 回頭 UPDATE 同一筆的 predicted_drain
                                     │
    前端在 2.5s / 6s refetch ────────┘  → 電池動畫更新
@@ -120,6 +121,7 @@
 | 順序 | 供應商 | 需要什麼 | 說明 |
 |---|---|---|---|
 | 0 | **Azure OpenAI（Microsoft Foundry）** | `AZURE_OPENAI_ENDPOINT`、`AZURE_OPENAI_API_KEY`、`AZURE_OPENAI_DEPLOYMENT` | 主要供應商。走 v1 API `${endpoint}/openai/v1/chat/completions`，`model` 填部署名稱，用 `api-key` 標頭驗證。失敗自動退到 Workers AI。回應的 `provider` 欄位會標示 `azure-openai` |
+| 0.5 | **GitHub Models（Microsoft）** | `GITHUB_MODELS_TOKEN` | fine-grained token，權限只需 Models: read。預設 `openai/gpt-4o-mini`，回應的 `provider` 標示 `github-models` |
 | 1 | **Cloudflare Workers AI** | **不需要 API Key** | 走 `wrangler.toml` 的 `[ai]` binding，跟 D1／Pages 同一個帳號。預設模型 `@cf/meta/llama-3.3-70b-instruct-fp8-fast`（中文品質好）。免費額度每天 10,000 Neurons |
 | 2 | Groq | `GROQ_API_KEY` | 免費、推論極快、OpenAI 相容介面 |
 | 3 | OpenAI | `OPENAI_API_KEY` | 現場若有發 credits，設了就自動接上，不用改程式碼 |

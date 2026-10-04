@@ -49,13 +49,13 @@ export function CalendarSubscribe() {
       <CardContent className="space-y-3 p-5">
         <div className="flex items-center gap-2">
           <CalendarPlus className="h-4 w-4 text-mint-600" />
-          <h3 className="text-sm font-semibold">同步到 Apple 行事曆</h3>
+          <h3 className="text-sm font-semibold">同步到 Outlook／Apple 行事曆</h3>
         </div>
 
         {!sub ? (
           <>
             <p className="text-xs leading-relaxed text-muted-foreground">
-              把社交活動與電量預警訂閱到 iPhone / Mac 的行事曆，行程和電量就在同一個地方看。
+              把社交活動與電量預警訂閱到 Outlook 或 iPhone / Mac 的行事曆，行程和電量就在同一個地方看。
             </p>
             <Button variant="outline" className="w-full" disabled={loading} onClick={enable}>
               {loading ? "產生中…" : "產生訂閱網址"}
@@ -81,8 +81,10 @@ export function CalendarSubscribe() {
             </div>
 
             <details className="text-xs text-muted-foreground">
-              <summary className="cursor-pointer">怎麼在 iPhone / Mac 訂閱？</summary>
+              <summary className="cursor-pointer">怎麼在 Outlook／iPhone／Mac 訂閱？</summary>
               <ol className="mt-2 list-decimal space-y-1 pl-4 leading-relaxed">
+                <li>Outlook 網頁版：行事曆 → 新增行事曆 → 從網路訂閱 → 貼上網址 → 匯入</li>
+                <li>Outlook 桌面版：行事曆 → 新增行事曆 → 從網際網路 → 貼上網址</li>
                 <li>iPhone：設定 → 應用程式 → 行事曆 → 帳號 → 加入帳號 → 其他 → 加入已訂閱的行事曆</li>
                 <li>Mac：行事曆 App → 檔案 → 新增行事曆訂閱項目</li>
                 <li>貼上上面的網址，重新整理頻率建議設為「每小時」</li>

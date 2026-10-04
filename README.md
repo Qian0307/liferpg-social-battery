@@ -43,10 +43,11 @@ npx serve .
 | App | 平台 | 設定 |
 |---|---|---|
 | `apps/battery` | Cloudflare Pages | 在 `apps/battery` 執行 `npm run deploy`；機密用 `npx wrangler pages secret put` 設定 |
+| `apps/liferpg` | Cloudflare Pages | `npx wrangler pages deploy apps/liferpg --project-name liferpg`；安全標頭在 `_headers` |
 | `apps/liferpg` | Vercel | 專案設定的 Root Directory 設為 `apps/liferpg`，Framework 選 Other |
 | `apps/liferpg` | Azure Static Web Apps | GitHub Actions workflow 的 `app_location: "apps/liferpg"`，`output_location` 留空 |
 
-LifeRPG 的安全標頭在 `apps/liferpg/vercel.json` 與 `apps/liferpg/staticwebapp.config.json`，兩邊要保持一致。
+LifeRPG 的安全標頭在 `_headers`（Cloudflare）、`vercel.json`、`staticwebapp.config.json` 三個檔案，內容要保持一致。
 
 ## 歷史
 

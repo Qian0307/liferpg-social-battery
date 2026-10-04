@@ -32,6 +32,8 @@ export interface GuideSuggestion {
 
 export interface GuideResult {
   suggestion: GuideSuggestion;
+  /** 七天內低電量日偏多時的關懷提醒（規則式，固定文字，不交給 AI 生成） */
+  careNote: string | null;
   source: "ai" | "rule" | "crisis";
   provider: AiProvider | null;
 }
@@ -114,10 +116,20 @@ export function ruleBasedGuide(snapshot: BatterySnapshot, goals: string[]): Guid
   };
 }
 
+/** 七天裡有幾天低電量，就提醒使用者可以找信任的人或專業資源聊聊。 */
+const CARE_NOTE_MIN_LOW_DAYS = 3;
+
+export function careNoteFor(snapshot: BatterySnapshot): string | null {
+  const lowDays = snapshot.riskDays.length;
+  if (lowDays < CARE_NOTE_MIN_LOW_DAYS) return null;
+  return `接下來七天有 ${lowDays} 天電量會低於 ${LOW_BATTERY_THRESHOLD}%。如果疲憊感持續好一陣子，可以和信任的人聊聊，或尋求學校輔導中心等專業資源。`;
+}
+
 export async function buildGuide(snapshot: BatterySnapshot, goals: string[]): Promise<GuideResult> {
   const fallback = ruleBasedGuide(snapshot, goals);
+  const careNote = careNoteFor(snapshot);
   if (detectCrisis(goals)) {
-    return { suggestion: { ...fallback, message: CRISIS_RESPONSE }, source: "crisis", provider: null };
+    return { suggestion: { ...fallback, message: CRISIS_RESPONSE }, source: "crisis", provider: null, careNote };
   }
 
   const result = await chatJsonWithProvider({
@@ -129,7 +141,7 @@ export async function buildGuide(snapshot: BatterySnapshot, goals: string[]): Pr
   const parsed = result === null ? null : aiGuideSchema.safeParse(result.data);
   if (!result || !parsed?.success) {
     if (result) console.warn("[guide] AI 輸出格式不符，改用規則式建議");
-    return { suggestion: fallback, source: "rule", provider: null };
+    return { suggestion: fallback, source: "rule", provider: null, careNote };
   }
 
   // AI 偶爾會改寫目標名稱；不在清單裡就當作沒有指定 Boss
@@ -143,5 +155,6 @@ export async function buildGuide(snapshot: BatterySnapshot, goals: string[]): Pr
     },
     source: "ai",
     provider: result.provider,
+    careNote,
   };
 }
