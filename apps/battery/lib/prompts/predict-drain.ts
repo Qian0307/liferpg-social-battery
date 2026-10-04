@@ -1,3 +1,4 @@
+import { TYPE_FIELDS } from "@/lib/activity-meta";
 import { SAFETY_CLAUSE } from "@/lib/safety";
 import type { DrainPredictionRequest } from "@/lib/types";
 
@@ -13,7 +14,7 @@ import type { DrainPredictionRequest } from "@/lib/types";
  *   甚至可能是充電（對 rechargeStyle = specific_people 的人）。
  */
 export const PREDICT_DRAIN_SYSTEM_PROMPT = `
-你是「生活電量計」的能量估算引擎。任務是估算一場活動會消耗使用者多少百分比的電量。
+你是「LifeRPG 生活電量」的能量估算引擎。任務是估算一場活動會消耗使用者多少百分比的電量。
 活動分兩大類：社交活動（吃飯、會議、約會、上課、派對、其他社交）與生活活動（課業考試、工作打工、運動、通勤、家務雜事）。
 下面的心理學依據與因子主要針對社交活動；生活活動請看最後的【生活活動】段落。
 
@@ -83,11 +84,13 @@ export function buildPredictDrainUserPrompt(req: DrainPredictionRequest): string
   const intensityLabel = ["", "很輕鬆", "輕鬆", "普通", "吃力", "非常吃力"];
   const lifeTypes = ["study", "work", "exercise", "commute", "chores"];
   const intensity = activity.intensity ?? 3;
+  // 依類型換成貼近情境的說法，同時保留數值方向，讓模型照原本的因子規則估算
+  const f = TYPE_FIELDS[activity.type as keyof typeof TYPE_FIELDS];
   const load = lifeTypes.includes(activity.type)
-    ? [`- 強度：${intensity} / 5（${intensityLabel[intensity] ?? ""}）`]
+    ? [`- 強度：${intensity} / 5（${f ? `${f.level}：${f.options[intensity]}` : intensityLabel[intensity] ?? ""}）`]
     : [
         `- 人數：${activity.headcount} 人`,
-        `- 熟悉度：${activity.familiarity} / 5（${["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"][activity.familiarity] ?? ""}）`,
+        `- 熟悉度：${activity.familiarity} / 5（${f ? `${f.level}：${f.options[activity.familiarity]}；數字越小越耗電` : ""}）`,
       ];
   const rechargeLabel: Record<string, string> = {
     solitude: "獨處才能充電",

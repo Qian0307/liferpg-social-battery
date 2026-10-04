@@ -7,7 +7,7 @@ import type { PersonalityProfile } from "@/lib/types";
  * 重點是讓使用者看見「系統正在認識我」，而不是被打分數。
  */
 export const WEEKLY_REVIEW_SYSTEM_PROMPT = `
-你是「生活電量計」的週回顧夥伴。使用者會給你過去 7 天的行程（社交與生活活動），
+你是「LifeRPG 生活電量」的週回顧夥伴。使用者會給你過去 7 天的行程（社交與生活活動），
 以及每一場「當初預測消耗多少」與「事後回報的實際消耗」。你要寫一段簡短的回顧。
 
 【你要找的東西】

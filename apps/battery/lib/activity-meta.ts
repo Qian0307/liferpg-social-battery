@@ -30,6 +30,26 @@ export function isLifeType(type: ActivityType): type is LifeActivityType {
 
 export const INTENSITY_LABELS = ["", "很輕鬆", "輕鬆", "普通", "吃力", "非常吃力"];
 
+/**
+ * 依活動類型換成貼近情境的問法。底層仍是同一套數值：
+ * - 社交活動的第二個欄位存在 familiarity（1 = 最耗電，5 = 最輕鬆），例如上課的「參與程度」1 = 要上台報告。
+ * - 生活活動的欄位存在 intensity（1 = 最輕鬆，5 = 最吃力）。
+ * LifeRPG 前端（apps/liferpg/index.html 的 FIELD_CONFIG）使用相同的文字，修改時兩邊要一起改。
+ */
+export const TYPE_FIELDS: Record<UserActivityType, { people: string | null; level: string; options: string[] }> = {
+  meal: { people: "一起吃飯的人數", level: "跟他們有多熟", options: ["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"] },
+  meeting: { people: "與會人數", level: "你在會議中的角色", options: ["", "要主持或上台報告", "要提出想法、會被追問", "一般討論", "偶爾發言", "純旁聽"] },
+  date: { people: null, level: "對象有多熟", options: ["", "第一次見面", "見過幾次", "還在認識中", "穩定交往", "在一起很久"] },
+  class: { people: "班上人數", level: "上課參與程度", options: ["", "要上台報告", "分組討論、要發言", "可能被點名", "偶爾互動", "純聽講"] },
+  party: { people: "參加人數", level: "認識的人有多少", options: ["", "幾乎都不認識", "認識少數幾個", "一半一半", "大部分都認識", "都是好朋友"] },
+  other: { people: "人數", level: "熟悉度", options: ["", "完全陌生", "點頭之交", "普通朋友", "熟識朋友", "最親密的人"] },
+  study: { people: null, level: "難度與壓力", options: ["", "輕鬆複習", "一般作業", "需要專心", "考前衝刺", "大考或趕截止"] },
+  work: { people: null, level: "忙碌程度", options: ["", "很清閒", "偶爾忙", "正常", "一直在忙", "忙到停不下來"] },
+  exercise: { people: null, level: "運動強度", options: ["", "散步伸展", "輕鬆慢跑", "一般運動", "高強度訓練", "比賽或極限"] },
+  commute: { people: null, level: "通勤狀況", options: ["", "輕鬆有座位", "一般", "要轉車", "擁擠站著", "又擠又久"] },
+  chores: { people: null, level: "工作量", options: ["", "整理一下", "一般家事", "大掃除一角", "大量家事", "搬家等級"] },
+};
+
 /** 一行描述活動的負荷：社交活動寫人數與熟悉度，生活活動寫強度。 */
 export function describeLoad(a: {
   type: ActivityType;
@@ -38,11 +58,13 @@ export function describeLoad(a: {
   intensity?: number | null;
 }): string {
   if (a.type === "recovery") return "恢復行動";
+  const f = TYPE_FIELDS[a.type];
   if (isLifeType(a.type)) {
     const level = a.intensity ?? 3;
-    return `強度 ${level}/5（${INTENSITY_LABELS[level] ?? ""}）`;
+    return `${f.level}：${f.options[level] ?? INTENSITY_LABELS[level] ?? ""}`;
   }
-  return `${a.headcount} 人・熟悉度 ${a.familiarity}/5`;
+  const level = `${f.level}：${f.options[a.familiarity] ?? ""}`;
+  return f.people ? `${a.headcount} 人・${level}` : level;
 }
 
 /** 耗電顯示成「-20%」，恢復（負值）顯示成「+15%」。 */

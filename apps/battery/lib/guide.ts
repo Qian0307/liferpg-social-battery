@@ -40,7 +40,7 @@ export interface GuideResult {
 
 const GUIDE_SYSTEM_PROMPT = `
 你是 LifeRPG 的「AI 嚮導」。LifeRPG 是把人生目標變成 Boss 戰的專注遊戲；
-玩家同時用「生活電量計」追蹤社交、課業、工作等行程造成的電量消耗。你的任務是看今天的電量，
+玩家同時用 LifeRPG 的「生活電量」追蹤社交、課業、工作等行程造成的電量消耗。你的任務是看今天的電量，
 建議今天適合挑戰哪一個 Boss（也就是哪個目標）、專注多久，以及何時安排恢復。
 
 【判斷原則】

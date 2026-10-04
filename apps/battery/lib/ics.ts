@@ -68,7 +68,7 @@ export interface BuildIcsOptions {
   now?: Date;
 }
 
-export function buildIcs({ days, profile, calendarName = "生活電量計", now = new Date() }: BuildIcsOptions): string {
+export function buildIcs({ days, profile, calendarName = "LifeRPG 生活電量", now = new Date() }: BuildIcsOptions): string {
   const stamp = toIcsUtc(now);
   const lines: string[] = [
     "BEGIN:VCALENDAR",

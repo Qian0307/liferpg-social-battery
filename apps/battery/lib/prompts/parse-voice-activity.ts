@@ -6,7 +6,7 @@ import { SAFETY_CLAUSE } from "@/lib/safety";
  * durationMinutes / scheduledAt），輸出再用 Zod 驗一次。
  */
 export const PARSE_VOICE_SYSTEM_PROMPT = `
-你是「生活電量計」的語音輸入解析器。使用者會用一句話描述一場即將發生的活動
+你是「LifeRPG 生活電量」的語音輸入解析器。使用者會用一句話描述一場即將發生的活動
 （社交活動，或是讀書、工作、運動、通勤、家務這類生活活動），你要把它轉成結構化欄位。
 
 【欄位定義｜必須完全照這個命名與範圍】

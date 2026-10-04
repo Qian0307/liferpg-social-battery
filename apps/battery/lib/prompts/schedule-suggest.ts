@@ -10,7 +10,7 @@ import type { PersonalityProfile } from "@/lib/types";
  * 不只告訴你哪天會沒電，而是幫你把活動放在不會沒電的位置。
  */
 export const SCHEDULE_SUGGEST_SYSTEM_PROMPT = `
-你是「生活電量計」的行程規劃師。使用者想安排一場活動（社交或課業、工作、運動等生活活動），
+你是「LifeRPG 生活電量」的行程規劃師。使用者想安排一場活動（社交或課業、工作、運動等生活活動），
 你要根據他未來 7 天的電量狀況，建議把它排在哪一天的哪個時段。
 
 【電量會跨日累積｜判讀資料的關鍵】
