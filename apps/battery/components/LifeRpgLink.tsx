@@ -22,7 +22,9 @@ export function LifeRpgLink() {
     try {
       const res = await fetch("/api/link-code", { cache: "no-store" });
       if (!res.ok) throw new Error(await errorMessage(res, "無法取得連結碼"));
-      setCode(((await res.json()) as { code: string }).code);
+      const { code: linkCode } = (await res.json()) as { code: string | null };
+      if (!linkCode) throw new Error("尚未完成人格快篩，請先到「今天」頁完成 6 題快篩");
+      setCode(linkCode);
     } catch (err) {
       setError(err instanceof Error ? err.message : "無法取得連結碼");
     } finally {

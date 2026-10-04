@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
 import { fail, parseBody } from "@/lib/api";
-import { computeProfile } from "@/lib/onboarding";
+import { computeProfile, ONBOARDING_QUESTIONS } from "@/lib/onboarding";
 import { findUserBySession, upsertUser } from "@/lib/repo";
 import { onboardingRequestSchema } from "@/lib/schemas";
 import { getSessionIdFromRequest, newSessionId, withSessionCookie } from "@/lib/session";
 
 export const runtime = "edge";
+
+/**
+ * GET /api/onboarding — 快篩題目（只有題目與選項文字，不含計分權重）。
+ * LifeRPG 在同一個網站內直接顯示快篩時使用。
+ */
+export async function GET() {
+  return NextResponse.json({
+    questions: ONBOARDING_QUESTIONS.map((q) => ({ id: q.id, question: q.question, options: q.options.map((o) => o.label) })),
+  });
+}
 
 /** POST /api/onboarding — 送出 6 題快篩答案，回傳 PersonalityProfile。 */
 export async function POST(req: Request) {

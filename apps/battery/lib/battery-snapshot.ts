@@ -1,3 +1,4 @@
+import { ACTIVITY_META } from "@/lib/activity-meta";
 import { DEMO_PROFILE, DEMO_SCENARIO } from "@/lib/demo-data";
 import { findUserBySession, listActivitiesBetween, rowToProfile } from "@/lib/repo";
 import { addDays, attachRuleWarnings, buildDaySummaries, localDate, type DaySummary } from "@/lib/week";
@@ -24,6 +25,14 @@ export interface BatterySnapshot {
   /** 從今天起算的七天 */
   week: BatteryDayDTO[];
   riskDays: { date: string; remainingBattery: number; warning: string }[];
+  /** 七天彙總：只有數字與類別合計，不含個別行程的時間或內容 */
+  stats: {
+    totalDrain: number;
+    recovered: number;
+    averageRemaining: number;
+    lowestDay: { date: string; remainingBattery: number };
+    byType: { type: string; label: string; emoji: string; count: number; drain: number }[];
+  };
 }
 
 /**
@@ -65,6 +74,34 @@ export async function getBatterySnapshot(sessionId: string): Promise<BatterySnap
     riskDays: days
       .filter((d) => d.isLow)
       .map((d) => ({ date: d.date, remainingBattery: d.remainingBattery, warning: d.warning ?? "" })),
+    stats: summarize(days),
+  };
+}
+
+function summarize(days: DaySummary[]): BatterySnapshot["stats"] {
+  const all = days.flatMap((d) => d.activities);
+  const drainOf = (a: (typeof all)[number]) => a.actualDrain ?? a.predictedDrain;
+  const byType = new Map<string, { count: number; drain: number }>();
+  for (const a of all) {
+    const row = byType.get(a.type) ?? { count: 0, drain: 0 };
+    row.count += 1;
+    row.drain += drainOf(a);
+    byType.set(a.type, row);
+  }
+  const lowest = days.reduce((min, d) => (d.remainingBattery < min.remainingBattery ? d : min), days[0]);
+  return {
+    totalDrain: all.reduce((sum, a) => sum + Math.max(0, drainOf(a)), 0),
+    recovered: all.reduce((sum, a) => sum + Math.max(0, -drainOf(a)), 0),
+    averageRemaining: Math.round(days.reduce((sum, d) => sum + d.remainingBattery, 0) / Math.max(1, days.length)),
+    lowestDay: { date: lowest.date, remainingBattery: lowest.remainingBattery },
+    byType: Array.from(byType.entries())
+      .map(([type, v]) => ({
+        type,
+        label: ACTIVITY_META[type as keyof typeof ACTIVITY_META]?.label ?? type,
+        emoji: ACTIVITY_META[type as keyof typeof ACTIVITY_META]?.emoji ?? "",
+        ...v,
+      }))
+      .sort((a, b) => Math.abs(b.drain) - Math.abs(a.drain)),
   };
 }
 
