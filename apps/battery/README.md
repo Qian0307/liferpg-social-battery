@@ -158,8 +158,8 @@ Workers AI 依模型回傳 `{response}` 或 OpenAI 格式的 `{choices[].message
 ## 3. 本地執行
 
 ```bash
-git clone <this-repo>
-cd futuremode
+git clone <this-repo> liferpg-social-battery
+cd liferpg-social-battery/apps/battery
 npm install
 
 # 1. 建立本機 D1 資料庫（第一次才需要）
