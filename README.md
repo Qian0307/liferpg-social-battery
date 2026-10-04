@@ -14,7 +14,8 @@ apps/
 └── liferpg/   LifeRPG：純靜態 PWA（單一 index.html），沒有 build step，資料存在 IndexedDB
 ```
 
-兩個 app 各自部署、各自的網域，透過以下 API 串接（皆在 `apps/battery`）：
+兩個 app 整合在**同一個網站**：建置時 `apps/battery/scripts/copy-liferpg.mjs` 會把 LifeRPG 複製到 `public/rpg/`，
+網址是 `/rpg/`，上方選單「冒險」進入，並透過同站的 `/api/link-code` 自動連結電量帳號。串接 API（皆在 `apps/battery`）：
 
 | API | 用途 |
 |---|---|
@@ -24,7 +25,7 @@ apps/
 
 詳細說明見 [`apps/battery/README.md`](apps/battery/README.md)，系統概述見 [`docs/系統概述.md`](docs/系統概述.md)。
 
-正式網址：LifeRPG https://liferpg-1h4.pages.dev ・ 生活電量計 https://social-battery-meter.pages.dev
+正式網址（單一網址）：https://social-battery-meter.pages.dev ・ 冒險：`/rpg/` ・ 示範情境：`/week?demo=1`
 
 ## 本機開發
 
@@ -44,8 +45,8 @@ npx serve .
 
 | App | 平台 | 設定 |
 |---|---|---|
-| `apps/battery` | Cloudflare Pages | 在 `apps/battery` 執行 `npm run deploy`；機密用 `npx wrangler pages secret put` 設定 |
-| `apps/liferpg` | Cloudflare Pages | `npx wrangler pages deploy apps/liferpg --project-name liferpg`；安全標頭在 `_headers` |
+| 整個網站 | Cloudflare Pages | 在 `apps/battery` 執行 `npm run deploy`（會自動把 LifeRPG 一起放進 `/rpg/`）；機密用 `npx wrangler pages secret put` 設定 |
+| `apps/liferpg`（單獨） | Cloudflare Pages | 舊網址 liferpg-1h4.pages.dev 已改為 301 轉到 `/rpg/`；單獨部署時安全標頭在 `_headers` |
 | `apps/liferpg` | Vercel | 專案設定的 Root Directory 設為 `apps/liferpg`，Framework 選 Other |
 | `apps/liferpg` | Azure Static Web Apps | GitHub Actions workflow 的 `app_location: "apps/liferpg"`，`output_location` 留空 |
 

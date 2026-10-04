@@ -24,7 +24,7 @@
 
 - 純靜態 PWA，整個應用程式寫在一個約 200KB 的 `index.html` 裡，沒有 build step。
 - 資料存在瀏覽器的 IndexedDB，只放本機。另外有 `sw.js`（Service Worker）和 `manifest.webmanifest`。
-- 正式站部署在 Cloudflare Pages：https://liferpg-1h4.pages.dev（安全標頭在 `_headers`）。另保留 Vercel（`vercel.json`）與 Azure Static Web Apps（`staticwebapp.config.json`）的設定。CSP 的 `connect-src` 已開放社交電量計網域，`vercel.json` 與 `staticwebapp.config.json` 兩邊要保持一致。
+- 正式站是生活電量計網站的 `/rpg/`（https://social-battery-meter.pages.dev/rpg/）：`apps/battery` 建置時由 `scripts/copy-liferpg.mjs` 複製進 `public/rpg/`（不進 git），安全標頭由 middleware 與 `public/_headers` 設定。舊網址 liferpg-1h4.pages.dev 已 301 轉到新位置。改 LifeRPG 只改 `apps/liferpg/`，部署電量計時會一起上線。另保留 Vercel（`vercel.json`）與 Azure Static Web Apps（`staticwebapp.config.json`）的設定。CSP 的 `connect-src` 已開放社交電量計網域，`vercel.json` 與 `staticwebapp.config.json` 兩邊要保持一致。
 - 七大領域之一「健康與身體」底下的「恢復與休息」（`health.recovery`）分類：放鬆練習、離屏休息、休息安排。完成這類專注或補登會回報社交電量計。
 - 修改 `index.html` 時，請沿用現有的程式風格和資料驗證寫法。檔案裡有大量格式檢查，例如「格式不正確」這類錯誤訊息，新增的資料欄位也要照同樣方式驗證。如果需要遷移資料，絕對不能改變歷史 XP。
 

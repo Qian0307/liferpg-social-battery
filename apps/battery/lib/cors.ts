@@ -36,10 +36,10 @@ export async function corsHeaders(req: Request, methods = "GET, OPTIONS"): Promi
   };
 }
 
-/** 有帶 Origin 但不在白名單——寫入類 API 用來直接拒絕。 */
+/** 有帶 Origin 但不在白名單——寫入類 API 用來直接拒絕。同源（LifeRPG 放在本站 /rpg/）一律允許。 */
 export async function isForbiddenOrigin(req: Request): Promise<boolean> {
   const origin = req.headers.get("origin");
-  if (!origin) return false;
+  if (!origin || origin === new URL(req.url).origin) return false;
   return !(LOCAL_ORIGIN.test(origin) || (await allowedOrigins()).includes(origin));
 }
 

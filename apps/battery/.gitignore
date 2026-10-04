@@ -8,3 +8,5 @@ node_modules
 next-env.d.ts
 .dev.vars
 db/seed.sql
+# LifeRPG 建置時由 scripts/copy-liferpg.mjs 複製進來
+public/rpg/

@@ -66,6 +66,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {item.label}
                 </Link>
               ))}
+              {/* LifeRPG 是同一個網站底下的靜態 PWA（/rpg/），不走 Next 路由，用一般連結 */}
+              <a
+                href="/rpg/"
+                className="rounded-full bg-foreground px-2.5 py-1.5 font-medium text-white transition hover:brightness-110 sm:px-3"
+              >
+                冒險
+              </a>
             </nav>
           </header>
           <main className="flex-1">{children}</main>

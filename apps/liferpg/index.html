@@ -1072,9 +1072,23 @@ const key=()=>mode;
 const factory=()=>mode==='demo'?D.demo():D.empty();
 /* Social battery link. Reads a read-only snapshot from the social battery meter.
    Any network failure only marks the bar offline; focus, records and XP never wait on it. */
-// Local development only: ?batteryApi=http://localhost:3000 when LifeRPG itself runs on localhost.
-const BATTERY_API=(()=>{const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname),o=new URLSearchParams(location.search).get('batteryApi');
+// Served under /rpg/ of the battery site: same origin, no CORS, and the battery session can be linked automatically.
+// Local development only: ?batteryApi=http://localhost:3000 when LifeRPG itself runs standalone on localhost.
+const SAME_SITE=/^\/rpg(\/|$)/.test(location.pathname);
+const BATTERY_API=(()=>{if(SAME_SITE)return location.origin;const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname),o=new URLSearchParams(location.search).get('batteryApi');
   return local&&o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d{1,5})?$/.test(o)?o:'https://social-battery-meter.pages.dev';})();
+const AUTO_LINK_OFF='liferpg-battery-autolink-off';
+const autoLinkAllowed=()=>{try{return localStorage.getItem(AUTO_LINK_OFF)!=='1';}catch{return true;}};
+const setAutoLink=on=>{try{on?localStorage.removeItem(AUTO_LINK_OFF):localStorage.setItem(AUTO_LINK_OFF,'1');}catch{}};
+/* On the same site, read the battery session (httpOnly cookie) through /api/link-code and link it once.
+   Never overrides a code the player set; skipped after the player unlinks on purpose. */
+async function autoLinkBattery(){
+  if(!SAME_SITE||batteryCode()||!autoLinkAllowed()||state?.active)return;
+  try{const res=await fetch('/api/link-code',{credentials:'same-origin',cache:'no-store'});if(!res.ok)return;
+    const body=await res.json();if(typeof body?.code!=='string'||batteryCode())return;
+    await mutate(s=>{D.setBatteryLink(s,body.code);},!modal.open);}
+  catch{}
+}
 let battery={code:null,status:'off',data:null,guide:null,guideStatus:'idle',guideKey:'',inflight:false};
 const batteryCode=()=>state?.preferences.socialBattery?.code||null;
 const pct=v=>Math.max(0,Math.min(100,Math.round(Number(v)||0)));
@@ -1083,7 +1097,7 @@ async function batteryFetch(path,init={}){const ctl=new AbortController(),timer=
   try{const res=await fetch(BATTERY_API+path,{method:init.method||'GET',headers:init.headers,body:init.body,signal:ctl.signal,credentials:'omit',cache:'no-store'});
     const body=await res.json().catch(()=>null);if(!res.ok||!body||typeof body!=='object')throw new Error(typeof body?.error==='string'?body.error:'電量計暫時連不上');return body;}
   catch(e){if(e.name==='AbortError'||e instanceof TypeError)throw new Error('電量計暫時連不上');throw e;}finally{clearTimeout(timer);}}
-async function refreshBattery(){const code=batteryCode();
+async function refreshBattery(){await autoLinkBattery();const code=batteryCode();
   if(!code){battery={code:null,status:'off',data:null,guide:null,guideStatus:'idle',guideKey:'',inflight:false};updateBatteryViews();return;}
   if(code!==battery.code){battery={code,status:'loading',data:null,guide:null,guideStatus:'idle',guideKey:'',inflight:false};updateBatteryViews();}
   if(battery.inflight)return;battery.inflight=true;
@@ -1109,7 +1123,7 @@ function batteryInner(){
   if(battery.status==='offline'&&!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="chip neutral">離線</span></div><p class="field-help" style="margin-top:6px">暫時連不上電量計，冒險照常進行。</p>`;
   if(!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="small muted">讀取中…</span></div><div class="progress battery"><span style="width:0"></span></div>`;
   const t=battery.data.today,v=pct(t.remainingBattery),low=t.isLow===true;
-  return `<div class="battery-head"><span>${I('spark')}生活電量${battery.data.demo?' <span class="chip neutral">示範</span>':''}${battery.status==='offline'?' <span class="chip neutral">離線</span>':''}</span><b class="num ${low?'low':''}">${v}%</b></div><div class="progress battery ${low?'low':''}" role="progressbar" aria-label="今天行程結束後的預估生活電量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><span style="width:${v}%"></span></div><div class="between small muted"><span>起床 ${pct(t.startBattery)}% · 今日行程後 ${v}%</span><span>${pct(t.activityCount)} 個行程</span></div>`;}
+  return `<div class="battery-head"><span>${I('spark')}生活電量${battery.data.demo?' <span class="chip neutral">示範</span>':''}${battery.status==='offline'?' <span class="chip neutral">離線</span>':''}</span><b class="num ${low?'low':''}">${v}%</b></div><div class="progress battery ${low?'low':''}" role="progressbar" aria-label="今天行程結束後的預估生活電量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><span style="width:${v}%"></span></div><div class="between small muted"><span>起床 ${pct(t.startBattery)}% · 今日行程後 ${v}%</span><a href="${BATTERY_API}/week" style="color:var(--purple-dark)">${pct(t.activityCount)} 個行程 · 看一週 →</a></div>`;}
 function guideCard(){return `<section class="card guide-card" data-guide-slot>${guideInner()}</section>`;}
 function guideSource(g){if(g.source==='ai')return g.provider==='azure-openai'?'由 Azure OpenAI 產生':g.provider==='workers-ai'?'由 Workers AI（Llama）產生':'由 AI 產生';return g.source==='crisis'?'安全提醒':'規則式建議 · AI 暫時無法使用';}
 function guideInner(){
@@ -1122,7 +1136,7 @@ function guideInner(){
   if(battery.guideStatus!=='ok')return head+stats+'<p class="small muted">嚮導正在看你的電量與目標…</p>';
   const s=battery.guide.suggestion,boss=typeof s.bossGoal==='string'&&s.bossGoal?s.bossGoal:'',care=typeof battery.guide.careNote==='string'?battery.guide.careNote:'';
   return head+stats+`<div class="guide-advice"><p>${esc(s.message)}</p><div class="guide-meta">${boss?`<span class="chip">${I('sword')}今日 Boss：${esc(boss)} · ${Math.max(0,Math.min(90,Math.round(Number(s.focusMinutes)||0)))} 分鐘</span>`:''}${s.recoveryWhen?`<span class="chip green">${I('clock')}恢復：${esc(s.recoveryWhen)}</span>`:''}</div></div>${care?`<div class="notice" style="margin-top:12px">${esc(care)}</div>`:''}<p class="guide-source">${esc(guideSource(battery.guide))}</p>`;}
-function batteryForm(){openModal('生活電量連結',`<p class="small muted" style="margin-bottom:16px">在生活電量計的「一週」頁面按「顯示連結碼」，複製後貼到這裡。連結後，LifeRPG 會讀取電量；完成「恢復與休息」時回報一筆恢復時數；AI 嚮導只會收到進行中的目標名稱，不含備註。</p><form id="battery-form" class="form-grid"><label>電量連結碼<input name="code" value="${esc(battery.code||'')}" maxlength="64" autocomplete="off" spellcheck="false" placeholder="貼上連結碼"></label><div class="form-actions">${button('使用示範電量','battery-demo')}${battery.code?button('取消連結','battery-unlink','','ghost'):''}<button type="submit" class="btn primary">儲存</button></div></form>`);}
+function batteryForm(){openModal('生活電量連結',`<p class="small muted" style="margin-bottom:16px">${SAME_SITE?'在同一個網站裡，打開「生活電量計」並完成快篩後會自動連結。也可以貼上其他裝置的連結碼。':'在生活電量計的「一週」頁面按「顯示連結碼」，複製後貼到這裡。'}連結後，LifeRPG 會讀取電量；完成「恢復與休息」時回報一筆恢復時數；AI 嚮導只會收到進行中的目標名稱，不含備註。</p><form id="battery-form" class="form-grid"><label>電量連結碼<input name="code" value="${esc(battery.code||'')}" maxlength="64" autocomplete="off" spellcheck="false" placeholder="貼上連結碼"></label><div class="form-actions">${button('使用示範電量','battery-demo')}${battery.code?button('取消連結','battery-unlink','','ghost'):''}<button type="submit" class="btn primary">儲存</button></div></form>`);}
 // Recovery & Rest sessions also restore social battery. XP comes from the normal scoring path only.
 async function syncRecovery(record,prefix=''){const code=batteryCode();if(!code||!record||!D.isRecoverySkill(state,record.skillId))return false;
   const end=Math.max(...record.segments.map(p=>p.end)),mins=Math.max(1,Math.round(D.closedSeconds(record)/60));
@@ -1136,7 +1150,7 @@ function openModal(title,body){previousFocus=document.activeElement;modal.innerH
 function closeModal(){modal.close();modal.innerHTML='';previousFocus?.focus?.();}
 function navButton(id,name,icon,mini=false){return `<button class="${mini?'':'nav-btn '}${tab===id?'active':''}" data-act="nav" data-tab="${id}">${I(icon)}<span>${name}</span>${!mini?`<small>${id==='today'?'01':id==='goals'?'02':id==='growth'?'03':id==='skills'?'04':'05'}</small>`:''}</button>`;}
 function shell(content){const sc=score(),active=state.active;const labels={today:['YOUR DAILY ADVENTURE','冒險大廳'],goals:['ONE LIFE. MANY QUESTS.','人生目標'],growth:['PROGRESS, NOT PERFECTION','成長軌跡'],skills:['BUILD YOUR OWN SKILL TREE','技能樹'],character:['YOUR ADVENTURER PROFILE','角色檔案'],detail:['CHAPTER DETAILS','目標章節']};const [en,title]=labels[tab]||labels.today;
-return `<div class="shell"><aside class="sidebar">${brand()}<div><div class="side-label">ADVENTURE JOURNAL</div><nav class="nav-stack" aria-label="主導覽">${navButton('today','冒險大廳','compass')}${navButton('goals','人生目標','map')}${navButton('growth','成長軌跡','growth')}${navButton('skills','技能樹','spark')}${navButton('character','角色檔案','user')}</nav></div><div class="side-footer">${button(I(mode==='demo'?'back':'eye')+(mode==='demo'?'返回我的旅程':'體驗示範'),'mode','', 'ghost full')}<div class="local-card"><div class="row" style="gap:7px;margin-bottom:5px">${I('lock')}<b>本機保存 · 無追蹤</b></div>${batteryCode()?'已連結生活電量，只交換電量與恢復時數。':'未連接雲端。'}重要紀錄請定期匯出，避免瀏覽器資料被清除。</div><div class="user-card"><div class="avatar">${I('compass')}</div><div><div class="user-name">${esc(state.player.name)}</div><div class="small muted">Lv. ${sc.character.level} · 冒險者</div></div></div></div></aside><main class="workspace">
+return `<div class="shell"><aside class="sidebar">${brand()}<div><div class="side-label">ADVENTURE JOURNAL</div><nav class="nav-stack" aria-label="主導覽">${navButton('today','冒險大廳','compass')}${navButton('goals','人生目標','map')}${navButton('growth','成長軌跡','growth')}${navButton('skills','技能樹','spark')}${navButton('character','角色檔案','user')}</nav></div><div class="side-footer">${SAME_SITE?`<a class="btn ghost full" href="/week">${I('spark')}生活電量計</a>`:''}${button(I(mode==='demo'?'back':'eye')+(mode==='demo'?'返回我的旅程':'體驗示範'),'mode','', 'ghost full')}<div class="local-card"><div class="row" style="gap:7px;margin-bottom:5px">${I('lock')}<b>本機保存 · 無追蹤</b></div>${batteryCode()?'已連結生活電量，只交換電量與恢復時數。':'未連接雲端。'}重要紀錄請定期匯出，避免瀏覽器資料被清除。</div><div class="user-card"><div class="avatar">${I('compass')}</div><div><div class="user-name">${esc(state.player.name)}</div><div class="small muted">Lv. ${sc.character.level} · 冒險者</div></div></div></div></aside><main class="workspace">
 ${mode==='demo'?`<div class="demo-banner"><span>示範世界 · 以下是試玩資料，不計入你的正式紀錄。</span>${button('返回我的旅程','mode')}</div>`:''}
 <header class="topbar"><div><div class="eyebrow">${en}</div><h1>${title}</h1></div><div class="top-actions"><span class="date-label">${new Intl.DateTimeFormat('zh-TW',{month:'long',day:'numeric',weekday:'short',timeZone:'Asia/Taipei'}).format(new Date())}</span>${button(I('plus')+'新增目標','goal-new','', 'primary')}</div></header>
 ${active?`<div class="resume-banner"><div><strong>你有一場${({running:'進行中',paused:'暫停中',break:'休息中',ready:'等待下一回合',review:'待結算'})[active.state]}的戰鬥</strong><p>${esc(active.task)} · <span data-active-elapsed>${fmt(D.seconds(active))}</span></p></div>${button('返回戰場 '+I('arrow'),'battle','','primary')}</div>`:''}${content}</main><nav class="bottom-nav" aria-label="行動版主導覽">${navButton('today','今日','compass',true)}${navButton('goals','目標','map',true)}${navButton('growth','成長','growth',true)}${navButton('skills','技能','spark',true)}${navButton('character','角色','user',true)}</nav></div>`;}
@@ -1390,8 +1404,8 @@ case 'day-records':{const d=b.dataset.date,sc=score(),rows=state.sessions.filter
 case 'edit-name':openModal('修改玩家名稱',`<form id="name-form" class="form-grid"><label>名稱<input name="name" value="${esc(state.player.name)}" maxlength="40" required></label><button type="submit" class="btn primary">儲存名稱</button></form>`);break;
 case 'export':await exportData();break;
 case 'battery-link':batteryForm();break;
-case 'battery-demo':await mutate(s=>{D.setBatteryLink(s,'demo-session');});closeModal();render();toast('已套用示範電量。');await refreshBattery();break;
-case 'battery-unlink':await mutate(s=>{D.setBatteryLink(s,'');});closeModal();render();toast('已取消生活電量連結。');await refreshBattery();break;
+case 'battery-demo':setAutoLink(true);await mutate(s=>{D.setBatteryLink(s,'demo-session');});closeModal();render();toast('已套用示範電量。');await refreshBattery();break;
+case 'battery-unlink':setAutoLink(false);await mutate(s=>{D.setBatteryLink(s,'');});closeModal();render();toast('已取消生活電量連結。');await refreshBattery();break;
 case 'guide-refresh':await refreshGuide(true);break;
 case 'import':await importData();break;
 }}catch(err){error(err);}});

@@ -47,8 +47,31 @@ function limitFor(pathname: string): number | null {
 /** 示範情境的匿名 session id，對應 db/demo-scenario.json 的 persona。 */
 const DEMO_SESSION_ID = "demo-session";
 
+/**
+ * LifeRPG 放在同一個網站的 /rpg/ 底下（建置時由 scripts/copy-liferpg.mjs 複製進 public/rpg/）。
+ * 沿用 LifeRPG 原本的安全標頭；connect-src 只需要 'self'，因為電量 API 就在同一個網域。
+ */
+const RPG_SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Content-Security-Policy":
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; " +
+    "font-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+};
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
+  // LifeRPG 的相對路徑（./sw.js、./icons/）需要結尾斜線才會解析到 /rpg/ 底下
+  if (pathname === "/rpg") {
+    // 用一般 URL 物件：NextURL 會依 trailingSlash 設定把結尾斜線拿掉
+    return NextResponse.redirect(new URL(`/rpg/${req.nextUrl.search}`, req.url), 308);
+  }
+  if (pathname === "/rpg/" || pathname === "/rpg/index.html") {
+    const res = NextResponse.rewrite(new URL("/rpg/index.html", req.url));
+    for (const [k, v] of Object.entries(RPG_SECURITY_HEADERS)) res.headers.set(k, v);
+    return res;
+  }
 
   // ?demo=1 一鍵載入示範情境。
   // 沒有這個入口的話，第一次打開網站的人（例如評審）只會看到一個空的 app——

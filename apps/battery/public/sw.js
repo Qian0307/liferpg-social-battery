@@ -3,7 +3,7 @@
  * - /_next/static：檔名含雜湊，快取優先。
  * - API：只有「一週電量」在離線時回傳最後一次成功的結果；其他 API 一律走網路（寫入不能離線假裝成功）。
  */
-const VERSION = "sbm-v1";
+const VERSION = "sbm-v2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const DATA_CACHE = `${VERSION}-data`;
 const SHELL = ["/", "/week", "/plan", "/review", "/onboarding", "/offline.html", "/icon.svg", "/icon-192.png", "/icon-512.png", "/manifest.webmanifest"];
@@ -32,6 +32,8 @@ self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  // /rpg/ 是 LifeRPG，由它自己的 Service Worker 負責快取
+  if (url.pathname === "/rpg" || url.pathname.startsWith("/rpg/")) return;
 
   if (url.pathname.startsWith("/api/")) {
     if (OFFLINE_READABLE_API.includes(url.pathname)) event.respondWith(networkFirst(request, DATA_CACHE, null));
