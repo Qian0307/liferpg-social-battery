@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "LifeRPG 遊戲管理人生",
+  "name": "LifeRPG 生活電量冒險",
   "short_name": "LifeRPG",
-  "description": "專注戰鬥、人生目標與技能成長。",
+  "description": "專注 Boss 戰、人生目標、技能成長，加上社交與生活行程的電量規劃。",
   "lang": "zh-TW",
   "start_url": "./",
   "scope": "./",

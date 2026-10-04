@@ -1,57 +1,46 @@
-# LifeRPG 社交電量冒險
+# LifeRPG 生活電量冒險
 
-一個「會累的 RPG 角色」：把人生目標變成 Boss 戰的 **LifeRPG**，接上預測生活能量的 **生活電量計**。
-社交、課業、工作、運動等行程讓角色的電量下降，完成「恢復與休息」讓電量回升、技能成長，AI 嚮導依電量建議今天該挑戰哪個 Boss。
+一個「會累的 RPG 角色」：把人生目標變成 Boss 戰，同時用**生活電量**規劃挑戰與恢復。
+社交、課業、工作、運動等行程讓角色的電量下降，完成「恢復與休息」讓電量回升、技能成長，
+AI 嚮導依電量建議今天該挑戰哪個 Boss、何時安排恢復。
 
 > 自我照顧工具，不是醫療診斷。
+
+**網址（唯一入口）：https://liferpg-adventure.pages.dev** ・ 示範情境：`/?demo=1#demo`
+・ 系統概述：[`docs/系統概述.md`](docs/系統概述.md)（Word 版 `docs/系統概述.docx`）
 
 ## 專案結構
 
 ```
 apps/
-├── battery/   生活電量計：Next.js 14 + TypeScript，edge runtime，Cloudflare Pages + D1，PWA
-│              AI：Workers AI（Meta Llama 3.3）＋規則式備援；Outlook 行事曆訂閱與匯入
-└── liferpg/   LifeRPG：純靜態 PWA（單一 index.html），沒有 build step，資料存在 IndexedDB
+├── liferpg/   App 介面：單一 index.html 的 PWA（冒險、技能、目標、生活電量、行事曆、AI 嚮導、語音輸入）
+└── battery/   API 服務：Next.js 14 Route Handlers（edge runtime）＋ Cloudflare D1
+               建置時 scripts/copy-liferpg.mjs 會把 apps/liferpg 複製到 public/，整個網站就是 LifeRPG
 ```
 
-兩個 app 整合在**同一個網站**：建置時 `apps/battery/scripts/copy-liferpg.mjs` 會把 LifeRPG 複製到 `public/rpg/`，
-網址是 `/rpg/`，上方選單「冒險」進入，並透過同站的 `/api/link-code` 自動連結電量帳號。串接 API（皆在 `apps/battery`）：
-
-| API | 用途 |
-|---|---|
-| `GET /api/public/battery?session=<連結碼>` | LifeRPG 讀取今天與七天電量、風險日（唯讀） |
-| `POST /api/public/recovery` | LifeRPG 完成「恢復與休息」後回報恢復行動，電量回升 |
-| `POST /api/guide/today` | AI 嚮導：依電量與目標名稱給今日建議（Azure OpenAI 優先） |
-
-詳細說明見 [`apps/battery/README.md`](apps/battery/README.md)，系統概述見 [`docs/系統概述.md`](docs/系統概述.md)。
-
-正式網址（單一網址）：https://social-battery-meter.pages.dev ・ 冒險：`/rpg/` ・ 示範情境：`/week?demo=1`
+- 改畫面只改 `apps/liferpg/`；改 API 改 `apps/battery/`。兩者一起部署、同一個網域。
+- AI：Workers AI（Meta Llama 3.3）＋規則式備援；`lib/ai.ts` 預留 Azure OpenAI 等供應商介面。
+- 語音輸入：瀏覽器 Web Speech API（Edge／Chrome）轉文字，再由 AI 解析成行程。
+- Outlook：一鍵訂閱（.ics）與從 Outlook 匯入未來七天行程。
 
 ## 本機開發
 
 ```bash
-# 社交電量計（node_modules 需在 WSL / Linux 安裝）
-cd apps/battery
+cd apps/battery          # node_modules 需在 WSL / Linux 安裝
 npm install
-npm run dev                # http://localhost:3000
-
-# LifeRPG（IndexedDB 與 Service Worker 不能用 file:// 開啟）
-cd apps/liferpg
-npx serve .
-# 本機要接本機電量計時，網址加上 ?batteryApi=http://localhost:3000
+npm run dev              # http://localhost:3000，會先把 LifeRPG 複製進 public/
 ```
 
 ## 部署
 
-| App | 平台 | 設定 |
-|---|---|---|
-| 整個網站 | Cloudflare Pages | 在 `apps/battery` 執行 `npm run deploy`（會自動把 LifeRPG 一起放進 `/rpg/`）；機密用 `npx wrangler pages secret put` 設定 |
-| `apps/liferpg`（單獨） | Cloudflare Pages | 舊網址 liferpg-1h4.pages.dev 已改為 301 轉到 `/rpg/`；單獨部署時安全標頭在 `_headers` |
-| `apps/liferpg` | Vercel | 專案設定的 Root Directory 設為 `apps/liferpg`，Framework 選 Other |
-| `apps/liferpg` | Azure Static Web Apps | GitHub Actions workflow 的 `app_location: "apps/liferpg"`，`output_location` 留空 |
+```bash
+cd apps/battery
+npm run deploy           # 建置（含 LifeRPG）並部署到 Cloudflare Pages 專案 liferpg-adventure
+npm run db:seed:remote   # 重建示範資料（以當天為基準，錄影前要跑）
+```
 
-LifeRPG 的安全標頭在 `_headers`（Cloudflare）、`vercel.json`、`staticwebapp.config.json` 三個檔案，內容要保持一致。
+機密用 `npx wrangler pages secret put <名稱>` 設定。舊網址 social-battery-meter.pages.dev 與 liferpg-1h4.pages.dev 已 301 轉到新網址。
 
 ## 歷史
 
-本 repo 由兩個專案以 `git subtree` 合併，保留各自完整的 commit 歷史。
+本 repo 由兩個專案（LifeRPG、社交電量計）以 `git subtree` 合併，保留各自完整的 commit 歷史，之後整合成單一 App。

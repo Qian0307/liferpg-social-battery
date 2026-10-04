@@ -203,6 +203,43 @@ button:focus-visible,a:focus-visible{outline:3px solid #9c87e9;outline-offset:3p
 .quiz-opt:has(input:checked){border-color:var(--violet);background:var(--lavender)}
 @media(max-width:600px){.stat-chips{grid-template-columns:repeat(2,1fr)}.week-bars{gap:5px}}
 @media(max-width:600px){.subject-picker{padding:0}.subject-picker>input[type="text"]{font-size:16px;min-height:48px}.subject-chip{min-height:36px}.training-tag{font-size:10px;padding:8px 12px;margin-top:14px}.subject-classification select{font-size:14px}.skill-toolbar>.btn{align-self:flex-start}}
+/* Life battery tab (merged from the battery meter) */
+[hidden]{display:none!important}
+.link-btn{border:0;background:none;padding:0;color:var(--purple-dark);font:inherit;font-size:11px;cursor:pointer}
+.form-grid.two{grid-template-columns:1fr 1fr}
+.energy-grid{display:grid;gap:18px}
+.energy-hero h2{font-size:24px;margin:6px 0}
+.energy-ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:800;color:var(--green);background:conic-gradient(var(--green) calc(var(--v)*1%),#e8efec 0);position:relative;flex:none}
+.energy-ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}
+.energy-ring span{position:relative}
+.energy-ring.low{color:var(--danger);background:conic-gradient(var(--danger) calc(var(--v)*1%),#f3e6ea 0)}
+.day-pills{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:16px}
+.day-pill{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;font:inherit}
+.day-pill span{font-size:10px;color:var(--muted)}
+.day-pill b{font-size:13px;color:var(--green)}
+.day-pill.low b{color:var(--danger)}
+.day-pill.active{border-color:var(--violet);background:var(--lavender)}
+.act-line{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.act-line:first-child{border-top:0}
+.act-emoji{font-size:22px;width:30px;text-align:center}
+.act-body{flex:1;min-width:0}
+.act-body h4{font-size:13px}
+.act-body p{font-size:11px;color:var(--muted)}
+.act-drain{font-weight:800;font-size:14px;color:var(--green)}
+.act-drain.heavy{color:var(--danger)}
+.report-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.report-row .btn{padding:5px 10px;font-size:10px;min-height:0}
+.voice-box{border:1px dashed var(--violet);border-radius:14px;padding:14px;margin-bottom:16px;background:#faf8ff}
+.voice-box textarea{width:100%;resize:vertical}
+.suggest-line{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.suggest-line:first-child{border-top:0}
+.suggest-line .chip{flex:none}
+.cal-links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.cal-links a{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:12px;font-size:12px;font-weight:700;text-align:center;padding:4px 8px}
+.cal-links .outlook{background:#0F6CBD;color:#fff}
+.cal-links .outlook-org{border:1px solid #0F6CBD;color:#0F6CBD}
+.cal-url{display:block;word-break:break-all;background:#f4f3f8;border-radius:10px;padding:8px 10px;font-size:10px;margin-top:6px}
+@media(max-width:600px){.bottom-nav{grid-template-columns:repeat(6,1fr)}.day-pills{gap:4px}.form-grid.two{grid-template-columns:1fr}.cal-links{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -1003,6 +1040,9 @@ let state,mode=location.hash==='#demo'?'demo':'real',tab='today',selected=null,f
 const channel=typeof BroadcastChannel==='function'?new BroadcastChannel('LifeRPG-v03-updates'):null;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icons={
+ bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7Z"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
  home:'<path d="m3 10 9-7 9 7v10H3Z"/><path d="M9 20v-7h6v7"/>',
  compass:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/>',
  map:'<path d="m3 5 6-2 6 3 6-2v15l-6 2-6-3-6 2Z"/><path d="M9 3v15M15 6v15"/>',
@@ -1092,9 +1132,9 @@ const factory=()=>mode==='demo'?D.demo():D.empty();
    Any network failure only marks the bar offline; focus, records and XP never wait on it. */
 // Served under /rpg/ of the battery site: same origin, no CORS, and the battery session can be linked automatically.
 // Local development only: ?batteryApi=http://localhost:3000 when LifeRPG itself runs standalone on localhost.
-const SAME_SITE=/^\/rpg(\/|$)/.test(location.pathname);
+const SAME_SITE=!(/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&new URLSearchParams(location.search).has('batteryApi'));
 const BATTERY_API=(()=>{if(SAME_SITE)return location.origin;const local=/^(localhost|127\.0\.0\.1)$/.test(location.hostname),o=new URLSearchParams(location.search).get('batteryApi');
-  return local&&o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d{1,5})?$/.test(o)?o:'https://social-battery-meter.pages.dev';})();
+  return local&&o&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d{1,5})?$/.test(o)?o:'https://liferpg-adventure.pages.dev';})();
 const AUTO_LINK_OFF='liferpg-battery-autolink-off';
 const autoLinkAllowed=()=>{try{return localStorage.getItem(AUTO_LINK_OFF)!=='1';}catch{return true;}};
 const setAutoLink=on=>{try{on?localStorage.removeItem(AUTO_LINK_OFF):localStorage.setItem(AUTO_LINK_OFF,'1');}catch{}};
@@ -1160,7 +1200,119 @@ function batteryInner(){
   if(battery.status==='offline'&&!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="chip neutral">離線</span></div><p class="field-help" style="margin-top:6px">暫時連不上電量計，冒險照常進行。</p>`;
   if(!battery.data)return `<div class="battery-head"><span>${I('spark')}生活電量</span><span class="small muted">讀取中…</span></div><div class="progress battery"><span style="width:0"></span></div>`;
   const t=battery.data.today,v=pct(t.remainingBattery),low=t.isLow===true;
-  return `<div class="battery-head"><span>${I('spark')}生活電量${battery.data.demo?' <span class="chip neutral">示範</span>':''}${battery.status==='offline'?' <span class="chip neutral">離線</span>':''}</span><b class="num ${low?'low':''}">${v}%</b></div><div class="progress battery ${low?'low':''}" role="progressbar" aria-label="今天行程結束後的預估生活電量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><span style="width:${v}%"></span></div><div class="between small muted"><span>起床 ${pct(t.startBattery)}% · 今日行程後 ${v}%</span><a href="${BATTERY_API}/week" style="color:var(--purple-dark)">${pct(t.activityCount)} 個行程 · 看一週 →</a></div>`;}
+  return `<div class="battery-head"><span>${I('spark')}生活電量${battery.data.demo?' <span class="chip neutral">示範</span>':''}${battery.status==='offline'?' <span class="chip neutral">離線</span>':''}</span><b class="num ${low?'low':''}">${v}%</b></div><div class="progress battery ${low?'low':''}" role="progressbar" aria-label="今天行程結束後的預估生活電量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><span style="width:${v}%"></span></div><div class="between small muted"><span>起床 ${pct(t.startBattery)}% · 今日行程後 ${v}%</span><button class="link-btn" data-act="nav" data-tab="energy">${pct(t.activityCount)} 個行程 · 看一週 →</button></div>`;}
+/* ===== 生活電量分頁：行程、語音輸入與 AI 辨識、七天電量、排程建議、週回顧、Outlook 行事曆 =====
+   All calls are same-origin and use the anonymous battery cookie. Failures only show a message; the game keeps working. */
+const LIFE_TYPES=['study','work','exercise','commute','chores'];
+const SOCIAL_TYPES=['meal','meeting','date','class','party','other'];
+const TYPE_META={meal:['吃飯聚餐','🍜'],meeting:['會議','💼'],date:['約會','💐'],class:['上課','📚'],party:['派對','🎉'],other:['其他社交','✨'],study:['課業／考試','📖'],work:['工作／打工','💻'],exercise:['運動','🏃'],commute:['通勤','🚌'],chores:['家務雜事','🧺'],recovery:['恢復時間','🌿']};
+const FAMILIARITY=['','完全陌生','點頭之交','普通朋友','熟識朋友','最親密的人'];
+const INTENSITY=['','很輕鬆','輕鬆','普通','吃力','非常吃力'];
+const FIELD_NAMES={type:'類型',headcount:'人數',familiarity:'熟悉度',intensity:'強度',durationMinutes:'時長',scheduledAt:'時間'};
+let energy,recognition=null;
+function resetEnergy(){energy={week:null,status:'idle',error:'',day:null,warnings:'idle',plan:null,planStatus:'idle',review:null,reviewStatus:'idle',sub:null,imported:null};}
+resetEnergy();
+const meta=t=>TYPE_META[t]||['其他','✨'];
+async function api(path,init={}){
+  const res=await fetch(path,{credentials:'same-origin',cache:'no-store',...init,headers:{'Content-Type':'application/json',...(init.headers||{})}});
+  const body=await res.json().catch(()=>null);
+  if(!res.ok){const err=new Error(typeof body?.error==='string'?body.error:'連線失敗，請稍後再試');err.status=res.status;throw err;}
+  if(!body||typeof body!=='object')throw new Error('伺服器回應格式不正確');
+  return body;
+}
+const taipei=iso=>{const d=new Date(new Date(iso).getTime()+28800000).toISOString();return {date:d.slice(0,10),time:d.slice(11,16)};};
+function defaultWhen(){const d=new Date(Date.now()+28800000+3600000);d.setUTCMinutes(0,0,0);return d.toISOString().slice(0,16);}
+const drainText=n=>{n=Math.round(Number(n)||0);return n<0?`+${-n}%`:`-${n}%`;};
+function loadText(a){if(a.type==='recovery')return '恢復行動';if(LIFE_TYPES.includes(a.type)){const i=pct(a.intensity||3)||3;return `強度 ${i}/5（${INTENSITY[i]||''}）`;}return `${pct(a.headcount)} 人・熟悉度 ${pct(a.familiarity)}/5`;}
+const weekdayOf=date=>'週'+'日一二三四五六'[new Date(date+'T00:00:00Z').getUTCDay()];
+function energyRender(){if(tab==='energy')render();}
+function needAccount(e){if(e?.status===401){energy.status='noaccount';energyRender();return true;}return false;}
+function afterChange(){battery.inflight=false;refreshBattery();loadWeek(true);}
+
+async function loadWeek(force=false){
+  if(energy.status==='loading'||(!force&&energy.week))return;
+  energy.status='loading';energyRender();
+  try{
+    const w=await api('/api/activities/week?warnings=0');if(!Array.isArray(w.days))throw new Error('資料格式不正確');
+    energy.week=w;energy.status='ok';if(!energy.day||!w.days.some(d=>d.date===energy.day))energy.day=w.days[0]?.date||null;energyRender();
+    if(w.days.some(d=>d.isLow)){energy.warnings='loading';energyRender();try{const full=await api('/api/activities/week');if(Array.isArray(full.days))energy.week=full;}catch{}energy.warnings='ok';energyRender();}
+  }catch(e){if(needAccount(e))return;energy.status='error';energy.error=e.message;energyRender();}
+}
+
+function energyPage(){
+  if(energy.status==='idle')setTimeout(()=>loadWeek(),0);
+  if(energy.status==='noaccount')return `<section class="card"><div class="eyebrow">LIFE BATTERY</div><h2 style="margin:8px 0 10px">先認識你的生活電量</h2><p class="small muted" style="margin-bottom:16px">做 6 題社交情境快篩，算出你的基礎電量與恢復方式。之後社交、課業、工作、運動的行程都會在這裡估算耗電，AI 嚮導也會依電量給建議。</p><div class="row">${button('開始快篩 '+I('arrow'),'quiz-open','','primary')}${button('先用示範電量','battery-demo','','ghost')}</div></section>`;
+  if(energy.status==='error'&&!energy.week)return `<section class="card"><h2 style="margin-bottom:10px">生活電量</h2><p class="small muted">${esc(energy.error)}</p>${button('重新讀取','energy-reload','','ghost')}</section>`;
+  if(!energy.week)return `<section class="card"><p class="small muted">正在讀取你的生活電量…</p></section>`;
+  const w=energy.week,today=w.days[0],day=w.days.find(d=>d.date===energy.day)||today,profile=w.profile||{};
+  const v=pct(today?.remainingBattery),low=today?.isLow===true;
+  const hero=`<section class="card energy-hero"><div class="between" style="gap:18px"><div><div class="eyebrow">TODAY · ${esc(today?.date?dateText(today.date):'')}</div><h2>今天行程結束後剩 ${v}%</h2><p class="small muted">起床 ${pct(today?.startBattery)}% · ${today?.activities?.length||0} 個行程 · 基礎電量 ${pct(profile.baseBatteryCapacity)}%</p>${profile.summary?`<p class="small muted" style="margin-top:6px">${esc(profile.summary)}</p>`:''}</div><div class="energy-ring ${low?'low':''}" style="--v:${v}"><span>${v}%</span></div></div>
+    <div class="row" style="margin-top:18px;flex-wrap:wrap;gap:8px">${button(I('mic')+'語音／文字新增行程','activity-new','','primary')}${button(I('plus')+'手動新增','activity-new','data-manual="1"','ghost')}${button('重新快篩','quiz-open','','ghost')}</div></section>`;
+  const pills=`<div class="day-pills">${w.days.map((d,i)=>`<button class="day-pill ${d.isLow?'low':''} ${d.date===day.date?'active':''}" data-act="energy-day" data-date="${esc(d.date)}"><span>${i===0?'今天':weekdayOf(d.date)}</span><b>${pct(d.remainingBattery)}%</b><span>${dateText(d.date)}</span></button>`).join('')}</div>`;
+  const now=Date.now();
+  const acts=(day.activities||[]).map(a=>{const t=taipei(a.scheduledAt),m=meta(a.type),drain=a.actualDrain??a.predictedDrain,ended=new Date(a.scheduledAt).getTime()+a.durationMinutes*60000<now;
+    const report=ended&&a.actualDrain===null&&a.type!=='recovery'?`<div class="report-row">${['more','same','less'].map(fb=>button({more:'比預期累',same:'差不多',less:'比預期輕鬆'}[fb],'report',`data-id="${esc(a.id)}" data-fb="${fb}"`,'ghost')).join('')}</div>`:'';
+    return `<div class="act-line"><div class="act-emoji">${m[1]}</div><div class="act-body"><h4>${t.time} · ${esc(m[0])}</h4><p>${loadText(a)} · ${minutes(a.durationMinutes*60)} 分鐘 · ${a.actualDrain!==null?'實際':'預估'}</p>${report}</div><div class="act-drain ${drain>=40?'heavy':''}">${drainText(drain)}</div></div>`;}).join('')||'<div class="empty small">這天沒有行程，是完整的恢復日。</div>';
+  const warn=day.isLow?`<div class="notice warning" style="margin-top:14px">${day.warning?esc(day.warning):energy.warnings==='loading'?'AI 正在看這天的行程…':'這天電量偏低，記得留一點恢復時間。'}</div>`:'';
+  const weekCard=`<section class="card"><div class="between card-title"><div><div class="eyebrow">NEXT 7 DAYS</div><h2 style="margin:7px 0 0">七天電量與行程</h2></div>${button(I('growth'),'energy-reload','aria-label="重新讀取"','ghost icononly')}</div>${pills}<h3 style="margin-bottom:6px">${esc(dateText(day.date))}（${day.date===today.date?'今天':weekdayOf(day.date)}）起床 ${pct(day.startBattery)}% → 剩 ${pct(day.remainingBattery)}%</h3>${acts}${warn}</section>`;
+  const plan=energy.plan,planList=plan&&Array.isArray(plan.suggestions)?plan.suggestions.map((sg,i)=>`<div class="suggest-line"><span class="chip ${sg.rating==='best'?'green':sg.rating==='avoid'?'gold':'neutral'}">${{best:'最推薦',ok:'可以',avoid:'不建議'}[sg.rating]||''}</span><div style="flex:1"><b class="small">${esc(dateText(String(sg.date)))}（${esc(weekdayOf(String(sg.date)))}）${esc(sg.startTime)}</b><p class="small muted">${esc(sg.reason)}</p></div>${sg.rating!=='avoid'?button('排進這天','plan-add',`data-i="${i}"`,'ghost'):''}</div>`).join(''):'';
+  const planCard=`<section class="card"><div class="eyebrow">AI PLANNER</div><h2 style="margin:7px 0 12px">幫我找最適合的時間</h2><form id="plan-form" class="form-grid"><textarea name="description" rows="2" maxlength="300" required placeholder="例如：想找五個同學吃飯，大概兩小時">${esc(plan?.description||'')}</textarea><button type="submit" class="btn primary">${energy.planStatus==='loading'?'AI 規劃中…':'AI 排程建議'}</button></form>${plan?`<p class="small muted" style="margin:12px 0 4px">${esc(meta(plan.activity?.type)[0])} · 預估消耗 ${pct(plan.estimatedDrain)}% · ${plan.source==='ai'?'AI 建議':'規則式建議'}</p>${planList}`:''}</section>`;
+  const r=energy.review,acc=r?.accuracy||{};
+  const reviewCard=`<section class="card"><div class="eyebrow">WEEKLY REVIEW</div><h2 style="margin:7px 0 12px">過去七天回顧</h2>${energy.reviewStatus==='loading'?'<p class="small muted">AI 正在整理這週…</p>':r?.summary?`<h3 style="margin-bottom:8px">${esc(r.summary.headline)}</h3>${Array.isArray(r.summary.observations)?`<ul style="padding-left:18px;margin-bottom:10px">${r.summary.observations.map(o=>`<li class="small" style="margin-bottom:4px">${esc(o)}</li>`).join('')}</ul>`:''}<div class="notice">${esc(r.summary.suggestion)}</div><p class="small muted" style="margin-top:10px">回報 ${pct(acc.reported)} 筆${acc.avgError!=null?` · 預測平均誤差 ${esc(acc.avgError)}%`:''} · ${r.summary.source==='ai'?'由 AI 整理':'規則式整理'}</p>`:`<p class="small muted" style="margin-bottom:12px">回報「比預期累／輕鬆」越多，預測越準，基礎電量也會自動校準。</p>${button('產生本週回顧','review-load','','ghost')}`}</section>`;
+  const sub=energy.sub,imp=energy.imported;
+  const calCard=`<section class="card"><div class="eyebrow">OUTLOOK CALENDAR</div><h2 style="margin:7px 0 12px">Outlook 行事曆</h2><h3 style="margin-bottom:6px">同步到 Outlook</h3><p class="small muted">行程與電量預警會出現在 Outlook 行事曆，之後自動更新。</p>${sub?`<div class="cal-links"><a class="outlook" target="_blank" rel="noopener noreferrer" href="${esc(outlookAdd('https://outlook.live.com',sub.url))}">加入 Outlook（個人帳號）</a><a class="outlook-org" target="_blank" rel="noopener noreferrer" href="${esc(outlookAdd('https://outlook.office.com',sub.url))}">加入 Outlook（學校／公司）</a></div><a class="small" href="${esc(sub.webcalUrl)}">或加入 Apple 行事曆</a><code class="cal-url">${esc(sub.url)}</code>`:`<div style="margin:10px 0">${button(I('calendar')+'產生訂閱連結','calendar-sub','','ghost')}</div>`}
+    <div class="divider"></div><h3 style="margin-bottom:6px">從 Outlook 匯入</h3><p class="small muted">貼上 Outlook「發佈行事曆」的 ICS 連結，或選擇匯出的 .ics 檔，未來 7 天的課、會議、打工、運動會自動分類並估算耗電。行程標題只用來分類，不會儲存。</p><form id="import-form" class="row" style="gap:8px;margin-top:10px"><input name="url" type="url" placeholder="https://outlook.live.com/owa/calendar/…/calendar.ics" style="flex:1;min-width:0"><button type="submit" class="btn">匯入</button></form><div style="margin-top:8px">${button('選擇 .ics 檔案','import-file','','ghost')}<input type="file" id="ics-file" accept=".ics,text/calendar" hidden></div>${imp?`<p class="small" style="margin-top:10px;color:var(--green)">找到 ${pct(imp.found)} 個行程，新增 ${pct(imp.imported)} 個${imp.skipped?`，${pct(imp.skipped)} 個先前已匯入`:''}。</p>`:''}</section>`;
+  return `<div class="energy-grid" data-energy-root>${hero}${weekCard}<div class="dashboard"><div class="main-column">${planCard}${reviewCard}</div><aside class="aside-column">${calCard}</aside></div></div>`;
+}
+function outlookAdd(origin,url){return `${origin}/calendar/0/addfromweb?url=${encodeURIComponent(url)}&name=${encodeURIComponent('LifeRPG 生活電量')}`;}
+
+function activityForm(prefill={}){
+  const p={type:'meal',headcount:4,familiarity:3,intensity:3,durationMinutes:90,scheduledAt:defaultWhen(),...prefill},life=LIFE_TYPES.includes(p.type);
+  const opts=list=>list.map(t=>`<option value="${t}" ${p.type===t?'selected':''}>${meta(t)[1]} ${meta(t)[0]}</option>`).join('');
+  const lv=(name,labels,cur)=>[1,2,3,4,5].map(n=>`<option value="${n}" ${Number(cur)===n?'selected':''}>${n}・${labels[n]}</option>`).join('');
+  openModal('新增行程',`<div class="voice-box"><label for="activity-describe" class="field-label">用一句話描述，或直接用說的</label><textarea id="activity-describe" rows="2" maxlength="300" placeholder="例如：明天晚上七點跟五個不太熟的同學吃飯兩小時"></textarea><div class="row" style="gap:8px;margin-top:8px">${button(I('mic')+'語音輸入','voice-start','id="voice-btn"','ghost')}${button(I('spark')+'AI 辨識','ai-parse','','ghost')}</div><p class="field-help" id="voice-status">說完或打完字後，AI 會辨識並填好下面的欄位。</p></div>
+  <form id="activity-form" class="form-grid"><label>類型<select name="type" id="activity-type"><optgroup label="社交活動">${opts(SOCIAL_TYPES)}</optgroup><optgroup label="生活活動">${opts(LIFE_TYPES)}</optgroup></select></label>
+  <div class="form-grid two" data-social ${life?'hidden':''}><label>人數<input name="headcount" type="number" min="1" max="500" value="${pct(p.headcount)||1}"></label><label>熟悉度<select name="familiarity">${lv('familiarity',FAMILIARITY,p.familiarity)}</select></label></div>
+  <div data-life ${life?'':'hidden'}><label>強度<select name="intensity">${lv('intensity',INTENSITY,p.intensity)}</select></label></div>
+  <div class="form-grid two"><label>時長（分鐘）<input name="durationMinutes" type="number" min="5" max="1440" step="5" value="${Math.max(5,Math.min(1440,Number(p.durationMinutes)||90))}" required></label><label>日期時間<input name="scheduledAt" type="datetime-local" value="${esc(p.scheduledAt)}" required></label></div>
+  <button type="submit" class="btn primary">加入行程</button></form>`);
+}
+function toggleActivityFields(){const f=$('#activity-form');if(!f)return;const life=LIFE_TYPES.includes(f.elements.type.value);f.querySelector('[data-social]').hidden=life;f.querySelector('[data-life]').hidden=!life;}
+function startVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,status=$('#voice-status'),box=$('#activity-describe'),btn=$('#voice-btn');
+  if(!status||!box)return;
+  if(!SR){status.textContent='這個瀏覽器不支援語音輸入，請直接打字（建議使用 Edge 或 Chrome）。';return;}
+  if(recognition){recognition.stop();return;}
+  recognition=new SR();recognition.lang='zh-TW';recognition.interimResults=true;recognition.continuous=false;
+  let finalText='';
+  recognition.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)finalText+=t;else interim+=t;}box.value=(finalText+interim).slice(0,300);};
+  recognition.onerror=e=>{status.textContent=e.error==='not-allowed'||e.error==='service-not-allowed'?'沒有麥克風權限，請在瀏覽器允許後再試，或直接打字。':'語音辨識中斷，請再試一次或直接打字。';};
+  recognition.onend=()=>{recognition=null;const b=$('#voice-btn');if(b)b.innerHTML=I('mic')+'語音輸入';if($('#activity-describe')?.value.trim())aiParse();};
+  try{recognition.start();status.textContent='聆聽中…說完會自動交給 AI 辨識';if(btn)btn.innerHTML=I('pause')+'停止';}catch{recognition=null;status.textContent='無法啟動語音輸入，請直接打字。';}
+}
+async function aiParse(){
+  const box=$('#activity-describe'),status=$('#voice-status'),f=$('#activity-form');if(!box||!f)return;const text=box.value.trim();
+  if(!text){status.textContent='先說一句話或打字描述這個行程。';return;}
+  status.textContent='AI 辨識中…';
+  try{const r=await api('/api/parse-voice-activity',{method:'POST',body:JSON.stringify({transcript:text.slice(0,500)})});
+    if(r.crisis){status.textContent=r.message;return;}
+    const a=r.activity;if(!a||!TYPE_META[a.type]||a.type==='recovery')throw new Error('辨識結果格式不正確，請手動填寫');
+    f.elements.type.value=a.type;f.elements.headcount.value=pct(a.headcount)||1;f.elements.familiarity.value=Math.min(5,Math.max(1,pct(a.familiarity)||3));if(a.intensity)f.elements.intensity.value=Math.min(5,Math.max(1,pct(a.intensity)));
+    f.elements.durationMinutes.value=Math.max(5,Math.min(1440,Number(a.durationMinutes)||60));if(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(a.scheduledAt))f.elements.scheduledAt.value=a.scheduledAt;toggleActivityFields();
+    const src=r.source==='ai'?(r.provider==='workers-ai'?'Workers AI（Llama）':'AI'):'關鍵字規則';
+    const skip=LIFE_TYPES.includes(a.type)?['headcount','familiarity']:['intensity'];
+    const unsure=(Array.isArray(a.uncertainFields)?a.uncertainFields:[]).filter(x=>!skip.includes(x)).map(x=>FIELD_NAMES[x]).filter(Boolean);
+    status.textContent=`已由 ${src} 填好：${meta(a.type)[0]}・${String(a.scheduledAt).replace('T',' ')}。${unsure.length?'這幾項是猜的，請確認：'+unsure.join('、'):'確認後按「加入行程」。'}`;}
+  catch(e){if(e.status===401){closeModal();quizForm();return;}status.textContent=e.message;}
+}
+async function createActivity(input){
+  const life=LIFE_TYPES.includes(input.type);
+  return api('/api/activities',{method:'POST',body:JSON.stringify({type:input.type,headcount:life?1:Math.max(1,Number(input.headcount)||1),familiarity:life?3:Math.min(5,Math.max(1,Number(input.familiarity)||3)),intensity:life?Math.min(5,Math.max(1,Number(input.intensity)||3)):null,durationMinutes:Math.max(5,Math.min(1440,Number(input.durationMinutes)||60)),scheduledAt:input.scheduledAt})});
+}
+async function importCalendar(payload){
+  try{energy.imported=await api('/api/calendar/import',{method:'POST',body:JSON.stringify(payload)});toast(`已匯入 ${pct(energy.imported.imported)} 個行程。`);afterChange();}
+  catch(e){if(!needAccount(e))toast(e.message,true);}
+}
 const WEEKDAY='日一二三四五六';
 function weekStats(){
   const d=battery.data;if(!d||!Array.isArray(d.week))return '';
@@ -1172,7 +1324,7 @@ function weekStats(){
   return `<div class="guide-section-title">未來七天電量</div>${bars}
     <div class="stat-chips"><div><span>平均剩餘</span><b>${pct(st.averageRemaining)}%</b></div><div><span>最累的一天</span><b>${lowest}</b></div><div><span>行程總耗電</span><b>${Math.max(0,Math.round(Number(st.totalDrain)||0))}%</b></div><div><span>恢復回充</span><b>+${Math.max(0,Math.round(Number(st.recovered)||0))}%</b></div></div>
     ${types.length?`<div class="type-chips">${types.map(t=>{const n=Math.round(Number(t.drain)||0);return `<span class="chip neutral">${esc(t.emoji||'')} ${esc(t.label)} ${Math.max(0,Math.round(Number(t.count)||0))} 次 · ${n<0?'+'+(-n):'-'+n}%</span>`;}).join('')}</div>`:''}
-    <p class="field-help" style="margin-top:10px"><a href="${BATTERY_API}/week" style="color:var(--purple-dark)">在生活電量計看完整一週 →</a></p>`;
+    <p class="field-help" style="margin-top:10px"><button class="link-btn" data-act="nav" data-tab="energy">查看完整一週、新增行程 →</button></p>`;
 }
 function guideCard(){return `<section class="card guide-card" data-guide-slot>${guideInner()}</section>`;}
 function guideSource(g){if(g.source==='ai')return g.provider==='azure-openai'?'由 Azure OpenAI 產生':g.provider==='workers-ai'?'由 Workers AI（Llama）產生':'由 AI 產生';return g.source==='crisis'?'安全提醒':'規則式建議 · AI 暫時無法使用';}
@@ -1200,12 +1352,12 @@ function toast(message,error=false){clearTimeout(toastTimeout);$('#toasts').inne
 function error(e){console.error(e);const box=modal.querySelector('.form-error');if(modal.open&&box)box.textContent=e.message||String(e);else toast(e.message||String(e),true);}
 function openModal(title,body){previousFocus=document.activeElement;modal.innerHTML=`<div class="modal-head"><h2 id="modal-title">${esc(title)}</h2>${button(I('close'),'close-modal','aria-label="關閉對話框"','ghost icononly')}</div><div class="modal-body">${body}<div class="form-error" role="alert"></div></div>`;if(!modal.open)modal.showModal();}
 function closeModal(){modal.close();modal.innerHTML='';previousFocus?.focus?.();}
-function navButton(id,name,icon,mini=false){return `<button class="${mini?'':'nav-btn '}${tab===id?'active':''}" data-act="nav" data-tab="${id}">${I(icon)}<span>${name}</span>${!mini?`<small>${id==='today'?'01':id==='goals'?'02':id==='growth'?'03':id==='skills'?'04':'05'}</small>`:''}</button>`;}
-function shell(content){const sc=score(),active=state.active;const labels={today:['YOUR DAILY ADVENTURE','冒險大廳'],goals:['ONE LIFE. MANY QUESTS.','人生目標'],growth:['PROGRESS, NOT PERFECTION','成長軌跡'],skills:['BUILD YOUR OWN SKILL TREE','技能樹'],character:['YOUR ADVENTURER PROFILE','角色檔案'],detail:['CHAPTER DETAILS','目標章節']};const [en,title]=labels[tab]||labels.today;
-return `<div class="shell"><aside class="sidebar">${brand()}<div><div class="side-label">ADVENTURE JOURNAL</div><nav class="nav-stack" aria-label="主導覽">${navButton('today','冒險大廳','compass')}${navButton('goals','人生目標','map')}${navButton('growth','成長軌跡','growth')}${navButton('skills','技能樹','spark')}${navButton('character','角色檔案','user')}</nav></div><div class="side-footer">${SAME_SITE?`<a class="btn ghost full" href="/week">${I('spark')}生活電量計</a>`:''}${button(I(mode==='demo'?'back':'eye')+(mode==='demo'?'返回我的旅程':'體驗示範'),'mode','', 'ghost full')}<div class="local-card"><div class="row" style="gap:7px;margin-bottom:5px">${I('lock')}<b>本機保存 · 無追蹤</b></div>${batteryCode()?'已連結生活電量，只交換電量與恢復時數。':'未連接雲端。'}重要紀錄請定期匯出，避免瀏覽器資料被清除。</div><div class="user-card"><div class="avatar">${I('compass')}</div><div><div class="user-name">${esc(state.player.name)}</div><div class="small muted">Lv. ${sc.character.level} · 冒險者</div></div></div></div></aside><main class="workspace">
+function navButton(id,name,icon,mini=false){return `<button class="${mini?'':'nav-btn '}${tab===id?'active':''}" data-act="nav" data-tab="${id}">${I(icon)}<span>${name}</span>${!mini?`<small>${String(['today','energy','goals','growth','skills','character'].indexOf(id)+1).padStart(2,'0')}</small>`:''}</button>`;}
+function shell(content){const sc=score(),active=state.active;const labels={today:['YOUR DAILY ADVENTURE','冒險大廳'],goals:['ONE LIFE. MANY QUESTS.','人生目標'],growth:['PROGRESS, NOT PERFECTION','成長軌跡'],skills:['BUILD YOUR OWN SKILL TREE','技能樹'],character:['YOUR ADVENTURER PROFILE','角色檔案'],detail:['CHAPTER DETAILS','目標章節'],energy:['YOUR LIFE BATTERY','生活電量']};const [en,title]=labels[tab]||labels.today;
+return `<div class="shell"><aside class="sidebar">${brand()}<div><div class="side-label">ADVENTURE JOURNAL</div><nav class="nav-stack" aria-label="主導覽">${navButton('today','冒險大廳','compass')}${navButton('energy','生活電量','bolt')}${navButton('goals','人生目標','map')}${navButton('growth','成長軌跡','growth')}${navButton('skills','技能樹','spark')}${navButton('character','角色檔案','user')}</nav></div><div class="side-footer">${button(I(mode==='demo'?'back':'eye')+(mode==='demo'?'返回我的旅程':'體驗示範'),'mode','', 'ghost full')}<div class="local-card"><div class="row" style="gap:7px;margin-bottom:5px">${I('lock')}<b>本機保存 · 無追蹤</b></div>${batteryCode()?'生活電量以匿名帳號存放；目標、紀錄與 XP 只在本機。':'未連接雲端。'}重要紀錄請定期匯出，避免瀏覽器資料被清除。</div><div class="user-card"><div class="avatar">${I('compass')}</div><div><div class="user-name">${esc(state.player.name)}</div><div class="small muted">Lv. ${sc.character.level} · 冒險者</div></div></div></div></aside><main class="workspace">
 ${mode==='demo'?`<div class="demo-banner"><span>示範世界 · 以下是試玩資料，不計入你的正式紀錄。</span>${button('返回我的旅程','mode')}</div>`:''}
 <header class="topbar"><div><div class="eyebrow">${en}</div><h1>${title}</h1></div><div class="top-actions"><span class="date-label">${new Intl.DateTimeFormat('zh-TW',{month:'long',day:'numeric',weekday:'short',timeZone:'Asia/Taipei'}).format(new Date())}</span>${button(I('plus')+'新增目標','goal-new','', 'primary')}</div></header>
-${active?`<div class="resume-banner"><div><strong>你有一場${({running:'進行中',paused:'暫停中',break:'休息中',ready:'等待下一回合',review:'待結算'})[active.state]}的戰鬥</strong><p>${esc(active.task)} · <span data-active-elapsed>${fmt(D.seconds(active))}</span></p></div>${button('返回戰場 '+I('arrow'),'battle','','primary')}</div>`:''}${content}</main><nav class="bottom-nav" aria-label="行動版主導覽">${navButton('today','今日','compass',true)}${navButton('goals','目標','map',true)}${navButton('growth','成長','growth',true)}${navButton('skills','技能','spark',true)}${navButton('character','角色','user',true)}</nav></div>`;}
+${active?`<div class="resume-banner"><div><strong>你有一場${({running:'進行中',paused:'暫停中',break:'休息中',ready:'等待下一回合',review:'待結算'})[active.state]}的戰鬥</strong><p>${esc(active.task)} · <span data-active-elapsed>${fmt(D.seconds(active))}</span></p></div>${button('返回戰場 '+I('arrow'),'battle','','primary')}</div>`:''}${content}</main><nav class="bottom-nav" aria-label="行動版主導覽">${navButton('today','今日','compass',true)}${navButton('energy','電量','bolt',true)}${navButton('goals','目標','map',true)}${navButton('growth','成長','growth',true)}${navButton('skills','技能','spark',true)}${navButton('character','角色','user',true)}</nav></div>`;}
 function levelCard(){const p=score().character;return `<section class="card level-card"><div class="level-top"><div class="avatar">${I('compass','big')}</div><div><div class="eyebrow">ADVENTURER</div><div class="level-number">Lv. ${p.level}</div></div></div><div class="between small"><b>${esc(state.player.name)}</b><span class="muted">冒險者</span></div><div class="progress" role="progressbar" aria-label="角色升級進度" aria-valuenow="${p.xpIntoLevel}" aria-valuemin="0" aria-valuemax="${p.nextLevelXP-p.levelStartXP}"><span style="width:${p.progress*100}%"></span></div><div class="between small muted"><span>${p.xpIntoLevel} / ${p.nextLevelXP-p.levelStartXP} XP</span><span>距升級 ${p.xpToNextLevel} XP</span></div>${batteryBar()}<div class="mini-metrics"><div><b>${p.totalXP}</b><span>累積 XP</span></div><div><b>${state.goals.filter(g=>g.status==='completed').length}</b><span>已完成目標</span></div></div></section>`;}
 function checkpointList(g,interactive=false){return `<div class="checkpoint-list">${g.checkpoints.map((c,i)=>`<div class="checkpoint ${c.completedAt?'done':''}"><span class="checkpoint-mark">${c.completedAt?I('check'):String(i+1).padStart(2,'0')}</span><div><h4>${esc(c.title)}</h4>${c.completedAt?`<p>已確認 · ${dateText(D.day(Date.parse(c.completedAt)/1000))}</p>`:''}</div>${interactive&&g.status!=='archived'?button(c.completedAt?'更正':'確認成果','checkpoint',`data-goal="${g.id}" data-checkpoint="${c.id}"`,'ghost'):''}</div>`).join('')}</div>`;}
 function todayPage(){const sc=score(),today=sc.days[D.day(D.now())],g=currentGoal(),available=state.goals.filter(g=>g.status==='active').slice(0,3);
@@ -1226,7 +1378,7 @@ function sessionList(list,sc){if(!list.length)return '<div class="empty small">�
 function growthPage(){const sc=score(),today=D.dayStart(D.day(D.now())),start=today-(range-1)*86400,valid=state.sessions.filter(r=>!r.voidedAt);const phaseEvents=state.goals.flatMap(g=>g.checkpoints.filter(c=>c.completedAt&&Date.parse(c.completedAt)/1000>=start).map(c=>({g,c}))).sort((a,b)=>Date.parse(b.c.completedAt)-Date.parse(a.c.completedAt));const inDays=Object.values(sc.days).filter(d=>D.dayStart(d.localDate)>=start);const timed=inDays.reduce((n,d)=>n+d.focusSeconds,0);const bars=D.DOMAINS.map(d=>({d,seconds:D.activities(state).filter(a=>D.skillMeta(state,a.skillId).domainId===d.id&&D.dayStart(a.localDate)>=start).reduce((n,a)=>n+a.focusSeconds,0)}));const barMax=Math.max(...bars.map(x=>x.seconds),1);
 return `<div class="between" style="margin-bottom:22px;align-items:flex-start"><p class="small muted">投入、成果與人生價值不同。這裡呈現的是你的紀錄。</p><div class="row" style="gap:5px">${[7,30,90].map(d=>`<button class="filter ${range===d?'active':''}" data-act="range" data-range="${d}" style="padding:8px 12px;font-size:11px">${d} 天</button>`).join('')}</div></div><div class="dashboard"><div class="main-column"><section class="card"><div class="between card-title"><div><div class="eyebrow">LIFE TRAJECTORY</div><h2 style="margin:7px 0">成長，正在發生</h2><p class="small muted">最近 ${range} 天的歷程 · 累積值含更早紀錄</p></div><div style="text-align:right"><div class="chart-total">${sc.totalXP}</div><div class="small muted">累積 XP</div></div></div>${chart(sc)}</section><section class="card"><div class="between card-title"><h3>實際成果 · Boss 關卡</h3><span class="chip gold">${phaseEvents.length} 個</span></div>${phaseEvents.length?phaseEvents.map(({g,c})=>`<div class="timeline-line">${I('flag')}<div class="timeline-text"><h4>${esc(c.title)}</h4><p>${D.day(Date.parse(c.completedAt)/1000)} · ${esc(g.title)} · 使用者確認</p></div><span class="chip green">已完成</span></div>`).join(''):'<div class="empty small">尚未確認成果關卡。計時不會自動把目標標記為完成。</div>'}</section><section class="card"><div class="between card-title"><h3>行動時間軸</h3>${button(I('edit')+'補登','manual','','ghost')}</div>${sessionList(valid.filter(r=>r.segments.some(p=>p.end>start)).slice().sort((a,b)=>Date.parse(b.recordedAt)-Date.parse(a.recordedAt)),sc)}</section></div><aside class="aside-column"><section class="card"><div class="eyebrow">RECORDED EFFORT</div><h3 style="margin:9px 0 7px">最近 ${range} 天的投入</h3><p class="small muted">已記錄 ${minutes(timed)} 分鐘 · ${inDays.length} 個日期</p>${bars.filter(x=>x.seconds>0).map(({d,seconds})=>`<div class="bar-row"><span>${d.name}</span><span class="bar-track"><span style="width:${100*seconds/barMax}%"></span></span><span class="num muted">${minutes(seconds)}</span></div>`).join('')||'<div class="empty small">還沒有專注時間紀錄。</div>'}<p class="field-help">單位：分鐘。不受每日 XP 上限裁切；未記錄的日子不等於沒有努力。</p></section><section class="card"><div class="row">${I('shield')}<h3>分數不是你的價值</h3></div><p class="small muted" style="margin-top:13px">XP 是已記錄投入的遊戲回饋，不是智力、能力或健康評分。不同領域不需要平均分配。</p></section><div class="quote-card">真正值得回看的，<br>是數字背後做過的事。<small>A STORY, NOT JUST A SCORE.</small></div></aside></div>`;}
 function characterPage(){const sc=score(),p=sc.character,valid=state.sessions.filter(r=>!r.voidedAt),weekStart=D.dayStart(D.day(D.now()))-((new Date((D.now()+28800)*1000).getUTCDay()+6)%7)*86400;const weeks=new Map();for(const a of D.activities(state)){const t=D.dayStart(a.localDate),w=t-((new Date((t+28800)*1000).getUTCDay()+6)%7)*86400;if(!weeks.has(w))weeks.set(w,new Set());weeks.get(w).add(a.localDate);}const hasThreeDayWeek=[...weeks.values()].some(ds=>ds.size>=3);const achievements=[{name:'踏出第一步',sub:'第一筆有效紀錄',icon:'compass',ok:valid.length>0},{name:'三日行動',sub:'同一週三個不同紀錄日',icon:'spark',ok:hasThreeDayWeek},{name:'首個里程碑',sub:'確認一個成果關卡',icon:'trophy',ok:state.goals.some(g=>g.checkpoints.some(c=>c.completedAt))}];
-return `<section class="profile-hero"><div class="between"><div class="row" style="gap:20px"><div class="avatar">${I('compass')}</div><div><div class="eyebrow">YOUR CHARACTER</div><h2 style="margin:6px 0">${esc(state.player.name)}</h2><span class="small muted">記錄行動的冒險者 · Lv. ${p.level}</span></div></div>${button(I('edit'),'edit-name','aria-label="修改玩家名稱"','ghost icononly')}</div><div class="progress" style="margin:25px 0 10px"><span style="width:${p.progress*100}%"></span></div><div class="between small muted"><span>${p.xpIntoLevel} / ${p.nextLevelXP-p.levelStartXP} XP</span><span>累積 ${p.totalXP} XP · 距下一級 ${p.xpToNextLevel} XP</span></div>${batteryBar()}</section><div class="profile-grid"><section class="card"><div class="card-title"><h3>正在練習的技能</h3>${button('探索技能樹 '+I('arrow'),'nav','data-tab="skills"','ghost')}<p class="small muted">記錄練習，不推定精通。</p></div>${Object.entries(sc.skillLevels).map(([id,p])=>`<div style="margin:20px 0"><div class="between small"><b>${esc(D.skillMeta(state,id).name)}</b><span class="muted">Lv. ${p.level} · ${p.totalXP} XP</span></div><div class="progress" style="height:5px;margin-top:10px"><span style="width:${p.progress*100}%"></span></div></div>`).join('')||'<div class="empty small">記錄第一段專注後，你的技能會出現在這裡。</div>'}<div class="divider"></div><h3 style="margin-bottom:17px">旅程徽章</h3><div class="badge-grid">${achievements.map(a=>`<div class="badge ${a.ok?'earned':''}">${I(a.icon)}<b>${a.name}</b><p>${a.ok?'已達成':a.sub}</p></div>`).join('')}</div></section><section class="card"><h3 style="margin-bottom:18px">旅程設定與資料</h3><div class="setting-row"><div><h3>戰鬥畫面</h3><p>不影響 XP，可隨時切換。</p></div><select id="scene-setting" aria-label="預設戰鬥畫面" style="width:130px;font-size:11px"><option value="dynamic" ${state.preferences.scene==='dynamic'?'selected':''}>動態戰鬥</option><option value="static" ${state.preferences.scene==='static'?'selected':''}>靜態場景</option><option value="minimal" ${state.preferences.scene==='minimal'?'selected':''}>純計時器</option></select></div><div class="setting-row"><div><h3>生活電量連結</h3><p>${battery.code?'已連結 · 只讀取電量與回報恢復時數':'貼上生活電量計的連結碼'}</p></div>${button(I('spark')+(battery.code?'管理':'設定'),'battery-link')}</div><div class="setting-row"><div><h3>匯出旅程</h3><p>JSON 包含目標、紀錄與備註。</p></div>${button(I('export')+'匯出','export')}</div><div class="setting-row"><div><h3>還原旅程</h3><p>預覽後取代目前資料，不合併。</p></div>${button(I('restore')+'還原','import')}</div><div class="setting-row"><div><h3>${mode==='demo'?'返回正式旅程':'體驗示範世界'}</h3><p>示範與正式資料完全分開。</p></div>${button(I('eye')+'切換','mode')}</div><div class="setting-row"><div><h3>安裝到主畫面</h3><p>上線後可依瀏覽器支援安裝。</p></div><button class="btn" data-act="install-pwa">安裝</button></div><div class="notice" style="margin-top:18px">v0.6 Web App · 單人、本機儲存 · 台北時區。<br>沒有帳號、雲端同步或資料加密。清除瀏覽器資料可能失去紀錄，請定期匯出。<br>連結生活電量時，只會送出連結碼、恢復行動的時數與進行中的目標名稱。${location.protocol==='file:'?'<br><b>目前直接開啟 HTML。不同檔案路徑可能有不同儲存區；長期試用請使用資料包的本機啟動器。</b>':''}</div></section></div>`;}
+return `<section class="profile-hero"><div class="between"><div class="row" style="gap:20px"><div class="avatar">${I('compass')}</div><div><div class="eyebrow">YOUR CHARACTER</div><h2 style="margin:6px 0">${esc(state.player.name)}</h2><span class="small muted">記錄行動的冒險者 · Lv. ${p.level}</span></div></div>${button(I('edit'),'edit-name','aria-label="修改玩家名稱"','ghost icononly')}</div><div class="progress" style="margin:25px 0 10px"><span style="width:${p.progress*100}%"></span></div><div class="between small muted"><span>${p.xpIntoLevel} / ${p.nextLevelXP-p.levelStartXP} XP</span><span>累積 ${p.totalXP} XP · 距下一級 ${p.xpToNextLevel} XP</span></div>${batteryBar()}</section><div class="profile-grid"><section class="card"><div class="card-title"><h3>正在練習的技能</h3>${button('探索技能樹 '+I('arrow'),'nav','data-tab="skills"','ghost')}<p class="small muted">記錄練習，不推定精通。</p></div>${Object.entries(sc.skillLevels).map(([id,p])=>`<div style="margin:20px 0"><div class="between small"><b>${esc(D.skillMeta(state,id).name)}</b><span class="muted">Lv. ${p.level} · ${p.totalXP} XP</span></div><div class="progress" style="height:5px;margin-top:10px"><span style="width:${p.progress*100}%"></span></div></div>`).join('')||'<div class="empty small">記錄第一段專注後，你的技能會出現在這裡。</div>'}<div class="divider"></div><h3 style="margin-bottom:17px">旅程徽章</h3><div class="badge-grid">${achievements.map(a=>`<div class="badge ${a.ok?'earned':''}">${I(a.icon)}<b>${a.name}</b><p>${a.ok?'已達成':a.sub}</p></div>`).join('')}</div></section><section class="card"><h3 style="margin-bottom:18px">旅程設定與資料</h3><div class="setting-row"><div><h3>戰鬥畫面</h3><p>不影響 XP，可隨時切換。</p></div><select id="scene-setting" aria-label="預設戰鬥畫面" style="width:130px;font-size:11px"><option value="dynamic" ${state.preferences.scene==='dynamic'?'selected':''}>動態戰鬥</option><option value="static" ${state.preferences.scene==='static'?'selected':''}>靜態場景</option><option value="minimal" ${state.preferences.scene==='minimal'?'selected':''}>純計時器</option></select></div><div class="setting-row"><div><h3>生活電量連結</h3><p>${battery.code?'已連結 · 只讀取電量與回報恢復時數':'貼上生活電量計的連結碼'}</p></div>${button(I('spark')+(battery.code?'管理':'設定'),'battery-link')}</div><div class="setting-row"><div><h3>匯出旅程</h3><p>JSON 包含目標、紀錄與備註。</p></div>${button(I('export')+'匯出','export')}</div><div class="setting-row"><div><h3>還原旅程</h3><p>預覽後取代目前資料，不合併。</p></div>${button(I('restore')+'還原','import')}</div><div class="setting-row"><div><h3>${mode==='demo'?'返回正式旅程':'體驗示範世界'}</h3><p>示範與正式資料完全分開。</p></div>${button(I('eye')+'切換','mode')}</div><div class="setting-row"><div><h3>安裝到主畫面</h3><p>上線後可依瀏覽器支援安裝。</p></div><button class="btn" data-act="install-pwa">安裝</button></div><div class="notice" style="margin-top:18px">v0.6 Web App · 單人、本機儲存 · 台北時區。<br>沒有帳號、雲端同步或資料加密。清除瀏覽器資料可能失去紀錄，請定期匯出。<br>生活電量（行程、電量、快篩結果）以匿名帳號存在伺服器，不需要註冊；AI 嚮導只會收到進行中的目標名稱。${location.protocol==='file:'?'<br><b>目前直接開啟 HTML。不同檔案路徑可能有不同儲存區；長期試用請使用資料包的本機啟動器。</b>':''}</div></section></div>`;}
 function sceneButtons(){return `<div class="scene-toggle" aria-label="戰鬥畫面模式">${[['dynamic','動態'],['static','靜態'],['minimal','純計時']].map(([id,label])=>`<button data-act="scene" data-scene="${id}" class="${state.preferences.scene===id?'active':''}" aria-pressed="${state.preferences.scene===id}">${label}</button>`).join('')}</div>`;}
 const MODE_LABELS={countdown:'倒數專注',countup:'正計時 · 木樁訓練',pomodoro:'番茄鐘'};
 function timerMessage(a,v) {
@@ -1277,7 +1429,7 @@ function battlePage(){
 }
 function render(){
   if(!state)return;LifeBattle.stop();
-  const pages={today:todayPage,goals:goalsPage,growth:growthPage,character:characterPage,skills:skillsPage,detail:detailPage};
+  const pages={today:todayPage,energy:energyPage,goals:goalsPage,growth:growthPage,character:characterPage,skills:skillsPage,detail:detailPage};
   app.innerHTML=tab==='battle'?battlePage():shell((pages[tab]||todayPage)());
   app.classList.toggle('reduced',matchMedia('(prefers-reduced-motion: reduce)').matches);
   if(tab==='battle'&&state.active){const a=state.active,k=D.skillMeta(state,a.skillId);
@@ -1456,32 +1608,47 @@ case 'day-records':{const d=b.dataset.date,sc=score(),rows=state.sessions.filter
 case 'edit-name':openModal('修改玩家名稱',`<form id="name-form" class="form-grid"><label>名稱<input name="name" value="${esc(state.player.name)}" maxlength="40" required></label><button type="submit" class="btn primary">儲存名稱</button></form>`);break;
 case 'export':await exportData();break;
 case 'battery-link':batteryForm();break;
-case 'battery-demo':setAutoLink(true);await mutate(s=>{D.setBatteryLink(s,'demo-session');});closeModal();render();toast('已套用示範電量。');await refreshBattery();break;
+case 'battery-demo':setAutoLink(true);try{await fetch('/?demo=1',{credentials:'same-origin'});}catch{}resetEnergy();await mutate(s=>{D.setBatteryLink(s,'demo-session');});closeModal();render();toast('已套用示範電量。');await refreshBattery();break;
 case 'battery-unlink':setAutoLink(false);await mutate(s=>{D.setBatteryLink(s,'');});closeModal();render();toast('已取消生活電量連結。');await refreshBattery();break;
 case 'guide-refresh':await refreshGuide(true);break;
 case 'quiz-open':await quizForm();break;
+case 'activity-new':activityForm();if(!b.dataset.manual)setTimeout(()=>$('#activity-describe')?.focus(),50);break;
+case 'voice-start':startVoice();break;
+case 'ai-parse':await aiParse();break;
+case 'energy-day':energy.day=b.dataset.date;render();break;
+case 'energy-reload':energy.status='idle';energy.week=null;await loadWeek(true);break;
+case 'report':{try{const r=await api(`/api/activities/${encodeURIComponent(b.dataset.id)}/actual-drain`,{method:'PATCH',body:JSON.stringify({feedback:b.dataset.fb})});toast(r.capacityChanged?`已回報，基礎電量校準為 ${pct(r.baseBatteryCapacity)}%。`:'已回報，預測會越來越準。');afterChange();}catch(e){if(!needAccount(e))throw e;}break;}
+case 'plan-add':{const sg=energy.plan?.suggestions?.[Number(b.dataset.i)],a=energy.plan?.activity;if(!sg||!a)break;const r=await createActivity({...a,scheduledAt:`${sg.date}T${sg.startTime}`});toast(`已排進 ${dateText(sg.date)} ${sg.startTime}，預估 ${drainText(r.activity.predictedDrain)}。`);energy.plan=null;afterChange();break;}
+case 'review-load':{energy.reviewStatus='loading';render();try{energy.review=await api('/api/review/week');energy.reviewStatus='ok';}catch(e){energy.reviewStatus='idle';if(!needAccount(e))toast(e.message,true);}render();break;}
+case 'calendar-sub':{try{energy.sub=await api('/api/calendar/subscribe',{method:'POST',body:'{}'});render();}catch(e){if(!needAccount(e))toast(e.message,true);}break;}
+case 'import-file':$('#ics-file')?.click();break;
 case 'quiz-later':try{sessionStorage.setItem(QUIZ_LATER,'1');}catch{}closeModal();toast('之後可以從冒險大廳的 AI 嚮導開始快篩。');break;
 case 'import':await importData();break;
 }}catch(err){error(err);}});
-document.addEventListener('submit',async e=>{if(!e.target.closest('#modal'))return;e.preventDefault();if(busy)return;const form=e.target,v=Object.fromEntries(new FormData(form)),old=score().totalXP;try{if(form.id==='goal-form'){const g=await mutate(s=>D.createGoal(s,{...v,skillId:resolveSubject(s,v),nextAction:v.nextAction.trim()||v.title,checkpoints:v.checkpoints.trim()?v.checkpoints.split('\n'):['完成「'+v.title+'」']}));selected=g.id;tab='detail';closeModal();render();toast('人生章節已建立。現在就能開始第一場專注戰鬥。');}
+document.addEventListener('submit',async e=>{if(!e.target.closest('#modal')&&!['plan-form','import-form'].includes(e.target.id))return;e.preventDefault();if(busy)return;const form=e.target,v=Object.fromEntries(new FormData(form)),old=score().totalXP;try{if(form.id==='goal-form'){const g=await mutate(s=>D.createGoal(s,{...v,skillId:resolveSubject(s,v),nextAction:v.nextAction.trim()||v.title,checkpoints:v.checkpoints.trim()?v.checkpoints.split('\n'):['完成「'+v.title+'」']}));selected=g.id;tab='detail';closeModal();render();toast('人生章節已建立。現在就能開始第一場專注戰鬥。');}
 else if(form.id==='focus-form'){await mutate(s=>{rememberFocus(s,v);return D.start(s,focusOptions(v,false,s));});closeModal();tab='battle';recovered=false;render();window.scrollTo(0,0);}
 else if(form.id==='review-form'){const id=v.sessionId;await mutate(s=>{if(s.sessions.some(r=>r.id===id))return;D.reviewTrim(s,id,Number(v.keepSeconds));return D.save(s,id,v.note);});const gained=score().totalXP-old;closeModal();recovered=false;tab='today';render();syncRecovery(state.sessions.find(r=>r.id===id));openModal('這一步，已寫進你的旅程',`<div style="text-align:center;padding:10px 0"><div class="avatar" style="width:65px;height:65px;margin:0 auto 15px">${I('spark','big')}</div><h2>+${gained} XP</h2><p class="small muted" style="margin:12px 0">本次投入已儲存。成果關卡仍由你確認，<br>不會因為計時結束就自動完成。</p></div><div class="form-actions">${button('返回大廳','close-modal')}${button('查看成長軌跡 '+I('arrow'),'saved-growth','','primary')}</div>`);}
 else if(form.id==='manual-form'){const start=Date.parse(v.start+':00+08:00')/1000,end=Date.parse(v.end+':00+08:00')/1000;const record=await mutate(s=>D.manual(s,{...v,skillId:resolveSubject(s,v),start,end}));closeModal();render();const msg=`補登已儲存 · +${score().totalXP-old} XP。`;toast(msg);syncRecovery(record,msg);}
 else if(form.id==='checkpoint-form'){await mutate(s=>D.checkpoint(s,v.goalId,v.checkpointId,v.done==='true',v.note||''));closeModal();render();toast(v.done==='true'?'成果已確認，Boss 關卡已更新。':'成果狀態已更正，專注紀錄保留。');}
 else if(form.id==='edit-goal-form'){await mutate(s=>{D.updateGoal(s,v.goalId,v);s.preferences.subjectByGoal[v.goalId]=resolveSubject(s,v);});closeModal();render();toast('目標已更新，原始紀錄與 XP 保留。');}
 else if(form.id==='subject-form'){await mutate(s=>{const id=resolveSubject(s,v);if(!s.preferences.pinnedSkills.includes(id))s.preferences.pinnedSkills.push(id);});closeModal();skillFilter='pinned';tab='skills';render();toast('科目已保存，下次專注可以直接選用。');}
+else if(form.id==='activity-form'){try{const r=await createActivity(v);closeModal();toast(`已加入行程：預估 ${drainText(r.activity.predictedDrain)}。${typeof r.reason==='string'?r.reason:''}`);afterChange();if(r.refining)setTimeout(afterChange,6000);}catch(e){if(e.status===401){closeModal();await quizForm();return;}throw e;}}
+else if(form.id==='plan-form'){energy.planStatus='loading';render();try{const r=await api('/api/schedule-suggest',{method:'POST',body:JSON.stringify({description:String(v.description||'').slice(0,300)})});if(r.crisis)toast(r.message,true);else energy.plan={...r,description:v.description};}catch(e){if(!needAccount(e))toast(e.message,true);}energy.planStatus='idle';render();}
+else if(form.id==='import-form'){if(String(v.url||'').trim())await importCalendar({url:String(v.url).trim()});}
 else if(form.id==='quiz-form'){const answers=(quizQuestions||[]).map((_,i)=>Number(v['q'+i]));
   if(!answers.length||answers.some(n=>!Number.isInteger(n)))throw new Error('請回答全部題目');
   const res=await fetch('/api/onboarding',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({answers})});
   const body=await res.json().catch(()=>null);if(!res.ok||!body?.profile)throw new Error(typeof body?.error==='string'?body.error:'快篩儲存失敗，請稍後再試');
-  setAutoLink(true);closeModal();toast(`你的基礎電量是 ${pct(body.profile.baseBatteryCapacity)}%。${typeof body.profile.summary==='string'?body.profile.summary:''}`);
+  setAutoLink(true);resetEnergy();try{await mutate(s=>{D.setBatteryLink(s,'');});}catch{}closeModal();toast(`你的基礎電量是 ${pct(body.profile.baseBatteryCapacity)}%。${typeof body.profile.summary==='string'?body.profile.summary:''}`);
   battery.inflight=false;await refreshBattery();}
 else if(form.id==='battery-form'){await mutate(s=>{D.setBatteryLink(s,v.code);});closeModal();render();toast(v.code.trim()?'電量連結碼已儲存。':'已取消生活電量連結。');await refreshBattery();}
 else if(form.id==='name-form'){await mutate(s=>{s.player.name=v.name.trim();});closeModal();render();toast('玩家名稱已更新。');}
 }catch(err){error(err);}});
 document.addEventListener('click',e=>{if(e.target.closest('[data-act="saved-growth"]')){closeModal();tab='growth';render();window.scrollTo(0,0);}});
 document.addEventListener('input',e=>{if(e.target.matches('#review-form input[name="keepSeconds"]')){try{const a=state.active,copy=D.clone(state),n=Number(e.target.value);D.reviewTrim(copy,a.id,n);D.save(copy,a.id,'');$('#review-duration').textContent=fmt(n);$('#review-xp').textContent='+'+(D.score(copy).totalXP-score().totalXP)+' XP';}catch{if($('#review-xp'))$('#review-xp').textContent='待確認';}}});
-document.addEventListener('change',async e=>{try{if(e.target.id==='scene-setting')await mutate(s=>s.preferences.scene=e.target.value);
+document.addEventListener('change',async e=>{try{if(e.target.id==='activity-type')toggleActivityFields();
+if(e.target.id==='ics-file'&&e.target.files?.[0]){const file=e.target.files[0];e.target.value='';if(file.size>2e6)throw new Error('檔案太大，請匯出較短期間的行事曆');await importCalendar({ics:await file.text()});}
+if(e.target.id==='scene-setting')await mutate(s=>s.preferences.scene=e.target.value);
 if(e.target.matches('#goal-form select[name="domainId"]')){const d=D.DOMAINS.find(d=>d.id===e.target.value),f=$('#goal-form');setPicker(f.querySelector('.skill-picker'),D.T.defaults[d.id]);f.elements.boss.value=d.boss;}
 if(e.target.matches('#manual-form select[name="goalId"]'))setPicker($('#manual-form .skill-picker'),D.goal(state,e.target.value).skillId);
 const picker=e.target.closest('.subject-picker');if(picker&&e.target.name==='subjectGroup')updateSubjectPicker(picker,false);

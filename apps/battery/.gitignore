@@ -10,3 +10,7 @@ next-env.d.ts
 db/seed.sql
 # LifeRPG 建置時由 scripts/copy-liferpg.mjs 複製進來
 public/rpg/
+public/index.html
+public/sw.js
+public/manifest.webmanifest
+public/icons/

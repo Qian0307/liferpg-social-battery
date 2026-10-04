@@ -32,6 +32,7 @@ export async function POST(req: Request) {
       type: result.activity.type,
       headcount: result.activity.headcount,
       familiarity: result.activity.familiarity as ActivityShape["familiarity"],
+      intensity: result.activity.intensity ?? null,
       durationMinutes: result.activity.durationMinutes,
     };
   }

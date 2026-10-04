@@ -24,7 +24,9 @@ export async function POST(req: Request) {
 
   const profile = computeProfile(parsed.data.answers);
 
-  const sessionId = getSessionIdFromRequest(req) ?? newSessionId();
+  // 示範帳號是大家共用的，做快篩時一律另開新的匿名帳號，避免覆寫示範人格
+  const current = getSessionIdFromRequest(req);
+  const sessionId = current && current !== "demo-session" ? current : newSessionId();
   const existing = await findUserBySession(sessionId);
   const now = new Date().toISOString();
 

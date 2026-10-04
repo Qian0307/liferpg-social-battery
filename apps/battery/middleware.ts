@@ -48,30 +48,22 @@ function limitFor(pathname: string): number | null {
 const DEMO_SESSION_ID = "demo-session";
 
 /**
- * LifeRPG 放在同一個網站的 /rpg/ 底下（建置時由 scripts/copy-liferpg.mjs 複製進 public/rpg/）。
- * 沿用 LifeRPG 原本的安全標頭；connect-src 只需要 'self'，因為電量 API 就在同一個網域。
+ * 整個網站的介面就是 LifeRPG（public/index.html，建置時由 apps/liferpg 複製進來）。
+ * 沿用 LifeRPG 原本的安全標頭；connect-src 只需要 'self'，因為 API 都在同一個網域。
  */
-const RPG_SECURITY_HEADERS: Record<string, string> = {
+const APP_SECURITY_HEADERS: Record<string, string> = {
   "X-Content-Type-Options": "nosniff",
   "Referrer-Policy": "strict-origin-when-cross-origin",
   "Content-Security-Policy":
     "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; " +
-    "font-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
+    "font-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
 };
+
+/** 舊版的獨立頁面（生活電量計、/rpg/），一律回到單一入口。 */
+const LEGACY_PAGES = ["/week", "/plan", "/review", "/onboarding", "/rpg"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
-  // LifeRPG 的相對路徑（./sw.js、./icons/）需要結尾斜線才會解析到 /rpg/ 底下
-  if (pathname === "/rpg") {
-    // 用一般 URL 物件：NextURL 會依 trailingSlash 設定把結尾斜線拿掉
-    return NextResponse.redirect(new URL(`/rpg/${req.nextUrl.search}`, req.url), 308);
-  }
-  if (pathname === "/rpg/" || pathname === "/rpg/index.html") {
-    const res = NextResponse.rewrite(new URL("/rpg/index.html", req.url));
-    for (const [k, v] of Object.entries(RPG_SECURITY_HEADERS)) res.headers.set(k, v);
-    return res;
-  }
 
   // ?demo=1 一鍵載入示範情境。
   // 沒有這個入口的話，第一次打開網站的人（例如評審）只會看到一個空的 app——
@@ -87,6 +79,14 @@ export function middleware(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7,
     });
+    return res;
+  }
+  if (LEGACY_PAGES.some((p) => pathname === p || pathname.startsWith(`${p}/`))) {
+    return NextResponse.redirect(new URL("/", req.url), 308);
+  }
+  if (pathname === "/" || pathname === "/index.html") {
+    const res = NextResponse.rewrite(new URL("/index.html", req.url));
+    for (const [k, v] of Object.entries(APP_SECURITY_HEADERS)) res.headers.set(k, v);
     return res;
   }
   // 日曆 feed 由 Apple/Google 行事曆定時輪詢，且不帶 cookie，不套用限流。
@@ -133,6 +133,6 @@ export const config = {
   // 排除 _next 靜態資源與 favicon，避免無謂的 middleware 執行。
   matcher: [
     "/api/:path*",
-    "/((?!_next/static|_next/image|favicon.ico|icon.svg|icon-192.png|icon-512.png|sw.js|manifest.webmanifest|offline.html).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icon.svg|icons/|sw.js|manifest.webmanifest).*)",
   ],
 };

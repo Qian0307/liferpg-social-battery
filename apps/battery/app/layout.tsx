@@ -1,83 +1,26 @@
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import Link from "next/link";
-import { PwaRegister } from "@/components/PwaRegister";
+import type { Metadata } from "next";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
-
-const SITE_URL = "https://social-battery-meter.pages.dev";
-const DESCRIPTION =
-  "像管理電池一樣管理你的生活能量：AI 預測社交、課業、工作、運動等每個行程的消耗，" +
-  "並把前一天沒補回來的赤字帶到隔天，讓你在 burnout 發生之前就看見它。";
-
+/**
+ * 整個網站的介面是 LifeRPG（public/index.html，建置時由 apps/liferpg 複製進來）。
+ * Next.js 只提供 API；這個 layout 只會用在 404 之類的系統頁面。
+ */
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: "生活電量計 · Life Battery Meter",
-  description: DESCRIPTION,
-  applicationName: "生活電量計",
-  // 圖示放 public/ 而不是 app/：App Router 會把 app/icon.svg 當成一條 route，
-  // 而 next-on-pages 要求所有 route 都是 edge runtime，會直接讓建置失敗。
-  icons: { icon: "/icon.svg", shortcut: "/icon.svg", apple: "/icon-192.png" },
-  manifest: "/manifest.webmanifest",
-  appleWebApp: { capable: true, title: "生活電量計", statusBarStyle: "default" },
-  openGraph: {
-    type: "website",
-    locale: "zh_TW",
-    url: SITE_URL,
-    siteName: "生活電量計",
-    title: "生活電量計 · Life Battery Meter",
-    description: DESCRIPTION,
-  },
-  twitter: {
-    card: "summary",
-    title: "生活電量計 · Life Battery Meter",
-    description: DESCRIPTION,
-  },
-};
-
-export const viewport: Viewport = {
-  themeColor: "#22c98a",
-  width: "device-width",
-  initialScale: 1,
+  title: "LifeRPG 生活電量冒險",
+  description: "把人生目標變成 Boss 戰，用生活電量規劃挑戰與恢復。",
+  icons: { icon: "/icons/icon-192.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-Hant" className={inter.variable}>
+    <html lang="zh-Hant">
       <body className="font-sans antialiased">
-        <div className="mx-auto flex min-h-screen w-full max-w-lg flex-col px-5 pb-10 pt-6">
-          <header className="mb-6 flex items-center justify-between">
-            <Link href="/" className="text-base font-semibold tracking-tight text-foreground">
-              生活電量計
-            </Link>
-            <nav className="flex items-center gap-0.5 rounded-full bg-white/70 p-1 text-xs shadow-sm backdrop-blur sm:text-sm">
-              {[
-                { href: "/", label: "今天" },
-                { href: "/week", label: "一週" },
-                { href: "/plan", label: "排程" },
-                { href: "/review", label: "回顧" },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-full px-2.5 py-1.5 text-muted-foreground transition hover:bg-white hover:text-foreground sm:px-3"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              {/* LifeRPG 是同一個網站底下的靜態 PWA（/rpg/），不走 Next 路由，用一般連結 */}
-              <a
-                href="/rpg/"
-                className="rounded-full bg-foreground px-2.5 py-1.5 font-medium text-white transition hover:brightness-110 sm:px-3"
-              >
-                冒險
-              </a>
-            </nav>
-          </header>
-          <main className="flex-1">{children}</main>
-          <PwaRegister />
-        </div>
+        <main className="mx-auto max-w-lg px-5 py-16 text-center">
+          {children}
+          <p className="mt-6 text-sm">
+            <a href="/" className="text-mint-600 underline underline-offset-4">回到 LifeRPG</a>
+          </p>
+        </main>
       </body>
     </html>
   );

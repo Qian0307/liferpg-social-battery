@@ -18,25 +18,17 @@
 
 文件寫了什麼，程式就要做到什麼。時間不夠時，寧可縮小範圍做穩，也不要做半套。做不完的功能告訴我，我會把它移到文件的「下一階段」。
 
-## 兩個 app 的現況
+## 現況：單一 App
 
-### LifeRPG（`apps/liferpg/`）
-
-- 純靜態 PWA，整個應用程式寫在一個約 200KB 的 `index.html` 裡，沒有 build step。
-- 資料存在瀏覽器的 IndexedDB，只放本機。另外有 `sw.js`（Service Worker）和 `manifest.webmanifest`。
-- 正式站是生活電量計網站的 `/rpg/`（https://social-battery-meter.pages.dev/rpg/）：`apps/battery` 建置時由 `scripts/copy-liferpg.mjs` 複製進 `public/rpg/`（不進 git），安全標頭由 middleware 與 `public/_headers` 設定。舊網址 liferpg-1h4.pages.dev 已 301 轉到新位置。改 LifeRPG 只改 `apps/liferpg/`，部署電量計時會一起上線。另保留 Vercel（`vercel.json`）與 Azure Static Web Apps（`staticwebapp.config.json`）的設定。CSP 的 `connect-src` 已開放社交電量計網域，`vercel.json` 與 `staticwebapp.config.json` 兩邊要保持一致。
-- 七大領域之一「健康與身體」底下的「恢復與休息」（`health.recovery`）分類：放鬆練習、離屏休息、休息安排。完成這類專注或補登會回報社交電量計。
-- 修改 `index.html` 時，請沿用現有的程式風格和資料驗證寫法。檔案裡有大量格式檢查，例如「格式不正確」這類錯誤訊息，新增的資料欄位也要照同樣方式驗證。如果需要遷移資料，絕對不能改變歷史 XP。
-
-### 生活電量計（`apps/battery/`）
-
-- Next.js 14（App Router）加 TypeScript，所有 route 都跑在 edge runtime，部署在 Cloudflare Pages，資料庫用 D1 搭配 Drizzle。
-- `node_modules` 在 WSL（Linux）安裝，所有 npm 指令請在 WSL 裡執行。
-- `lib/ai.ts` 是所有 AI 呼叫的唯一入口。目前實際運作的是 Workers AI（Meta Llama 3.3），Azure OpenAI 程式已預留在第一順位但未設定金鑰（已決定移到「下一階段」，GitHub Models 已於 2026/7/30 停止服務，不可使用）。全部失敗時退回規則式估算（`lib/drain-rules.ts`）。回應的 `provider` 欄位標示實際回答的供應商。
-- 活動分兩類：社交活動（人數、熟悉度）與生活活動 `study`／`work`／`exercise`／`commute`／`chores`（`intensity` 1–5，migration 0002）。
-- `lib/battery.ts` 的 `simulateWeek()` 是電量模型：每天起床電量 = min(基礎容量, 前一天剩餘 + 基礎容量 × 0.8)，當天結束時低於 30% 就判定為風險日。恢復活動（`type: recovery`）的耗電量為負值。
-- 使用者用匿名 session 識別，cookie 名稱是 `sbm_session`。demo 資料綁在 `demo-session`，網址 `/week?demo=1` 會自動載入。
-- LifeRPG 串接用的 API：`GET /api/public/battery`、`POST /api/public/recovery`、`POST /api/guide/today`，用連結碼認人、不依賴跨站 cookie，CORS 白名單由 `LIFERPG_ORIGINS` 設定。
+- 網址（唯一入口）：https://liferpg-adventure.pages.dev（Cloudflare Pages 專案 `liferpg-adventure`），示範情境 `/?demo=1#demo`。
+- `apps/liferpg/`：**整個 App 的介面**，純靜態 PWA，全部寫在一個 `index.html`，沒有 build step，遊戲資料存在 IndexedDB。
+  分頁：冒險大廳（電量條、AI 嚮導、七天統計）、生活電量（新增行程、語音輸入＋AI 辨識、七天行程、AI 排程建議、AI 週回顧、Outlook 訂閱與匯入）、人生目標、成長軌跡、技能樹、角色檔案。第一次進入會跳出 6 題快篩。
+  修改時沿用現有的程式風格和資料驗證寫法（「格式不正確」這類檢查），新增資料欄位要照同樣方式驗證；資料遷移絕對不能改變歷史 XP。
+- `apps/battery/`：**只有 API**（Next.js 14 Route Handlers、edge runtime、D1＋Drizzle）。建置時 `scripts/copy-liferpg.mjs` 把 LifeRPG 複製到 `public/`（不進 git）；middleware 把 `/` 改送 `index.html` 並加上安全標頭，舊頁面 `/week` 等一律轉回 `/`。`node_modules` 在 WSL 安裝，npm 指令都在 WSL 執行。
+- `lib/ai.ts` 是所有 AI 呼叫的唯一入口。目前實際運作的是 Workers AI（Meta Llama 3.3）；Azure OpenAI 程式已預留但未設定（移到「下一階段」；GitHub Models 已於 2026/7/30 停止服務，不可使用）。全部失敗時退回規則式估算。
+- 電量模型 `lib/battery.ts`：每天起床電量 = min(基礎容量, 前一天剩餘 + 基礎容量 × 0.8)，低於 30% 為風險日；恢復活動（`type: recovery`）耗電量為負。
+- 活動分兩類：社交（人數、熟悉度）與生活 `study`／`work`／`exercise`／`commute`／`chores`（`intensity` 1–5）。
+- 使用者以匿名 cookie `sbm_session` 識別；示範帳號 `demo-session`，任何網址加 `?demo=1` 會切到示範帳號；快篩不會覆寫示範帳號。
 
 ## 下一階段（先不要做）
 
@@ -61,15 +53,13 @@ Microsoft Graph 串接 Outlook、Copilot Studio、Teams、把電量服務搬到 
 ## 常用指令
 
 ```bash
-# 社交電量計（在 WSL 的 apps/battery 執行）
-npm run dev              # http://localhost:3000，不能和 deploy 同時執行
-npm run deploy           # 建置並部署到 Cloudflare Pages
+# 都在 WSL 的 apps/battery 執行
+npm run dev              # http://localhost:3000（含 LifeRPG），不能和 deploy 同時執行
+npm run deploy           # 建置（含 LifeRPG）並部署到 Cloudflare Pages 專案 liferpg-adventure
 npm run db:seed:remote   # demo 資料依當天日期重建，錄影前要跑
 npx wrangler pages secret put AZURE_OPENAI_API_KEY   # 設定完要重新 deploy
 
-# LifeRPG（在 apps/liferpg 執行，沒有 build step）
-npx serve .              # IndexedDB 和 Service Worker 不能用 file:// 開啟
-                         # 接本機電量計：網址加 ?batteryApi=http://localhost:3000
+# 只看 LifeRPG 畫面（沒有 API）：在 apps/liferpg 執行 npx serve .，網址加 ?batteryApi=http://localhost:3000 可接本機 API
 ```
 
 ## 完成定義（影片要拍到的畫面）

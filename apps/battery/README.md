@@ -1,8 +1,10 @@
+> **現況（InnoServe 版）：** 這個目錄現在只提供 API。所有畫面已整合進 LifeRPG（`apps/liferpg`），建置時會被複製到 `public/`，網址是 https://liferpg-adventure.pages.dev 。下方保留原本「社交電量計」的設計說明。
+
 # 社交電量計 · Social Battery Meter
 
 > **SITCON Hackathon 2026 · 賽道：AI for Everyday Life**
 
-## 🔋 [→ 開啟示範情境](https://social-battery-meter.pages.dev/week?demo=1)
+## 🔋 [→ 開啟示範情境](https://liferpg-adventure.pages.dev/?demo=1#demo)
 
 一打開就會看到一位使用者未來七天的社交電量。**請看第四格**：
 
@@ -16,8 +18,8 @@
 
 | | |
 |---|---|
-| 線上展示 | https://social-battery-meter.pages.dev/week?demo=1 |
-| 一般入口 | https://social-battery-meter.pages.dev |
+| 線上展示 | https://liferpg-adventure.pages.dev/?demo=1#demo |
+| 一般入口 | https://liferpg-adventure.pages.dev |
 | 技術棧 | Next.js 14 · Cloudflare Pages + D1 · Azure OpenAI（Microsoft Foundry）+ Workers AI 備援 · 全部 edge runtime |
 | AI 供應商 | Workers AI（Meta Llama 3.3）＋規則式估算；預留 Azure OpenAI、Groq、OpenAI 介面，設定金鑰即依序啟用 |
 | Microsoft 整合 | Outlook 行事曆一鍵訂閱與匯入（.ics）、兩個 app 皆可安裝為 Edge／Windows PWA |
@@ -205,8 +207,8 @@ document.cookie = "sbm_session=demo-session; path=/"; location.reload();
 
 ## 4. 部署（Cloudflare Pages）
 
-**正式站台：https://social-battery-meter.pages.dev**
-**示範情境（一鍵載入）：https://social-battery-meter.pages.dev/week?demo=1**
+**正式站台：https://liferpg-adventure.pages.dev**
+**示範情境（一鍵載入）：https://liferpg-adventure.pages.dev/?demo=1#demo**
 
 ### 日常更新（初次設定完成後，只需要這一行）
 
@@ -215,7 +217,7 @@ npm run deploy
 ```
 
 等同於 `npx @cloudflare/next-on-pages` 建置後，
-`wrangler pages deploy .vercel/output/static --project-name social-battery-meter`。
+`wrangler pages deploy .vercel/output/static --project-name liferpg-adventure`。
 
 > ⚠️ **`npm run dev` 不能跟 `npm run deploy` 同時跑**——兩者都會寫 `.next`，
 > 會讓建置中途失敗。部署前先把 dev server 關掉。
@@ -230,7 +232,7 @@ npx wrangler login
 npx wrangler d1 create social-battery-db
 
 # 3. 建立 Pages 專案
-npx wrangler pages project create social-battery-meter --production-branch main
+npx wrangler pages project create liferpg-adventure --production-branch main
 
 # 4. 套用 migration 到正式資料庫
 npx wrangler d1 migrations apply social-battery-db --remote
@@ -264,7 +266,7 @@ npx wrangler pages secret put OPENAI_API_KEY       # 現場有發 credits 再設
 ### 部署後驗收
 
 ```bash
-URL=https://social-battery-meter.pages.dev
+URL=https://liferpg-adventure.pages.dev
 
 # AI 是否活著——要看到 "source":"ai" 和 "provider":"azure-openai"
 # provider 是 workers-ai 代表 Azure 沒接上、已自動退回；source 是 rule 代表所有 AI 都沒接上
