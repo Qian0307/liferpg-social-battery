@@ -1,0 +1,9 @@
+{
+  "name": "liferpg-video",
+  "private": true,
+  "type": "module",
+  "description": "自動錄製 LifeRPG 示範畫面並剪成 3 分鐘影片",
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

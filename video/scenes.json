@@ -1,0 +1,80 @@
+{
+  "voice": "zh-TW-HsiaoChenNeural",
+  "rate": "+8%",
+  "scenes": [
+    {
+      "id": "00-problem",
+      "kind": "media",
+      "media": ["ai/problem.mp4"],
+      "text": "行事曆只管理時間，不管理能量。上課、打工、迎新、考試一個接一個；同樣兩小時，耗掉的心力卻完全不同。"
+    },
+    {
+      "id": "01-difficulty",
+      "kind": "media",
+      "media": ["ai/difficulty.mp4"],
+      "text": "更難的是，疲勞會一天天累積。睡一覺補不滿，前一天的赤字拖累隔天，常常到撐不住才發現。"
+    },
+    {
+      "id": "02-title",
+      "kind": "card",
+      "card": { "eyebrow": "INNOSERVE 2026 · AGENTIC FRONTIER", "title": "LifeRPG 生活電量冒險", "sub": "一個會累的 RPG 角色：規劃挑戰，也規劃恢復" },
+      "text": "如果你的遊戲角色也會累，你會怎麼安排今天？這是 LifeRPG 生活電量冒險。",
+      "tts": "如果你的遊戲角色也會累，你會怎麼安排今天？這是 Life R P G 生活電量冒險。"
+    },
+    {
+      "id": "03-quiz",
+      "kind": "media",
+      "media": ["clips/03-quiz.mp4"],
+      "text": "第一次進入，會先做十題生活快篩，涵蓋社交、學習、工作、滑手機和休息。結果卡會算出你的基礎電量，並點出最容易漏電的地方。"
+    },
+    {
+      "id": "04-lobby",
+      "kind": "media",
+      "media": ["clips/04-lobby.mp4"],
+      "text": "進入冒險大廳，角色多了一條生活電量。AI 嚮導會看未來七天的電量和你的目標，建議今天挑戰哪個 Boss、什麼時候安排恢復。這週第三到第五天電量會低於百分之三十，其中第四天，是前一天的迎新累積下來的。"
+    },
+    {
+      "id": "05-boss",
+      "kind": "media",
+      "media": ["clips/05a-battle.mp4", "clips/05b-growth.mp4"],
+      "text": "專注的時候，角色會自動和 Boss 戰鬥。專注時間會轉成經驗值，每天還有上限，鼓勵穩定前進，而不是過勞。"
+    },
+    {
+      "id": "06-voice",
+      "kind": "media",
+      "media": ["clips/06-voice.mp4"],
+      "text": "在生活電量分頁，按下語音輸入直接說，或打一句話。AI 會辨識成行程，自動判斷類型、強度和時間；加入之後，七天電量立刻更新。"
+    },
+    {
+      "id": "07-recovery",
+      "kind": "media",
+      "media": ["clips/07-recovery.mp4"],
+      "text": "休息也是成長。完成一段放鬆練習，電量會回升，恢復與休息技能也會累積經驗值。"
+    },
+    {
+      "id": "08-planner",
+      "kind": "media",
+      "media": ["clips/08a-plan.mp4", "clips/08b-plan-result.mp4", "clips/08c-review.mp4"],
+      "text": "想安排新活動，AI 會比較未來七天的電量，建議最適合的時段；每週的 AI 回顧，則會找出哪類活動最容易被你低估。"
+    },
+    {
+      "id": "09-outlook",
+      "kind": "media",
+      "media": ["clips/09-outlook.mp4"],
+      "text": "行程和電量預警可以一鍵訂閱到 Outlook 行事曆，也能把 Outlook 裡的課表匯入，自動估算耗電。"
+    },
+    {
+      "id": "10-tech",
+      "kind": "card",
+      "card": { "eyebrow": "AI · DATA · PRIVACY", "title": "穩定、可信、尊重隱私", "bullets": ["Meta Llama 生成式 AI，輸出經 Zod 驗證", "AI 失敗自動退回規則式估算，遊戲照常進行", "電量服務使用匿名帳號，不需註冊", "遊戲紀錄只存在你的裝置"] },
+      "text": "AI 使用 Meta Llama 模型，輸出都經過驗證；AI 失敗時自動退回規則式估算，遊戲照常進行。電量服務以匿名帳號運作，遊戲紀錄只存在你的裝置。"
+    },
+    {
+      "id": "11-end",
+      "kind": "card",
+      "card": { "eyebrow": "liferpg-adventure.pages.dev", "title": "挑戰之前，也記得規劃恢復", "sub": "LifeRPG 生活電量冒險" },
+      "text": "LifeRPG 生活電量冒險。挑戰之前，也記得規劃恢復。",
+      "tts": "Life R P G 生活電量冒險。挑戰之前，也記得規劃恢復。"
+    }
+  ]
+}
